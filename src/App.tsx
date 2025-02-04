@@ -9,6 +9,8 @@ import Index from "./pages/Index";
 import Landing from "./pages/Landing";
 import Auth from "./pages/Auth";
 import MyTools from "./pages/MyTools";
+import Pricing from "./pages/Pricing";
+import Navbar from "./components/Navbar";
 
 const queryClient = new QueryClient();
 
@@ -41,8 +43,10 @@ const App = () => {
         <Toaster />
         <Sonner />
         <BrowserRouter>
+          <Navbar />
           <Routes>
             <Route path="/" element={session ? <Navigate to="/tools" /> : <Landing />} />
+            <Route path="/pricing" element={<Pricing />} />
             <Route path="/auth" element={!session ? <Auth /> : <Navigate to="/tools" />} />
             <Route
               path="/tools"
