@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import SearchBar from "@/components/SearchBar";
 import CategoryFilter from "@/components/CategoryFilter";
 import ToolCard from "@/components/ToolCard";
 import { tools } from "@/data/tools";
-import { Filter, Sparkles } from "lucide-react";
+import { Filter, Sparkles, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,6 +19,47 @@ const Index = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [priceFilter, setPriceFilter] = useState<string | null>(null);
   const [sortBy, setSortBy] = useState<"popularity" | "rating" | null>(null);
+  const [subscriptionTier, setSubscriptionTier] = useState<string>("free");
+  const [toolsLimit, setToolsLimit] = useState<number>(3);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchSubscriptionLimit = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return;
+
+        const { data: userTools } = await supabase
+          .from("user_tools")
+          .select("subscription_tier")
+          .eq("user_id", user.id)
+          .single();
+
+        if (userTools?.subscription_tier) {
+          setSubscriptionTier(userTools.subscription_tier);
+          
+          const { data: limits } = await supabase
+            .from("subscription_limits")
+            .select("tools_per_category")
+            .eq("tier", userTools.subscription_tier)
+            .single();
+
+          if (limits) {
+            setToolsLimit(limits.tools_per_category);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching subscription:", error);
+      }
+    };
+
+    fetchSubscriptionLimit();
+  }, []);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    navigate("/");
+  };
 
   const filteredTools = tools.filter((tool) => {
     const matchesSearch =
@@ -34,13 +77,35 @@ const Index = () => {
     return 0;
   });
 
-  const featuredTools = filteredTools.filter((tool) => tool.featured);
-  const regularTools = filteredTools.filter((tool) => !tool.featured);
+  const limitedTools = filteredTools.slice(0, toolsLimit);
+  const featuredTools = limitedTools.filter((tool) => tool.featured);
+  const regularTools = limitedTools.filter((tool) => !tool.featured);
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white">
       <div className="container py-8">
-        <h1 className="text-3xl font-bold mb-8 text-left">Relevence</h1>
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">
+            Relevence
+          </h1>
+          <div className="flex gap-4">
+            <Button
+              onClick={() => navigate("/my-tools")}
+              variant="outline"
+              className="text-white border-white hover:bg-white hover:text-black"
+            >
+              My Tools
+            </Button>
+            <Button
+              onClick={handleLogout}
+              variant="outline"
+              className="text-white border-white hover:bg-white hover:text-black"
+            >
+              <LogOut className="h-4 w-4 mr-2" />
+              Sign Out
+            </Button>
+          </div>
+        </div>
         
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           <aside className="lg:col-span-1">
@@ -58,7 +123,7 @@ const Index = () => {
               
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className="gap-2">
+                  <Button variant="outline" className="gap-2 text-white border-white hover:bg-white hover:text-black">
                     <Filter className="h-4 w-4" />
                     Filter
                   </Button>
@@ -67,8 +132,8 @@ const Index = () => {
                   <DropdownMenuItem onClick={() => setPriceFilter(null)}>
                     All Prices
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setPriceFilter("Free")}>
-                    Free
+                  <DropdownMenuItem onClick={() => setPriceFilter("Free Trial")}>
+                    Free Trial
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => setPriceFilter("Paid")}>
                     Paid
@@ -81,7 +146,7 @@ const Index = () => {
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className="gap-2">
+                  <Button variant="outline" className="gap-2 text-white border-white hover:bg-white hover:text-black">
                     Sort By
                   </Button>
                 </DropdownMenuTrigger>
@@ -124,7 +189,21 @@ const Index = () => {
 
             {filteredTools.length === 0 && (
               <div className="text-center py-12">
-                <p className="text-gray-500">No tools found matching your criteria.</p>
+                <p className="text-gray-400">No tools found matching your criteria.</p>
+              </div>
+            )}
+
+            {filteredTools.length > toolsLimit && (
+              <div className="text-center py-8">
+                <p className="text-gray-400 mb-4">
+                  Upgrade your plan to see more tools in each category
+                </p>
+                <Button
+                  onClick={() => navigate("/")}
+                  className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+                >
+                  Upgrade Now
+                </Button>
               </div>
             )}
           </main>

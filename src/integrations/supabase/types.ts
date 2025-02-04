@@ -9,12 +9,36 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      subscription_limits: {
+        Row: {
+          features: Json
+          price_monthly: number
+          tier: Database["public"]["Enums"]["subscription_tier"]
+          tools_per_category: number
+        }
+        Insert: {
+          features: Json
+          price_monthly: number
+          tier: Database["public"]["Enums"]["subscription_tier"]
+          tools_per_category: number
+        }
+        Update: {
+          features?: Json
+          price_monthly?: number
+          tier?: Database["public"]["Enums"]["subscription_tier"]
+          tools_per_category?: number
+        }
+        Relationships: []
+      }
       user_tools: {
         Row: {
           id: string
           notes: string | null
           purchase_date: string | null
           subscription_status: string | null
+          subscription_tier:
+            | Database["public"]["Enums"]["subscription_tier"]
+            | null
           tool_id: string
           user_id: string
         }
@@ -23,6 +47,9 @@ export type Database = {
           notes?: string | null
           purchase_date?: string | null
           subscription_status?: string | null
+          subscription_tier?:
+            | Database["public"]["Enums"]["subscription_tier"]
+            | null
           tool_id: string
           user_id: string
         }
@@ -31,6 +58,9 @@ export type Database = {
           notes?: string | null
           purchase_date?: string | null
           subscription_status?: string | null
+          subscription_tier?:
+            | Database["public"]["Enums"]["subscription_tier"]
+            | null
           tool_id?: string
           user_id?: string
         }
@@ -44,7 +74,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      subscription_tier: "free" | "pro" | "business" | "business_plus"
     }
     CompositeTypes: {
       [_ in never]: never
