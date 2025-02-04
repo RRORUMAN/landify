@@ -1,0 +1,46 @@
+import type { Tool } from "../types";
+
+export const salesMarketingTools: Tool[] = [
+  {
+    id: "copy-ai",
+    name: "Copy.ai",
+    logo: "https://placehold.co/60x60",
+    rating: 4.8,
+    reviews: 2500,
+    pricing: "Freemium",
+    description: "AI-powered copywriting platform for marketing content, product descriptions, and ads.",
+    tags: ["copywriting", "marketing", "content"],
+    category: "Sales & Marketing",
+    featured: true,
+    visitUrl: "https://www.copy.ai",
+    bookmarks: 1250,
+  },
+  {
+    id: "jasper-ai",
+    name: "Jasper",
+    logo: "https://placehold.co/60x60",
+    rating: 4.7,
+    reviews: 3000,
+    pricing: "Paid",
+    description: "Advanced AI content platform for marketing teams and content creators.",
+    tags: ["content", "marketing", "ai writing"],
+    category: "Sales & Marketing",
+    featured: true,
+    visitUrl: "https://www.jasper.ai",
+    bookmarks: 1800,
+  },
+  {
+    id: "mailchimp-ai",
+    name: "Mailchimp AI",
+    logo: "https://placehold.co/60x60",
+    rating: 4.6,
+    reviews: 2000,
+    pricing: "Freemium",
+    description: "AI-enhanced email marketing platform with smart campaign optimization.",
+    tags: ["email", "marketing", "automation"],
+    category: "Sales & Marketing",
+    featured: false,
+    visitUrl: "https://mailchimp.com",
+    bookmarks: 950,
+  }
+];

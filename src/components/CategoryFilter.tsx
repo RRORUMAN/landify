@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { categories } from "@/data/tools";
+import { categories } from "@/data/categories";
 import { DragHandleDots2Icon } from "@radix-ui/react-icons";
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
