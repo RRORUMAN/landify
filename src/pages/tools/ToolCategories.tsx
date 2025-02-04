@@ -13,7 +13,8 @@ import {
   Star,
   Calendar,
   Bookmark,
-  X
+  X,
+  Tags
 } from "lucide-react";
 import {
   Select,
@@ -27,6 +28,11 @@ import { supabase } from "@/integrations/supabase/client";
 import type { Tool } from "@/data/types";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 type SortOption = "rating" | "reviews" | "bookmarks" | "newest" | "price";
 
@@ -67,7 +73,6 @@ const ToolCategories = () => {
     fetchTools();
   }, []);
 
-  // Get unique tags from all tools and sort them alphabetically
   const allTags = Array.from(
     new Set(tools.flatMap(tool => tool.tags))
   ).sort();
@@ -217,6 +222,44 @@ const ToolCategories = () => {
             </SelectContent>
           </Select>
 
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline" className="gap-2">
+                <Tags className="h-4 w-4" />
+                Tags {selectedTags.length > 0 && `(${selectedTags.length})`}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-80 p-0" align="start">
+              <ScrollArea className="h-80">
+                <div className="p-4">
+                  <div className="flex justify-between items-center mb-4">
+                    <h3 className="font-medium text-sm text-gray-900">Filter by Tags</h3>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setShowAllTags(!showAllTags)}
+                      className="text-blue-600 hover:text-blue-700 text-xs"
+                    >
+                      {showAllTags ? "Show Less" : "Show All"}
+                    </Button>
+                  </div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {visibleTags.map((tag) => (
+                      <Badge
+                        key={tag}
+                        variant={selectedTags.includes(tag) ? "default" : "outline"}
+                        className="cursor-pointer text-xs py-0.5"
+                        onClick={() => handleTagToggle(tag)}
+                      >
+                        {tag}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              </ScrollArea>
+            </PopoverContent>
+          </Popover>
+
           <div className="flex-1" />
           
           <p className="text-sm text-gray-500">
@@ -224,17 +267,16 @@ const ToolCategories = () => {
           </p>
         </div>
 
-        {/* Selected Tags */}
         {selectedTags.length > 0 && (
           <div className="flex flex-wrap gap-2 items-center">
-            <span className="text-sm text-gray-500">Active filters:</span>
+            <span className="text-xs text-gray-500">Active filters:</span>
             {selectedTags.map((tag) => (
               <Badge
                 key={tag}
                 variant="secondary"
-                className="pl-2 pr-1 py-1 flex items-center gap-1"
+                className="pl-2 pr-1 py-0.5 flex items-center gap-1 text-xs"
               >
-                #{tag}
+                {tag}
                 <Button
                   variant="ghost"
                   size="icon"
@@ -248,42 +290,13 @@ const ToolCategories = () => {
             <Button
               variant="ghost"
               size="sm"
-              className="text-gray-500 hover:text-gray-700"
+              className="text-gray-500 hover:text-gray-700 text-xs h-6"
               onClick={() => setSelectedTags([])}
             >
               Clear all
             </Button>
           </div>
         )}
-
-        {/* Tag Filter */}
-        <ScrollArea className="w-full rounded-lg border bg-white p-4">
-          <div className="space-y-4">
-            <div className="flex justify-between items-center">
-              <h3 className="font-medium text-gray-900">Filter by Tags</h3>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setShowAllTags(!showAllTags)}
-                className="text-blue-600 hover:text-blue-700"
-              >
-                {showAllTags ? "Show Less" : "Show All"}
-              </Button>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {visibleTags.map((tag) => (
-                <Badge
-                  key={tag}
-                  variant={selectedTags.includes(tag) ? "default" : "outline"}
-                  className="cursor-pointer hover:bg-gray-100"
-                  onClick={() => handleTagToggle(tag)}
-                >
-                  #{tag}
-                </Badge>
-              ))}
-            </div>
-          </div>
-        </ScrollArea>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
