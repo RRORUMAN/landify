@@ -10,34 +10,33 @@ const HeroSection = () => {
       <div className="container mx-auto px-4 py-32">
         <div className="text-center max-w-4xl mx-auto animate-fade-in space-y-8">
           <div className="inline-flex items-center gap-2 bg-blue-50 dark:bg-blue-900/30 px-4 py-2 rounded-full text-sm font-medium text-blue-600 dark:text-blue-400 mb-8 animate-fade-in">
-            <Sparkles className="w-4 h-4" />
-            <span>Discover the Future of AI Tools</span>
+            <Sparkles className="w-4 h-4 animate-pulse" />
+            <span>Revolutionizing AI Tool Management</span>
           </div>
           
           <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-gray-900 dark:text-white">
-            The leading{" "}
-            <span className="bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600 bg-clip-text text-transparent">
-              AI Tool Directory
-            </span>{" "}
-            for modern teams
+            Unlock the Full Potential of{" "}
+            <span className="bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600 bg-clip-text text-transparent animate-text">
+              AI Tools
+            </span>
           </h1>
           
           <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed">
-            From marketing to development, find and manage all your AI tools in one powerful platform. 
-            Join thousands of teams already optimizing their AI workflow.
+            Discover, manage, and optimize your AI toolkit with our intelligent platform. 
+            Save time, reduce costs, and maximize ROI with data-driven insights.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-12">
             <Button
               size="lg"
-              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg rounded-xl w-full sm:w-auto animate-fade-in group transition-all duration-300"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg rounded-xl w-full sm:w-auto animate-fade-in group transition-all duration-300 hover:scale-105"
               onClick={() => navigate("/auth")}
             >
-              Get Started Free{" "}
+              Start Your Journey{" "}
               <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
             </Button>
-            <span className="text-sm text-gray-500 dark:text-gray-400">
-              No credit card required
+            <span className="text-sm text-gray-500 dark:text-gray-400 animate-fade-in">
+              14-day free trial • No credit card required
             </span>
           </div>
         </div>

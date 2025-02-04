@@ -45,6 +45,10 @@ export default {
         "card-hover": "card-hover 0.3s ease-out forwards",
         "fade-in": "fade-in 0.5s ease-out",
         "slide-up": "slide-up 0.5s ease-out",
+        "text": "text 5s ease infinite",
+        "pulse": "pulse 2s infinite",
+        "float": "float 3s ease-in-out infinite",
+        "bounce-slow": "bounce 3s infinite",
       },
       keyframes: {
         "card-hover": {
@@ -58,6 +62,20 @@ export default {
         "slide-up": {
           "0%": { transform: "translateY(20px)", opacity: "0" },
           "100%": { transform: "translateY(0)", opacity: "1" },
+        },
+        "text": {
+          "0%, 100%": {
+            "background-size": "200% 200%",
+            "background-position": "left center",
+          },
+          "50%": {
+            "background-size": "200% 200%",
+            "background-position": "right center",
+          },
+        },
+        "float": {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-10px)" },
         },
       },
       fontFamily: {
