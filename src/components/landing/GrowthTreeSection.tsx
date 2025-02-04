@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { TreeDeciduous, Sprout, Leaf, Branch, ArrowUpRight } from "lucide-react";
+import { TreeDeciduous, Sprout, Leaf, GitBranch, ArrowUpRight } from "lucide-react";
 
 const GrowthTreeSection = () => {
   const benefits = [
@@ -16,8 +16,8 @@ const GrowthTreeSection = () => {
       delay: 0.4,
     },
     {
-      icon: Branch,
-      title: "Scale Efficiently",
+      icon: GitBranch,
+      title: "Scale Efficiently", 
       description: "Expand your AI capabilities across teams and departments",
       delay: 0.6,
     },
