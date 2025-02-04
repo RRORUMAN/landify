@@ -12,7 +12,7 @@ export const developmentTools: Tool[] = [
     tags: ["coding", "development", "ai assistant"],
     category: "Development",
     featured: true,
-    visitUrl: "https://github.com/features/copilot",
+    visit_url: "https://github.com/features/copilot",
     bookmarks: 2800,
   },
   {
@@ -26,7 +26,7 @@ export const developmentTools: Tool[] = [
     tags: ["coding", "ai", "development"],
     category: "Development",
     featured: false,
-    visitUrl: "https://www.tabnine.com",
+    visit_url: "https://www.tabnine.com",
     bookmarks: 1500,
   }
 ];

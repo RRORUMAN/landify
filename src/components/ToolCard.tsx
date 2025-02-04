@@ -68,9 +68,14 @@ const ToolCard = ({ tool }: ToolCardProps) => {
               )}
             </div>
             <div>
-              <h3 className="font-semibold text-lg text-gray-900 group-hover:text-blue-600 transition-colors">
-                {tool.name}
-              </h3>
+              <div className="flex items-center gap-2">
+                <h3 className="font-semibold text-lg text-gray-900 group-hover:text-blue-600 transition-colors">
+                  {tool.name}
+                </h3>
+                <span className="text-sm bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-600 px-2 py-0.5 rounded-full font-medium">
+                  {tool.pricing}
+                </span>
+              </div>
               <div className="flex items-center gap-2 mt-1">
                 <div className="flex">
                   {[...Array(5)].map((_, i) => (
@@ -97,15 +102,10 @@ const ToolCard = ({ tool }: ToolCardProps) => {
             >
               <Share2 className="h-4 w-4 text-gray-500" />
             </Button>
-            <div className="flex items-center gap-2">
-              <span className="text-sm bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-600 px-3 py-1 rounded-full font-medium">
-                {tool.pricing}
-              </span>
-              <span className="text-sm text-gray-500 flex items-center gap-1">
-                <Bookmark className="h-4 w-4" />
-                {tool.bookmarks}
-              </span>
-            </div>
+            <span className="text-sm text-gray-500 flex items-center gap-1">
+              <Bookmark className="h-4 w-4" />
+              {tool.bookmarks}
+            </span>
           </div>
         </div>
 

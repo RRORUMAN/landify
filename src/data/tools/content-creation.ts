@@ -12,7 +12,7 @@ export const contentCreationTools: Tool[] = [
     tags: ["ai chat", "writing", "analysis"],
     category: "Content Creation",
     featured: true,
-    visitUrl: "https://chat.openai.com",
+    visit_url: "https://chat.openai.com",
     bookmarks: 5000,
   },
   {
@@ -26,7 +26,7 @@ export const contentCreationTools: Tool[] = [
     tags: ["writing", "editing", "grammar"],
     category: "Content Creation",
     featured: true,
-    visitUrl: "https://www.grammarly.com",
+    visit_url: "https://www.grammarly.com",
     bookmarks: 3500,
   }
 ];

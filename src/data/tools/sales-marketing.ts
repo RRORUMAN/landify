@@ -12,7 +12,7 @@ export const salesMarketingTools: Tool[] = [
     tags: ["copywriting", "marketing", "content"],
     category: "Sales & Marketing",
     featured: true,
-    visitUrl: "https://www.copy.ai",
+    visit_url: "https://www.copy.ai",
     bookmarks: 1250,
   },
   {
@@ -26,21 +26,7 @@ export const salesMarketingTools: Tool[] = [
     tags: ["content", "marketing", "ai writing"],
     category: "Sales & Marketing",
     featured: true,
-    visitUrl: "https://www.jasper.ai",
+    visit_url: "https://www.jasper.ai",
     bookmarks: 1800,
-  },
-  {
-    id: "mailchimp-ai",
-    name: "Mailchimp AI",
-    logo: "https://placehold.co/60x60",
-    rating: 4.6,
-    reviews: 2000,
-    pricing: "Freemium",
-    description: "AI-enhanced email marketing platform with smart campaign optimization.",
-    tags: ["email", "marketing", "automation"],
-    category: "Sales & Marketing",
-    featured: false,
-    visitUrl: "https://mailchimp.com",
-    bookmarks: 950,
   }
 ];
