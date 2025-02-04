@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Tool } from "@/data/tools";
+import { Tool, tools as allTools } from "@/data/tools";
 import ToolCard from "@/components/ToolCard";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
@@ -14,18 +14,24 @@ const MyTools = () => {
     const fetchUserTools = async () => {
       try {
         const { data: { user } } = await supabase.auth.getUser();
-        if (!user) return;
+        if (!user) {
+          navigate("/auth");
+          return;
+        }
 
-        const { data, error } = await supabase
+        const { data: userTools, error } = await supabase
           .from("user_tools")
           .select("*")
           .eq("user_id", user.id);
 
         if (error) throw error;
 
-        // Here you would typically fetch the full tool details for each tool_id
-        // For now, we'll just display the IDs
-        setTools(data);
+        // Map user tools to actual tool data
+        const userToolsWithData = userTools
+          .map(userTool => allTools.find(tool => tool.id === userTool.tool_id))
+          .filter((tool): tool is Tool => tool !== undefined);
+
+        setTools(userToolsWithData);
       } catch (error) {
         console.error("Error fetching tools:", error);
       } finally {
@@ -34,7 +40,7 @@ const MyTools = () => {
     };
 
     fetchUserTools();
-  }, []);
+  }, [navigate]);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white">
