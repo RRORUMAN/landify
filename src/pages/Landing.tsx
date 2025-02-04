@@ -195,38 +195,79 @@ const Landing = () => {
         </div>
       </div>
 
-      {/* Analytics Section */}
-      <div className="py-32 bg-white">
+      {/* Innovation Hub Section - Replacing Data-Driven Insights */}
+      <div className="py-32 bg-[#D3E4FD]">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <span className="bg-green-50 text-green-600 px-4 py-1 rounded-full text-sm font-medium">
-              ANALYTICS
+            <span className="bg-blue-600 text-white px-4 py-1 rounded-full text-sm font-medium">
+              INNOVATION HUB
             </span>
-            <h2 className="text-4xl font-bold mt-6 mb-4 text-primary">
-              Data-Driven Insights
+            <h2 className="text-4xl font-bold mt-6 mb-4 text-[#222222]">
+              Powering the Future of AI
             </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Make informed decisions with comprehensive analytics and reporting
+            <p className="text-gray-700 max-w-2xl mx-auto">
+              Experience the next generation of AI tool management and discovery
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              { icon: BarChart3, title: "Usage Metrics", color: "from-blue-400 to-blue-600" },
-              { icon: LineChart, title: "Growth Trends", color: "from-purple-400 to-purple-600" },
-              { icon: PieChart, title: "ROI Analysis", color: "from-green-400 to-green-600" },
-            ].map((chart, index) => (
-              <div
-                key={chart.title}
-                className="p-8 rounded-2xl bg-white shadow-sm hover:shadow-lg transition-all animate-fade-in"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                <div className={`bg-gradient-to-r ${chart.color} p-4 rounded-xl w-fit mx-auto mb-6`}>
-                  <chart.icon className="w-12 h-12 text-white" />
-                </div>
-                <h4 className="text-xl font-bold text-center mb-4">{chart.title}</h4>
-                <div className="h-32 bg-gray-50 rounded-lg animate-pulse" />
+              {
+                title: "AI Integration",
+                description: "Seamlessly connect with 500+ AI tools",
+                metric: "98%",
+                subtext: "Integration Success Rate",
+              },
+              {
+                title: "Smart Discovery",
+                description: "Find the perfect AI tools for your needs",
+                metric: "2.5x",
+                subtext: "Faster Implementation",
+              },
+              {
+                title: "ROI Impact",
+                description: "Maximize your AI investment returns",
+                metric: "3.8x",
+                subtext: "Average ROI Increase",
+              },
+            ].map((item) => (
+              <div key={item.title} className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all">
+                <h3 className="text-2xl font-bold mb-2 text-blue-600">{item.title}</h3>
+                <p className="text-gray-600 mb-6">{item.description}</p>
+                <div className="text-4xl font-bold text-[#222222] mb-2">{item.metric}</div>
+                <p className="text-gray-500">{item.subtext}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Trust Signals Section */}
+      <div className="py-20 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h3 className="text-2xl font-bold text-[#222222] mb-8">Trusted by Leading Companies</h3>
+            <div className="grid grid-cols-2 md:grid-cols-6 gap-8 items-center">
+              {[
+                { name: "Microsoft", color: "#00A4EF" },
+                { name: "Palantir", color: "#101113" },
+                { name: "Datadog", color: "#632CA6" },
+                { name: "Snowflake", color: "#29B5E8" },
+                { name: "Apple", color: "#555555" },
+                { name: "Amazon", color: "#FF9900" },
+              ].map((company) => (
+                <div
+                  key={company.name}
+                  className="flex items-center justify-center p-4 rounded-lg hover:bg-gray-50 transition-colors"
+                >
+                  <div
+                    className="h-8 flex items-center justify-center font-bold text-lg"
+                    style={{ color: company.color }}
+                  >
+                    {company.name}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -285,23 +326,6 @@ const Landing = () => {
                 </div>
               </div>
             ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Trust Signals Section */}
-      <div className="py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h3 className="text-2xl font-semibold mb-8">Trusted by Leading Companies</h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 opacity-50">
-              {Array.from({ length: 4 }).map((_, index) => (
-                <div
-                  key={index}
-                  className="h-12 bg-gray-200 rounded animate-pulse"
-                />
-              ))}
-            </div>
           </div>
         </div>
       </div>
