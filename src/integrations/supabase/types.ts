@@ -30,6 +30,54 @@ export type Database = {
         }
         Relationships: []
       }
+      tools: {
+        Row: {
+          bookmarks: number
+          category: string
+          created_at: string | null
+          description: string
+          featured: boolean
+          id: string
+          logo: string
+          name: string
+          pricing: string
+          rating: number
+          reviews: number
+          tags: string[]
+          visit_url: string
+        }
+        Insert: {
+          bookmarks?: number
+          category: string
+          created_at?: string | null
+          description: string
+          featured?: boolean
+          id: string
+          logo: string
+          name: string
+          pricing: string
+          rating: number
+          reviews: number
+          tags: string[]
+          visit_url: string
+        }
+        Update: {
+          bookmarks?: number
+          category?: string
+          created_at?: string | null
+          description?: string
+          featured?: boolean
+          id?: string
+          logo?: string
+          name?: string
+          pricing?: string
+          rating?: number
+          reviews?: number
+          tags?: string[]
+          visit_url?: string
+        }
+        Relationships: []
+      }
       user_tools: {
         Row: {
           id: string
