@@ -1,6 +1,17 @@
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, Check, Zap, Shield, Search, Wrench, Brain } from "lucide-react";
+import {
+  ArrowRight,
+  Check,
+  Zap,
+  Shield,
+  Search,
+  Wrench,
+  Brain,
+  BarChart3,
+  LineChart,
+  PieChart,
+} from "lucide-react";
 
 const Landing = () => {
   const navigate = useNavigate();
@@ -70,6 +81,35 @@ const Landing = () => {
         </div>
       </div>
 
+      {/* Analytics Section */}
+      <div className="container mx-auto px-4 py-20 bg-gray-800/30">
+        <div className="text-center mb-16">
+          <h3 className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent mb-4">
+            Track Your AI Journey
+          </h3>
+          <p className="text-xl text-gray-300">
+            Visualize your AI tool usage and optimize your workflow
+          </p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {[
+            { icon: BarChart3, title: "Usage Analytics", description: "Monitor tool usage patterns" },
+            { icon: LineChart, title: "Performance Tracking", description: "Track ROI and efficiency" },
+            { icon: PieChart, title: "Resource Distribution", description: "Optimize tool allocation" },
+          ].map((chart, index) => (
+            <div
+              key={chart.title}
+              className="p-8 rounded-xl bg-gray-800/50 hover:bg-gray-800/70 transition-all animate-fade-in flex flex-col items-center text-center"
+              style={{ animationDelay: `${index * 0.1}s` }}
+            >
+              <chart.icon className="w-16 h-16 mb-4 text-purple-400" />
+              <h4 className="text-xl font-semibold mb-2">{chart.title}</h4>
+              <p className="text-gray-400">{chart.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* Stats Section */}
       <div className="container mx-auto px-4 py-20">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
@@ -77,14 +117,51 @@ const Landing = () => {
             <h4 className="text-4xl font-bold text-purple-400 mb-2">500+</h4>
             <p className="text-gray-400">AI Tools Available</p>
           </div>
-          <div className="p-6 rounded-lg bg-gray-800/50 animate-fade-in" style={{ animationDelay: "0.1s" }}>
+          <div
+            className="p-6 rounded-lg bg-gray-800/50 animate-fade-in"
+            style={{ animationDelay: "0.1s" }}
+          >
             <h4 className="text-4xl font-bold text-purple-400 mb-2">50k+</h4>
             <p className="text-gray-400">Active Users</p>
           </div>
-          <div className="p-6 rounded-lg bg-gray-800/50 animate-fade-in" style={{ animationDelay: "0.2s" }}>
+          <div
+            className="p-6 rounded-lg bg-gray-800/50 animate-fade-in"
+            style={{ animationDelay: "0.2s" }}
+          >
             <h4 className="text-4xl font-bold text-purple-400 mb-2">20+</h4>
             <p className="text-gray-400">Categories</p>
           </div>
+        </div>
+      </div>
+
+      {/* Benefits Section */}
+      <div className="container mx-auto px-4 py-20 bg-gray-800/30">
+        <div className="text-center mb-16">
+          <h3 className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent mb-4">
+            Benefits of Using Relevence
+          </h3>
+          <p className="text-xl text-gray-300">
+            Transform your workflow with our comprehensive AI tool management platform
+          </p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          {[
+            "Save time finding the right AI tools",
+            "Reduce costs with smart recommendations",
+            "Track and optimize tool usage",
+            "Access verified and reliable tools",
+            "Streamline your AI workflow",
+            "Get personalized suggestions",
+          ].map((benefit, index) => (
+            <div
+              key={benefit}
+              className="flex items-center p-4 rounded-lg bg-gray-800/50 animate-fade-in"
+              style={{ animationDelay: `${index * 0.1}s` }}
+            >
+              <Check className="w-6 h-6 text-green-400 mr-3 flex-shrink-0" />
+              <p className="text-gray-300">{benefit}</p>
+            </div>
+          ))}
         </div>
       </div>
 
