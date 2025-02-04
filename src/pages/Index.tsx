@@ -42,33 +42,16 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">AI Tools</h1>
-          <div className="flex gap-4">
-            <Button
-              onClick={() => navigate("/my-tools")}
-              variant="outline"
-              className="border-gray-200 hover:bg-gray-50"
-            >
-              My Tools
-            </Button>
-            <Button
-              onClick={handleSignOut}
-              variant="outline"
-              className="border-gray-200 hover:bg-gray-50 text-red-600 hover:text-red-700"
-            >
-              Sign Out
-            </Button>
-          </div>
-        </div>
-
+      <div className="p-8">
         <div className="mb-8">
           <SearchBar value={searchQuery} onChange={setSearchQuery} />
         </div>
 
         <RecentlyAdded />
-        <CompareTools />
+        
+        <div id="compare">
+          <CompareTools />
+        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           <div className="lg:col-span-1">

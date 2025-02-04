@@ -12,9 +12,6 @@ const NavLinks = () => {
       <Link to="/pricing" className="text-primary hover:text-primary/80 transition-colors">
         Pricing
       </Link>
-      <Link to="/tools" className="text-primary hover:text-primary/80 transition-colors">
-        Tools
-      </Link>
     </div>
   );
 };
