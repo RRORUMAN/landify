@@ -116,8 +116,8 @@ const ToolCategories = () => {
   return (
     <div className="p-6 max-w-7xl mx-auto">
       <div className="mb-8 animate-fade-in">
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">Browse AI Tools</h1>
-        <p className="text-gray-600">Discover and explore AI tools by category</p>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Browse AI Tools</h1>
+        <p className="text-gray-600 dark:text-gray-300">Discover and explore AI tools by category</p>
       </div>
 
       <div className="flex flex-col gap-4 mb-6">
@@ -201,12 +201,12 @@ const ToolCategories = () => {
             </SelectContent>
           </Select>
 
-          <Select value={selectedPricing || ""} onValueChange={(value) => setSelectedPricing(value || null)}>
+          <Select value={selectedPricing || "all"} onValueChange={(value) => setSelectedPricing(value === "all" ? null : value)}>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Price Range" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All Pricing</SelectItem>
+              <SelectItem value="all">All Pricing</SelectItem>
               <SelectItem value="Free Trial">Free Trial</SelectItem>
               <SelectItem value="Freemium">Freemium</SelectItem>
               <SelectItem value="Paid">Paid</SelectItem>
