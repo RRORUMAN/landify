@@ -1,17 +1,43 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SearchBar from "@/components/SearchBar";
 import CategoryFilter from "@/components/CategoryFilter";
 import ToolCard from "@/components/ToolCard";
-import { tools } from "@/data/tools";
 import { Button } from "@/components/ui/button";
-import { Grid, List, SlidersHorizontal } from "lucide-react";
+import { Grid, List, SlidersHorizontal, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/integrations/supabase/client";
+import type { Tool } from "@/data/tools";
 
 const ToolCategories = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [showFilters, setShowFilters] = useState(true);
+  const [tools, setTools] = useState<Tool[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTools = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('tools')
+          .select('*');
+        
+        if (error) {
+          console.error('Error fetching tools:', error);
+          return;
+        }
+
+        setTools(data || []);
+      } catch (error) {
+        console.error('Error:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchTools();
+  }, []);
 
   const filteredTools = tools.filter((tool) => {
     const matchesSearch = tool.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -78,14 +104,20 @@ const ToolCategories = () => {
           </div>
         )}
         <div className={showFilters ? "lg:col-span-3" : "lg:col-span-4"}>
-          <div className={cn(
-            "grid gap-6 animate-fade-in",
-            viewMode === "grid" ? "grid-cols-1 md:grid-cols-2" : "grid-cols-1"
-          )}>
-            {filteredTools.map((tool) => (
-              <ToolCard key={tool.id} tool={tool} />
-            ))}
-          </div>
+          {isLoading ? (
+            <div className="flex justify-center items-center min-h-[200px]">
+              <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
+            </div>
+          ) : (
+            <div className={cn(
+              "grid gap-6 animate-fade-in",
+              viewMode === "grid" ? "grid-cols-1 md:grid-cols-2" : "grid-cols-1"
+            )}>
+              {filteredTools.map((tool) => (
+                <ToolCard key={tool.id} tool={tool} />
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>
