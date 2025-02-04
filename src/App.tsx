@@ -11,38 +11,41 @@ import CompareTools from "./pages/tools/CompareTools";
 import AIRecommendations from "./pages/tools/AIRecommendations";
 import Analytics from "./pages/tools/Analytics";
 import Sidebar from "./components/dashboard/Sidebar";
+import { useLocation } from "react-router-dom";
 
 function App() {
+  const location = useLocation();
+  
   const isDashboardRoute = (pathname: string) => {
     return pathname.startsWith('/tools') || pathname === '/my-tools';
   };
 
+  const showNavbar = !isDashboardRoute(location.pathname);
+
   return (
-    <Router>
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-        <Navbar />
-        <div className="flex">
-          {isDashboardRoute(window.location.pathname) && <Sidebar />}
-          <main className="flex-1">
-            <Routes>
-              <Route path="/" element={<Landing />} />
-              <Route path="/features" element={<Features />} />
-              <Route path="/pricing" element={<Pricing />} />
-              <Route path="/auth" element={<Auth />} />
-              <Route path="/my-tools" element={<MyTools />} />
-              <Route path="/tools">
-                <Route index element={<Navigate to="/tools/categories" replace />} />
-                <Route path="categories" element={<ToolCategories />} />
-                <Route path="add" element={<AddTool />} />
-                <Route path="compare" element={<CompareTools />} />
-                <Route path="recommendations" element={<AIRecommendations />} />
-                <Route path="analytics" element={<Analytics />} />
-              </Route>
-            </Routes>
-          </main>
-        </div>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      {showNavbar && <Navbar />}
+      <div className="flex">
+        {isDashboardRoute(location.pathname) && <Sidebar />}
+        <main className={`flex-1 ${isDashboardRoute(location.pathname) ? 'pl-4 pr-6 pt-6' : ''}`}>
+          <Routes>
+            <Route path="/" element={<Landing />} />
+            <Route path="/features" element={<Features />} />
+            <Route path="/pricing" element={<Pricing />} />
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/my-tools" element={<MyTools />} />
+            <Route path="/tools">
+              <Route index element={<Navigate to="/tools/categories" replace />} />
+              <Route path="categories" element={<ToolCategories />} />
+              <Route path="add" element={<AddTool />} />
+              <Route path="compare" element={<CompareTools />} />
+              <Route path="recommendations" element={<AIRecommendations />} />
+              <Route path="analytics" element={<Analytics />} />
+            </Route>
+          </Routes>
+        </main>
       </div>
-    </Router>
+    </div>
   );
 }
 

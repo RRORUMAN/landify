@@ -82,10 +82,8 @@ const Sidebar = () => {
   };
 
   return (
-    <div className={cn(
-      "min-h-screen w-80 bg-white dark:bg-gray-900 border-r border-gray-100 dark:border-gray-800 p-6 relative transition-colors duration-300",
-    )}>
-      <div className="space-y-8">
+    <aside className="min-h-screen w-80 bg-white dark:bg-gray-900 border-r border-gray-100 dark:border-gray-800 p-6 relative transition-colors duration-300 flex flex-col">
+      <div className="flex-1 space-y-8">
         <div className="flex items-center justify-between px-2">
           <div>
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
@@ -103,7 +101,7 @@ const Sidebar = () => {
               key={item.title}
               to={item.path}
               className={cn(
-                "group flex items-start gap-4 px-4 py-4 rounded-lg transition-all duration-300 relative overflow-hidden",
+                "group flex items-start gap-4 px-4 py-4 rounded-lg transition-all duration-300 relative overflow-hidden hover:shadow-lg",
                 location.pathname === item.path
                   ? "bg-gradient-to-r from-gray-900 to-gray-800 text-white shadow-lg transform -translate-x-1"
                   : "text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
@@ -133,33 +131,33 @@ const Sidebar = () => {
             </Link>
           ))}
         </nav>
-
-        <div className="absolute bottom-6 left-6 right-6 space-y-3">
-          <Button
-            variant="ghost"
-            size="lg"
-            onClick={toggleDarkMode}
-            className={cn(
-              "w-full justify-start gap-3 text-sm",
-              isDarkMode ? "text-white hover:text-gray-300" : "text-gray-600 hover:text-gray-900"
-            )}
-          >
-            {isDarkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-            <span>{isDarkMode ? "Light Mode" : "Dark Mode"}</span>
-          </Button>
-
-          <Button
-            variant="ghost"
-            size="lg"
-            onClick={handleSignOut}
-            className="w-full justify-start gap-3 text-sm text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/10"
-          >
-            <LogOut className="h-5 w-5" />
-            <span>Sign Out</span>
-          </Button>
-        </div>
       </div>
-    </div>
+
+      <div className="space-y-3 pt-6 mt-auto">
+        <Button
+          variant="ghost"
+          size="lg"
+          onClick={toggleDarkMode}
+          className={cn(
+            "w-full justify-start gap-3 text-sm",
+            isDarkMode ? "text-white hover:text-gray-300" : "text-gray-600 hover:text-gray-900"
+          )}
+        >
+          {isDarkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+          <span>{isDarkMode ? "Light Mode" : "Dark Mode"}</span>
+        </Button>
+
+        <Button
+          variant="ghost"
+          size="lg"
+          onClick={handleSignOut}
+          className="w-full justify-start gap-3 text-sm text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/10"
+        >
+          <LogOut className="h-5 w-5" />
+          <span>Sign Out</span>
+        </Button>
+      </div>
+    </aside>
   );
 };
 
