@@ -6,14 +6,12 @@ import HowItWorksSection from "@/components/landing/HowItWorksSection";
 import ROICalculatorSection from "@/components/landing/ROICalculatorSection";
 import SuccessMetricsSection from "@/components/landing/SuccessMetricsSection";
 import IntegrationsSection from "@/components/landing/IntegrationsSection";
-import GrowthTreeSection from "@/components/landing/GrowthTreeSection";
 
 const Landing = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-blue-50 dark:from-gray-900 dark:to-gray-800 text-primary">
       <HeroSection />
       <SuccessMetricsSection />
-      <GrowthTreeSection />
       <HowItWorksSection />
       <FeaturesSection />
       <ROICalculatorSection />
