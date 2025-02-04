@@ -1,12 +1,25 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { Search, Plus, Scale, Brain, Sun, Moon, Settings } from "lucide-react";
+import { Search, Plus, Scale, Brain, Sun, Moon, Settings, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 const Sidebar = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { toast } = useToast();
   const [isDarkMode, setIsDarkMode] = useState(false);
+
+  useEffect(() => {
+    // Check if dark mode was previously enabled
+    const isDark = localStorage.getItem('darkMode') === 'true';
+    setIsDarkMode(isDark);
+    if (isDark) {
+      document.documentElement.classList.add('dark');
+    }
+  }, []);
 
   const menuItems = [
     {
@@ -20,8 +33,8 @@ const Sidebar = () => {
       title: "Add Tools",
       icon: Plus,
       path: "/tools/add",
-      description: "Add custom tools",
-      isNew: true,
+      description: "Track your tools",
+      isNew: false,
     },
     {
       title: "Compare",
@@ -42,6 +55,24 @@ const Sidebar = () => {
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
     document.documentElement.classList.toggle('dark');
+    localStorage.setItem('darkMode', (!isDarkMode).toString());
+  };
+
+  const handleSignOut = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      toast({
+        title: "Error signing out",
+        description: error.message,
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "Signed out successfully",
+        description: "You have been signed out of your account.",
+      });
+      navigate("/");
+    }
   };
 
   return (
@@ -61,17 +92,6 @@ const Sidebar = () => {
               isDarkMode ? "text-gray-400" : "text-gray-500"
             )}>Manage tools</p>
           </div>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={toggleDarkMode}
-            className={cn(
-              "rounded-full",
-              isDarkMode ? "text-white hover:text-gray-300" : "text-gray-600 hover:text-gray-900"
-            )}
-          >
-            {isDarkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-          </Button>
         </div>
         
         <nav className="space-y-2">
@@ -119,22 +139,32 @@ const Sidebar = () => {
           ))}
         </nav>
 
-        <div className="absolute bottom-4 left-4 right-4">
-          <Link
-            to="/settings"
+        <div className="absolute bottom-4 left-4 right-4 space-y-2">
+          <Button
+            variant="ghost"
+            size="lg"
+            onClick={toggleDarkMode}
             className={cn(
-              "flex items-center gap-2 p-4 rounded-lg transition-colors duration-200",
-              isDarkMode
-                ? "bg-gray-800 text-gray-300 hover:bg-gray-700"
-                : "bg-blue-50 text-blue-900 hover:bg-blue-100"
+              "w-full justify-start gap-2",
+              isDarkMode ? "text-white hover:text-gray-300" : "text-gray-600 hover:text-gray-900"
             )}
           >
-            <Settings className="h-5 w-5" />
-            <div>
-              <h3 className="text-sm font-medium mb-1">Customize</h3>
-              <p className="text-xs opacity-80">Layout & preferences</p>
-            </div>
-          </Link>
+            {isDarkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            <span>{isDarkMode ? "Light Mode" : "Dark Mode"}</span>
+          </Button>
+
+          <Button
+            variant="ghost"
+            size="lg"
+            onClick={handleSignOut}
+            className={cn(
+              "w-full justify-start gap-2 text-red-600 hover:text-red-700 hover:bg-red-50",
+              isDarkMode && "hover:bg-red-900/10"
+            )}
+          >
+            <LogOut className="h-5 w-5" />
+            <span>Sign Out</span>
+          </Button>
         </div>
       </div>
     </div>

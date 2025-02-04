@@ -11,10 +11,14 @@ import CompareTools from "./pages/tools/CompareTools";
 import AIRecommendations from "./pages/tools/AIRecommendations";
 
 function App() {
+  const isDashboardRoute = (pathname: string) => {
+    return pathname.startsWith('/tools') || pathname === '/my-tools';
+  };
+
   return (
     <Router>
-      <div className="min-h-screen bg-gray-50">
-        <Navbar />
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+        {!isDashboardRoute(window.location.pathname) && <Navbar />}
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/features" element={<Features />} />
