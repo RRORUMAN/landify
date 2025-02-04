@@ -8,11 +8,11 @@ interface CategoryFilterProps {
 
 const CategoryFilter = ({ selectedCategory, onSelectCategory }: CategoryFilterProps) => {
   return (
-    <div className="sticky top-4 space-y-2 bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-      <h2 className="text-xl font-semibold mb-6">Categories</h2>
+    <div className="sticky top-4 space-y-3 bg-white p-8 rounded-xl shadow-sm border border-gray-100">
+      <h2 className="text-lg font-semibold mb-6">Categories</h2>
       <Button
         variant={selectedCategory === null ? "default" : "ghost"}
-        className="w-full justify-start mb-2"
+        className="w-full justify-start py-6 text-base"
         onClick={() => onSelectCategory(null)}
       >
         All Tools
@@ -23,14 +23,12 @@ const CategoryFilter = ({ selectedCategory, onSelectCategory }: CategoryFilterPr
           <Button
             key={category.name}
             variant={selectedCategory === category.name ? "default" : "ghost"}
-            className={`w-full justify-start ${
-              selectedCategory === category.name
-                ? "bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
-                : ""
+            className={`w-full justify-start py-6 text-base ${
+              selectedCategory === category.name ? "bg-primary hover:bg-primary/90" : ""
             }`}
             onClick={() => onSelectCategory(category.name)}
           >
-            <Icon className="mr-2 h-4 w-4" />
+            <Icon className="mr-2 h-5 w-5" />
             {category.name}
           </Button>
         );
