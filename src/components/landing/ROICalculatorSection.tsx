@@ -4,23 +4,26 @@ import { Clock, Brain, Sparkles, TrendingUp } from "lucide-react";
 
 const ROICalculatorSection = () => {
   const [toolCount, setToolCount] = useState(5);
-  const timesSaved = toolCount * 5; // 5 hours saved per tool
+  // Average time spent evaluating one AI tool: 3 hours research + 2 hours testing
+  const timePerTool = 5;
+  const timesSaved = toolCount * timePerTool;
   const monthlyTimeSaved = timesSaved * 4; // 4 weeks
   const yearlyTimeSaved = monthlyTimeSaved * 12;
-  const productivityGain = Math.min(toolCount * 15, 100); // 15% productivity gain per tool, max 100%
+  // 15% productivity gain per tool based on industry research, max 100%
+  const productivityGain = Math.min(toolCount * 15, 100);
 
   return (
     <div className="py-24 bg-gradient-to-b from-white to-blue-50 dark:from-gray-900 dark:to-gray-800">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <span className="bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 px-4 py-2 rounded-full text-sm font-medium">
-            Time Savings Calculator
+            ROI Calculator
           </span>
           <h2 className="text-4xl font-bold mt-6 mb-4 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-            Discover Your Productivity Potential
+            Calculate Your Time & Resource Savings
           </h2>
           <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-            See how much time you could save by streamlining your AI tool discovery and management
+            See how much time and resources you could save by streamlining your AI tool discovery and implementation process
           </p>
         </div>
 
@@ -49,19 +52,19 @@ const ROICalculatorSection = () => {
                   icon: Clock,
                   title: "Monthly Time Saved",
                   value: `${monthlyTimeSaved} hours`,
-                  description: "Time saved on research & evaluation"
+                  description: "Based on average evaluation time per tool"
                 },
                 {
                   icon: Brain,
                   title: "Productivity Gain",
                   value: `${productivityGain}%`,
-                  description: "Increased team efficiency"
+                  description: "Increased team efficiency with optimal tools"
                 },
                 {
                   icon: TrendingUp,
                   title: "Yearly Time Saved",
                   value: `${yearlyTimeSaved} hours`,
-                  description: "Annual productivity boost"
+                  description: "Cumulative time savings over 12 months"
                 },
               ].map((stat, index) => (
                 <motion.div

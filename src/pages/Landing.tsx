@@ -5,6 +5,7 @@ import CTASection from "@/components/landing/CTASection";
 import HowItWorksSection from "@/components/landing/HowItWorksSection";
 import ROICalculatorSection from "@/components/landing/ROICalculatorSection";
 import SuccessMetricsSection from "@/components/landing/SuccessMetricsSection";
+import IntegrationsSection from "@/components/landing/IntegrationsSection";
 
 const Landing = () => {
   return (
@@ -14,6 +15,7 @@ const Landing = () => {
       <HowItWorksSection />
       <FeaturesSection />
       <ROICalculatorSection />
+      <IntegrationsSection />
       <TestimonialsSection />
       <CTASection />
     </div>
