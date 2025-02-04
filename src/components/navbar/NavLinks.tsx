@@ -6,7 +6,7 @@ const NavLinks = () => {
       <Link to="/" className="text-primary hover:text-primary/80 transition-colors">
         Home
       </Link>
-      <Link to="/features" className="text-primary hover:text-primary/80 transition-colors">
+      <Link to="/#features" className="text-primary hover:text-primary/80 transition-colors">
         Features
       </Link>
       <Link to="/pricing" className="text-primary hover:text-primary/80 transition-colors">
