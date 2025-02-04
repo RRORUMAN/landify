@@ -6,6 +6,8 @@ import { supabase } from "@/integrations/supabase/client";
 import SearchBar from "@/components/SearchBar";
 import CategoryFilter from "@/components/CategoryFilter";
 import ToolCard from "@/components/ToolCard";
+import CompareTools from "@/components/CompareTools";
+import RecentlyAdded from "@/components/RecentlyAdded";
 import { tools } from "@/data/tools";
 
 const Index = () => {
@@ -64,6 +66,9 @@ const Index = () => {
         <div className="mb-8">
           <SearchBar value={searchQuery} onChange={setSearchQuery} />
         </div>
+
+        <RecentlyAdded />
+        <CompareTools />
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           <div className="lg:col-span-1">

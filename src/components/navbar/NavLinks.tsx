@@ -1,8 +1,6 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const NavLinks = () => {
-  const navigate = useNavigate();
-  
   return (
     <div className="flex items-center space-x-8">
       <Link to="/" className="text-primary hover:text-primary/80 transition-colors">

@@ -1,6 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Star, Bookmark, ExternalLink } from "lucide-react";
+import { Star, Bookmark, ExternalLink, Share2 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 import type { Tool } from "@/data/tools";
 
 interface ToolCardProps {
@@ -8,6 +9,25 @@ interface ToolCardProps {
 }
 
 const ToolCard = ({ tool }: ToolCardProps) => {
+  const { toast } = useToast();
+
+  const handleShare = async () => {
+    try {
+      await navigator.share({
+        title: tool.name,
+        text: tool.description,
+        url: tool.visitUrl,
+      });
+    } catch (error) {
+      // Fallback to copying to clipboard
+      navigator.clipboard.writeText(tool.visitUrl);
+      toast({
+        title: "Link copied to clipboard",
+        description: "You can now share it with others!",
+      });
+    }
+  };
+
   return (
     <Card className="p-6 bg-white border-gray-100 hover:shadow-md transition-all duration-300">
       <div className="flex justify-between items-start">
@@ -31,6 +51,14 @@ const ToolCard = ({ tool }: ToolCardProps) => {
           </div>
         </div>
         <div className="flex items-center gap-3">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8"
+            onClick={handleShare}
+          >
+            <Share2 className="h-4 w-4 text-gray-500" />
+          </Button>
           <span className="text-sm bg-blue-50 text-blue-600 px-3 py-1 rounded-full font-medium">
             {tool.pricing}
           </span>
