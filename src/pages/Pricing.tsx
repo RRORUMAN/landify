@@ -65,7 +65,7 @@ const Pricing = () => {
               key={plan.name}
               className={`rounded-2xl p-8 relative ${
                 plan.popular
-                  ? "bg-blue-500/10 border-2 border-blue-500"
+                  ? "bg-blue-500/10 border-2 border-blue-500 transform scale-105"
                   : "bg-gray-900"
               } transition-all hover:scale-105`}
             >
