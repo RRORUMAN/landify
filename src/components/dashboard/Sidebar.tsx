@@ -33,10 +33,10 @@ const Sidebar = () => {
   ];
 
   return (
-    <div className="min-h-screen w-64 bg-white border-r border-gray-100 p-4">
+    <div className="min-h-screen w-64 bg-white border-r border-gray-100 shadow-lg p-4">
       <div className="space-y-6">
         <div className="px-2">
-          <h2 className="text-lg font-semibold text-gray-900">Tools Dashboard</h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-1">Tools Dashboard</h2>
           <p className="text-sm text-gray-500">Manage and discover AI tools</p>
         </div>
         
@@ -46,16 +46,26 @@ const Sidebar = () => {
               key={item.title}
               to={item.path}
               className={cn(
-                "flex items-center gap-3 px-3 py-2 rounded-lg transition-colors",
+                "flex items-start gap-3 px-3 py-3 rounded-lg transition-all duration-200 hover:shadow-md",
                 location.pathname === item.path
-                  ? "bg-gradient-to-r from-gray-900 to-gray-800 text-white"
+                  ? "bg-gradient-to-r from-gray-900 to-gray-800 text-white shadow-md transform -translate-x-1"
                   : "text-gray-600 hover:bg-gray-50"
               )}
             >
-              <item.icon className="h-5 w-5" />
+              <item.icon className={cn(
+                "h-5 w-5 mt-0.5",
+                location.pathname === item.path
+                  ? "text-white"
+                  : "text-gray-400 group-hover:text-gray-600"
+              )} />
               <div className="flex flex-col">
-                <span className="text-sm font-medium">{item.title}</span>
-                <span className="text-xs text-gray-400">{item.description}</span>
+                <span className="text-sm font-medium leading-none mb-1">{item.title}</span>
+                <span className={cn(
+                  "text-xs",
+                  location.pathname === item.path
+                    ? "text-gray-200"
+                    : "text-gray-400"
+                )}>{item.description}</span>
               </div>
             </Link>
           ))}
