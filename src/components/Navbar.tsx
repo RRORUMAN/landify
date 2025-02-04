@@ -41,13 +41,13 @@ const Navbar = () => {
         "fixed w-full z-50 transition-all duration-300",
         isScrolled
           ? "bg-white/90 backdrop-blur-md py-4 shadow-sm"
-          : "bg-transparent py-6"
+          : "bg-brand-blue/20 backdrop-blur-sm py-6"
       )}
     >
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center">
           <Logo />
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center space-x-8 animate-fade-in">
             <NavLinks />
             <AuthButtons />
           </div>
