@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, Check, Zap, Shield, Search, Tool, Brain } from "lucide-react";
+import { ArrowRight, Check, Zap, Shield, Search, Wrench, Brain } from "lucide-react";
 
 const Landing = () => {
   const navigate = useNavigate();
@@ -22,7 +22,7 @@ const Landing = () => {
       description: "All tools are thoroughly vetted and reviewed for quality and reliability.",
     },
     {
-      icon: Tool,
+      icon: Wrench,
       title: "Tool Management",
       description: "Keep track of your AI tools and subscriptions in one place.",
     },
