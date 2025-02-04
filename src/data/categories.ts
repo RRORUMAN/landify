@@ -7,6 +7,10 @@ export const categories: Category[] = [
   { name: "Development", icon: Server },
   { name: "Design", icon: Palette },
   { name: "Productivity", icon: List },
+  { name: "Human Resources", icon: Users },
+  { name: "Finance", icon: DollarSign },
   { name: "Business Intelligence", icon: Target },
-  { name: "Data & Analytics", icon: Database }
+  { name: "Legal & Compliance", icon: Building },
+  { name: "Data Management", icon: Database },
+  { name: "Project Management", icon: Briefcase }
 ];
