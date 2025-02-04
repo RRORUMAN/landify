@@ -15,14 +15,14 @@ const HeroSection = () => {
           </div>
           
           <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-gray-900 dark:text-white">
-            Find Your Perfect{" "}
+            Master Your AI Arsenal with{" "}
             <span className="bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600 bg-clip-text text-transparent animate-text">
-              AI Solution
+              Intelligence
             </span>
           </h1>
           
           <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed">
-            Stop wasting time searching for the right AI tools. Our intelligent platform helps you discover, evaluate, and implement the perfect AI solutions for your needs in minutes, not months.
+            Your command center for discovering, managing, and optimizing AI tools. Turn chaos into clarity with our intelligent platform.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-12">
