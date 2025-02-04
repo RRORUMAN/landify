@@ -1,55 +1,23 @@
-import { Link, useLocation } from "react-router-dom";
-import { cn } from "@/lib/utils";
+import { Link, useNavigate } from "react-router-dom";
 
 const NavLinks = () => {
-  const location = useLocation();
-
-  const handleFeaturesClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    if (location.pathname !== '/') {
-      navigate('/?section=features');
-    } else {
-      document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
+  const navigate = useNavigate();
+  
   return (
-    <>
-      <Link
-        to="/"
-        className={cn(
-          "text-white/70 hover:text-white transition-colors font-medium",
-          location.pathname === "/" && "text-white"
-        )}
-      >
+    <div className="flex items-center space-x-8">
+      <Link to="/" className="text-primary hover:text-primary/80 transition-colors">
         Home
       </Link>
-      <a
-        href="#features"
-        onClick={handleFeaturesClick}
-        className="text-white/70 hover:text-white transition-colors font-medium cursor-pointer"
-      >
+      <Link to="/features" className="text-primary hover:text-primary/80 transition-colors">
         Features
-      </a>
-      <Link
-        to="/pricing"
-        className={cn(
-          "text-white/70 hover:text-white transition-colors font-medium",
-          location.pathname === "/pricing" && "text-white"
-        )}
-      >
+      </Link>
+      <Link to="/pricing" className="text-primary hover:text-primary/80 transition-colors">
         Pricing
       </Link>
-      <Link
-        to="/tools"
-        className={cn(
-          "text-white/70 hover:text-white transition-colors font-medium",
-          location.pathname === "/tools" && "text-white"
-        )}
-      >
+      <Link to="/tools" className="text-primary hover:text-primary/80 transition-colors">
         Tools
       </Link>
-    </>
+    </div>
   );
 };
 
