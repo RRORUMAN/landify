@@ -13,7 +13,7 @@ const Sidebar = () => {
     },
     {
       title: "My Tools",
-      icon: Grid, // Changed from Tool to Grid since Tool is not available
+      icon: Grid,
       path: "/my-tools",
     },
     {

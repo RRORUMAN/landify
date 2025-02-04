@@ -1,6 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Star, Bookmark, ExternalLink, Share2 } from "lucide-react";
+import { Star, Bookmark, Share2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import type { Tool } from "@/data/tools";
 
@@ -19,7 +19,6 @@ const ToolCard = ({ tool }: ToolCardProps) => {
         url: tool.visitUrl,
       });
     } catch (error) {
-      // Fallback to copying to clipboard
       navigator.clipboard.writeText(tool.visitUrl);
       toast({
         title: "Link copied to clipboard",
@@ -85,7 +84,7 @@ const ToolCard = ({ tool }: ToolCardProps) => {
       <div className="mt-6 flex gap-3">
         <Button
           variant="default"
-          className="flex-1 bg-black hover:bg-black/90 text-white"
+          className="flex-1 bg-[#0EA5E9] hover:bg-[#0EA5E9]/90 text-white"
           onClick={() => window.open(tool.visitUrl, "_blank")}
         >
           Visit
