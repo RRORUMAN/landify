@@ -45,17 +45,17 @@ const Pricing = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white pt-24">
+    <div className="min-h-screen bg-white text-primary pt-24">
       <div className="container mx-auto px-4 py-20">
         <div className="text-center mb-16">
-          <span className="bg-blue-500/10 text-blue-400 px-4 py-1 rounded-full text-sm font-medium">
+          <span className="bg-brand-blue text-blue-600 px-4 py-1 rounded-full text-sm font-medium">
             PRICING
           </span>
-          <h2 className="text-4xl font-bold mt-6 mb-4">
-            Choose Your Plan
+          <h2 className="text-4xl font-bold mt-6 mb-4 text-primary">
+            Choose the Perfect Plan
           </h2>
-          <p className="text-gray-400 max-w-2xl mx-auto">
-            Get started for free or upgrade for more powerful features
+          <p className="text-gray-600 max-w-2xl mx-auto text-lg">
+            Start free and upgrade as your needs grow. No hidden fees.
           </p>
         </div>
         
@@ -63,11 +63,11 @@ const Pricing = () => {
           {plans.map((plan) => (
             <div
               key={plan.name}
-              className={`rounded-2xl p-8 relative ${
+              className={`rounded-2xl p-8 relative transition-all hover:scale-105 duration-300 ${
                 plan.popular
-                  ? "bg-blue-500/10 border-2 border-blue-500 transform scale-105"
-                  : "bg-gray-900"
-              } transition-all hover:scale-105`}
+                  ? "bg-brand-blue border-2 border-blue-400"
+                  : "bg-white border border-gray-200 hover:border-blue-200 hover:shadow-lg"
+              }`}
             >
               {plan.popular && (
                 <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
@@ -76,24 +76,24 @@ const Pricing = () => {
                   </span>
                 </div>
               )}
-              <h3 className="text-2xl font-bold mb-2">{plan.name}</h3>
-              <p className="text-4xl font-bold mb-6">
+              <h3 className="text-2xl font-bold mb-2 text-primary">{plan.name}</h3>
+              <p className="text-4xl font-bold mb-6 text-primary">
                 {plan.price}
-                <span className="text-sm font-normal text-gray-400">/month</span>
+                <span className="text-sm font-normal text-gray-500">/month</span>
               </p>
               <ul className="space-y-4 mb-8">
                 {plan.features.map((feature) => (
-                  <li key={feature} className="flex items-center text-gray-300">
-                    <Check className="h-5 w-5 mr-2 text-blue-400 flex-shrink-0" />
+                  <li key={feature} className="flex items-center text-gray-600">
+                    <Check className="h-5 w-5 mr-2 text-blue-500 flex-shrink-0" />
                     {feature}
                   </li>
                 ))}
               </ul>
               <Button
-                className={`w-full py-6 text-lg ${
+                className={`w-full py-6 text-lg transition-colors ${
                   plan.popular
                     ? "bg-blue-500 hover:bg-blue-600 text-white"
-                    : "bg-gray-800 hover:bg-gray-700 text-gray-300"
+                    : "bg-white hover:bg-brand-blue text-primary border border-gray-200"
                 }`}
                 onClick={() => navigate("/auth")}
               >
@@ -101,6 +101,34 @@ const Pricing = () => {
               </Button>
             </div>
           ))}
+        </div>
+
+        <div className="mt-20 text-center">
+          <h3 className="text-2xl font-bold mb-4 text-primary">
+            Trusted by Leading Companies Worldwide
+          </h3>
+          <div className="grid grid-cols-2 md:grid-cols-6 gap-8 items-center max-w-4xl mx-auto mt-8">
+            {[
+              { name: "Microsoft", color: "#00A4EF" },
+              { name: "Palantir", color: "#101113" },
+              { name: "Datadog", color: "#632CA6" },
+              { name: "Snowflake", color: "#29B5E8" },
+              { name: "Apple", color: "#555555" },
+              { name: "Amazon", color: "#FF9900" },
+            ].map((company) => (
+              <div
+                key={company.name}
+                className="flex items-center justify-center p-4 rounded-lg hover:bg-gray-50 transition-colors"
+              >
+                <div
+                  className="text-lg font-bold"
+                  style={{ color: company.color }}
+                >
+                  {company.name}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
