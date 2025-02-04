@@ -16,13 +16,18 @@ const ToolCard = ({ tool }: ToolCardProps) => {
 
   useEffect(() => {
     const checkToolOwnership = async () => {
-      const { data: userTool } = await supabase
-        .from('user_tools')
-        .select('*')
-        .eq('tool_id', tool.id)
-        .single();
-      
-      setIsOwned(!!userTool);
+      try {
+        const { data: userTool } = await supabase
+          .from('user_tools')
+          .select('*')
+          .eq('tool_id', tool.id)
+          .maybeSingle();
+        
+        setIsOwned(!!userTool);
+      } catch (error) {
+        console.error('Error checking tool ownership:', error);
+        setIsOwned(false);
+      }
     };
 
     checkToolOwnership();
