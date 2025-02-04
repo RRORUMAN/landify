@@ -1,14 +1,21 @@
 import { Link } from "react-router-dom";
 
 const NavLinks = () => {
+  const scrollToFeatures = () => {
+    document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
     <div className="flex items-center space-x-8">
       <Link to="/" className="text-primary hover:text-primary/80 transition-colors">
         Home
       </Link>
-      <Link to="/#features" className="text-primary hover:text-primary/80 transition-colors">
+      <button 
+        onClick={scrollToFeatures}
+        className="text-primary hover:text-primary/80 transition-colors"
+      >
         Features
-      </Link>
+      </button>
       <Link to="/pricing" className="text-primary hover:text-primary/80 transition-colors">
         Pricing
       </Link>

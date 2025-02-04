@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { supabase } from "@/integrations/supabase/client";
 import Logo from "./navbar/Logo";
 import NavLinks from "./navbar/NavLinks";
 import AuthButtons from "./navbar/AuthButtons";
@@ -9,29 +8,20 @@ import AuthButtons from "./navbar/AuthButtons";
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
-  const [isSignedIn, setIsSignedIn] = useState(false);
-
-  useEffect(() => {
-    const checkUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      setIsSignedIn(!!user);
-    };
-    checkUser();
-  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
 
-    if (!isSignedIn) {
-      window.addEventListener("scroll", handleScroll);
-      return () => window.removeEventListener("scroll", handleScroll);
-    }
-  }, [isSignedIn]);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
-  // Don't render navbar on tools page when signed in
-  if (location.pathname === '/tools' && isSignedIn) {
+  // Only show navbar on landing, features, and pricing pages
+  const showNavbar = ['/', '/features', '/pricing'].includes(location.pathname);
+  
+  if (!showNavbar) {
     return null;
   }
 

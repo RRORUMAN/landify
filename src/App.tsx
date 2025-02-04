@@ -20,7 +20,7 @@ function App() {
   return (
     <Router>
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-        {!isDashboardRoute(window.location.pathname) && <Navbar />}
+        <Navbar />
         <div className="flex">
           {isDashboardRoute(window.location.pathname) && <Sidebar />}
           <main className="flex-1">
