@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { Search, Plus, Scale, Brain, Sun, Moon, Settings, LogOut } from "lucide-react";
+import { Search, Plus, Scale, Brain, Sun, Moon, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -13,7 +13,6 @@ const Sidebar = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
-    // Check if dark mode was previously enabled
     const isDark = localStorage.getItem('darkMode') === 'true';
     setIsDarkMode(isDark);
     if (isDark) {
@@ -102,9 +101,7 @@ const Sidebar = () => {
               className={cn(
                 "group flex items-start gap-3 px-4 py-3 rounded-lg transition-all duration-300 relative overflow-hidden",
                 location.pathname === item.path
-                  ? isDarkMode 
-                    ? "bg-blue-600 text-white shadow-lg transform -translate-x-1"
-                    : "bg-gradient-to-r from-gray-900 to-gray-800 text-white shadow-lg transform -translate-x-1"
+                  ? "bg-gradient-to-r from-gray-900 to-gray-800 text-white shadow-lg transform -translate-x-1"
                   : isDarkMode
                     ? "text-gray-300 hover:bg-gray-800"
                     : "text-gray-600 hover:bg-gray-50"
