@@ -1,4 +1,4 @@
-import { Search, Brain, Shield, CircuitBoard, Users, ChartBar } from "lucide-react";
+import { Search, Brain, Zap, CircuitBoard, Users, ChartBar } from "lucide-react";
 
 const FeaturesSection = () => {
   return (
@@ -6,46 +6,46 @@ const FeaturesSection = () => {
       <div className="container mx-auto px-4">
         <div className="text-center mb-20">
           <div className="inline-flex items-center gap-2 bg-blue-50 dark:bg-blue-900/30 px-4 py-2 rounded-full text-sm font-medium text-blue-600 dark:text-blue-400 mb-8">
-            Features
+            Core Features
           </div>
           <h2 className="text-4xl md:text-5xl font-bold mt-6 mb-6 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 dark:from-white dark:via-gray-100 dark:to-gray-200 bg-clip-text text-transparent">
-            Everything You Need to Succeed
+            Solve Your AI Tool Management Challenges
           </h2>
           <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto text-lg leading-relaxed">
-            Powerful features designed to help you find and manage the perfect AI tools
+            Stop wasting time and money on inefficient AI tool management. Here's how we help:
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
           {[
             {
               icon: Search,
-              title: "Smart Search",
-              description: "Advanced filtering system with AI-powered recommendations",
+              title: "Smart Discovery",
+              description: "Find the perfect AI tools in minutes, not hours. Our AI-powered search understands your needs.",
             },
             {
               icon: Brain,
-              title: "AI Recommendations",
-              description: "Get personalized suggestions based on your unique needs",
+              title: "Intelligent Recommendations",
+              description: "Get personalized tool suggestions based on your industry, budget, and specific use cases.",
             },
             {
-              icon: Shield,
-              title: "Verified Tools",
-              description: "Every tool is thoroughly vetted for quality and reliability",
+              icon: Zap,
+              title: "One-Click Integration",
+              description: "Connect your tools instantly with our automated setup process. No technical expertise needed.",
             },
             {
               icon: CircuitBoard,
-              title: "Easy Integration",
-              description: "Seamlessly implement tools with step-by-step guides",
+              title: "Cost Optimization",
+              description: "Identify unused subscriptions and optimize spending across your AI tool stack.",
             },
             {
               icon: Users,
               title: "Team Collaboration",
-              description: "Work together efficiently with shared workspaces",
+              description: "Centralize tool access and permissions. Keep your team aligned and productive.",
             },
             {
               icon: ChartBar,
-              title: "Analytics Dashboard",
-              description: "Track and optimize your AI tool usage with detailed insights",
+              title: "Usage Analytics",
+              description: "Track ROI and tool effectiveness with detailed insights and custom reports.",
             },
           ].map((feature, index) => (
             <div

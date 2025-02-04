@@ -5,17 +5,18 @@ import TestimonialsSection from "@/components/landing/TestimonialsSection";
 import CTASection from "@/components/landing/CTASection";
 import IntegrationsSection from "@/components/landing/IntegrationsSection";
 import HowItWorksSection from "@/components/landing/HowItWorksSection";
-import SecuritySection from "@/components/landing/SecuritySection";
+import ROICalculatorSection from "@/components/landing/ROICalculatorSection";
+import SocialProofSection from "@/components/landing/SocialProofSection";
 
 const Landing = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-blue-50 dark:from-gray-900 dark:to-gray-800 text-primary">
       <HeroSection />
-      <StatsSection />
+      <SocialProofSection />
       <HowItWorksSection />
       <FeaturesSection />
+      <ROICalculatorSection />
       <IntegrationsSection />
-      <SecuritySection />
       <TestimonialsSection />
       <CTASection />
     </div>

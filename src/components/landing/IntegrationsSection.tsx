@@ -7,8 +7,14 @@ const IntegrationsSection = () => {
   const navigate = useNavigate();
   
   const integrations = [
-    "OpenAI", "Anthropic", "Google AI", "Microsoft Azure",
-    "HuggingFace", "Stability AI", "Midjourney", "Replicate"
+    { name: "OpenAI", logo: "🤖" },
+    { name: "Anthropic", logo: "🧠" },
+    { name: "Google AI", logo: "🔍" },
+    { name: "Microsoft Azure", logo: "☁️" },
+    { name: "HuggingFace", logo: "🤗" },
+    { name: "Stability AI", logo: "🎨" },
+    { name: "Midjourney", logo: "🖼️" },
+    { name: "Replicate", logo: "⚡" }
   ];
 
   return (
@@ -16,31 +22,29 @@ const IntegrationsSection = () => {
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <span className="bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 px-4 py-2 rounded-full text-sm font-medium">
-            Integrations
+            Seamless Integrations
           </span>
           <h2 className="text-4xl font-bold mt-6 mb-4 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-            Connect with Your Favorite AI Tools
+            All Your AI Tools in One Place
           </h2>
           <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-            Seamlessly integrate with leading AI platforms and services
+            Connect and manage your entire AI stack from a single dashboard
           </p>
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
           {integrations.map((integration, index) => (
             <div
-              key={integration}
+              key={integration.name}
               className="p-6 rounded-xl bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-all duration-300 group animate-fade-in"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
               <div className="text-center">
                 <div className="w-16 h-16 mx-auto mb-4 bg-blue-50 dark:bg-blue-900/30 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                  <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                    {integration[0]}
-                  </span>
+                  <span className="text-3xl">{integration.logo}</span>
                 </div>
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                  {integration}
+                  {integration.name}
                 </h3>
               </div>
             </div>
