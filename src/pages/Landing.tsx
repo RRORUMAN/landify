@@ -5,13 +5,14 @@ import {
   Zap,
   Shield,
   Search,
-  Wrench,
   Brain,
   ChartBar,
   ArrowUpRight,
   Users,
   Star,
-  CheckCircle2,
+  CircuitBoard,
+  Infinity,
+  Globe,
 } from "lucide-react";
 
 const Landing = () => {
@@ -22,66 +23,79 @@ const Landing = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white text-primary">
+    <div className="min-h-screen bg-gradient-to-b from-white to-blue-50 dark:from-gray-900 dark:to-gray-800 text-primary">
       {/* Hero Section */}
       <div className="container mx-auto px-4 pt-32 pb-20">
         <div className="text-center max-w-4xl mx-auto animate-fade-in">
-          <span className="bg-blue-50 text-blue-600 px-4 py-1 rounded-full text-sm font-medium mb-6 inline-block">
-            TRUSTED BY 10,000+ COMPANIES
-          </span>
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 text-primary">
+          <div className="flex items-center justify-center gap-2 mb-6">
+            <CircuitBoard className="w-5 h-5 text-blue-600" />
+            <span className="bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 px-4 py-1 rounded-full text-sm font-medium">
+              TRUSTED BY 10,000+ COMPANIES
+            </span>
+          </div>
+          <h1 className="text-5xl md:text-7xl font-bold mb-6 text-primary dark:text-white">
             Discover & Manage Your{" "}
             <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
               AI Tools
             </span>{" "}
             Effortlessly
           </h1>
-          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
             The most comprehensive AI tool discovery platform. Find, compare, and implement
             the perfect AI solutions for your business needs.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Button
               size="lg"
-              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg rounded-xl w-full sm:w-auto animate-fade-in"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg rounded-xl w-full sm:w-auto animate-fade-in group transition-all duration-300"
               onClick={() => navigate("/auth")}
             >
-              Get Started Free <ArrowRight className="ml-2" />
+              Get Started Free{" "}
+              <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
             </Button>
             <Button
               size="lg"
               variant="outline"
-              className="border-gray-200 text-primary hover:bg-gray-50 px-8 py-6 text-lg rounded-xl w-full sm:w-auto"
+              className="border-gray-200 dark:border-gray-700 text-primary dark:text-white hover:bg-gray-50 dark:hover:bg-gray-800 px-8 py-6 text-lg rounded-xl w-full sm:w-auto group"
               onClick={scrollToFeatures}
             >
-              See Features <ArrowUpRight className="ml-2" />
+              See Features{" "}
+              <ArrowUpRight className="ml-2 group-hover:rotate-45 transition-transform" />
             </Button>
           </div>
         </div>
       </div>
 
-      {/* Stats Section */}
-      <div className="border-y border-gray-100 bg-gray-50">
+      {/* Stats Section with Glassmorphism */}
+      <div className="border-y border-gray-100 dark:border-gray-800 bg-white/50 dark:bg-gray-800/50 backdrop-blur-lg">
         <div className="container mx-auto px-4 py-16">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {[
-              { number: "10,000+", label: "Active Users" },
-              { number: "500+", label: "AI Tools" },
-              { number: "98%", label: "Success Rate" },
-              { number: "24/7", label: "Support" },
-            ].map((stat) => (
-              <div key={stat.label} className="text-center animate-fade-in">
-                <div className="text-3xl md:text-4xl font-bold text-blue-600 mb-2">
+              { number: "10,000+", label: "Active Users", icon: Users },
+              { number: "500+", label: "AI Tools", icon: Brain },
+              { number: "98%", label: "Success Rate", icon: Star },
+              { number: "24/7", label: "Support", icon: Infinity },
+            ].map((stat, index) => (
+              <div
+                key={stat.label}
+                className="text-center animate-fade-in"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                <div className="flex justify-center mb-4">
+                  <div className="p-3 rounded-lg bg-blue-50 dark:bg-blue-900/30">
+                    <stat.icon className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                  </div>
+                </div>
+                <div className="text-3xl md:text-4xl font-bold text-blue-600 dark:text-blue-400 mb-2">
                   {stat.number}
                 </div>
-                <div className="text-gray-600">{stat.label}</div>
+                <div className="text-gray-600 dark:text-gray-300">{stat.label}</div>
               </div>
             ))}
           </div>
         </div>
       </div>
 
-      {/* How It Works Section */}
       <div className="py-32 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
@@ -129,17 +143,20 @@ const Landing = () => {
         </div>
       </div>
 
-      {/* Features Section */}
-      <div id="features" className="py-32 bg-gray-50">
+      {/* Features Section with Enhanced Design */}
+      <div id="features" className="py-32 bg-gray-50/50 dark:bg-gray-900/50 backdrop-blur-sm">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <span className="bg-blue-50 text-blue-600 px-4 py-1 rounded-full text-sm font-medium">
-              FEATURES
-            </span>
-            <h2 className="text-4xl font-bold mt-6 mb-4 text-primary">
+            <div className="flex items-center justify-center gap-2 mb-6">
+              <Globe className="w-5 h-5 text-purple-600" />
+              <span className="bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 px-4 py-1 rounded-full text-sm font-medium">
+                FEATURES
+              </span>
+            </div>
+            <h2 className="text-4xl font-bold mt-6 mb-4 text-primary dark:text-white">
               Everything You Need to Succeed
             </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
+            <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
               Powerful features designed to help you find and manage the perfect AI tools
             </p>
           </div>
@@ -161,7 +178,7 @@ const Landing = () => {
                 description: "Every tool is thoroughly vetted for quality and reliability",
               },
               {
-                icon: Wrench,
+                icon: CircuitBoard,
                 title: "Easy Integration",
                 description: "Seamlessly implement tools with step-by-step guides",
               },
@@ -178,21 +195,22 @@ const Landing = () => {
             ].map((feature, index) => (
               <div
                 key={feature.title}
-                className="p-8 rounded-2xl bg-white hover:shadow-lg transition-all animate-fade-in"
+                className="p-8 rounded-2xl bg-white dark:bg-gray-800 hover:shadow-xl dark:hover:shadow-2xl dark:shadow-blue-500/5 transition-all duration-300 animate-fade-in group hover:-translate-y-1"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <div className="bg-gradient-to-r from-blue-500 to-purple-500 p-3 rounded-xl w-fit mb-6">
+                <div className="bg-gradient-to-r from-blue-500 to-purple-500 p-3 rounded-xl w-fit mb-6 group-hover:scale-110 transition-transform">
                   <feature.icon className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="text-xl font-bold mb-3 text-primary">{feature.title}</h3>
-                <p className="text-gray-600">{feature.description}</p>
+                <h3 className="text-xl font-bold mb-3 text-primary dark:text-white">
+                  {feature.title}
+                </h3>
+                <p className="text-gray-600 dark:text-gray-300">{feature.description}</p>
               </div>
             ))}
           </div>
         </div>
       </div>
 
-      {/* Trust Signals Section */}
       <div className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
@@ -281,31 +299,33 @@ const Landing = () => {
         </div>
       </div>
 
-      {/* CTA Section */}
+      {/* Enhanced CTA Section */}
       <div className="container mx-auto px-4 py-32">
         <div className="text-center max-w-3xl mx-auto">
-          <h2 className="text-4xl font-bold mb-6 text-primary">
+          <h2 className="text-4xl font-bold mb-6 text-primary dark:text-white">
             Ready to Transform Your Business with AI?
           </h2>
-          <p className="text-xl text-gray-600 mb-8">
+          <p className="text-xl text-gray-600 dark:text-gray-300 mb-8">
             Join thousands of businesses already using Relevence to find and implement
             the perfect AI tools. Start your journey today.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button
               size="lg"
-              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg rounded-xl"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg rounded-xl group"
               onClick={() => navigate("/auth")}
             >
-              Get Started Now <Zap className="ml-2" />
+              Get Started Now{" "}
+              <Zap className="ml-2 group-hover:scale-110 transition-transform" />
             </Button>
             <Button
               size="lg"
               variant="outline"
-              className="border-gray-200 text-primary hover:bg-gray-50 px-8 py-6 text-lg rounded-xl"
+              className="border-gray-200 dark:border-gray-700 text-primary dark:text-white hover:bg-gray-50 dark:hover:bg-gray-800 px-8 py-6 text-lg rounded-xl group"
               onClick={() => navigate("/pricing")}
             >
-              View Pricing <ArrowRight className="ml-2" />
+              View Pricing{" "}
+              <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
             </Button>
           </div>
         </div>
