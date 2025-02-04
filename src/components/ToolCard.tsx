@@ -9,12 +9,12 @@ interface ToolCardProps {
 
 const ToolCard = ({ tool }: ToolCardProps) => {
   return (
-    <Card className="p-6 hover:shadow-lg transition-all duration-300 hover:animate-card-hover bg-white border-gray-100">
+    <Card className="p-6 bg-white border-gray-100 hover:shadow-md transition-all duration-300">
       <div className="flex justify-between items-start">
         <div className="flex items-center gap-4">
-          <img src={tool.logo} alt={tool.name} className="w-12 h-12 rounded-xl shadow-sm" />
+          <img src={tool.logo} alt={tool.name} className="w-12 h-12 rounded-lg" />
           <div>
-            <h3 className="font-semibold text-lg">{tool.name}</h3>
+            <h3 className="font-semibold text-lg text-gray-900">{tool.name}</h3>
             <div className="flex items-center gap-2">
               <div className="flex">
                 {[...Array(5)].map((_, i) => (
@@ -30,8 +30,8 @@ const ToolCard = ({ tool }: ToolCardProps) => {
             </div>
           </div>
         </div>
-        <div className="flex items-center gap-2">
-          <span className="text-sm bg-purple-100 text-purple-700 px-3 py-1 rounded-full">
+        <div className="flex items-center gap-3">
+          <span className="text-sm bg-blue-50 text-blue-600 px-3 py-1 rounded-full font-medium">
             {tool.pricing}
           </span>
           <span className="text-sm text-gray-500 flex items-center gap-1">
@@ -47,7 +47,7 @@ const ToolCard = ({ tool }: ToolCardProps) => {
         {tool.tags.map((tag) => (
           <span
             key={tag}
-            className="text-sm px-2 py-1 bg-blue-50 text-blue-600 rounded-full"
+            className="text-sm px-3 py-1 bg-blue-50 text-blue-600 rounded-full font-medium"
           >
             #{tag}
           </span>
@@ -57,16 +57,15 @@ const ToolCard = ({ tool }: ToolCardProps) => {
       <div className="mt-6 flex gap-3">
         <Button
           variant="default"
-          className="flex-1 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
+          className="flex-1 bg-black hover:bg-black/90 text-white"
           onClick={() => window.open(tool.visitUrl, "_blank")}
         >
-          <ExternalLink className="mr-2 h-4 w-4" />
           Visit
         </Button>
         {tool.dealUrl && (
           <Button
             variant="outline"
-            className="flex-1"
+            className="flex-1 border-gray-200 hover:bg-gray-50"
             onClick={() => window.open(tool.dealUrl, "_blank")}
           >
             Get Deal
