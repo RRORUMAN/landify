@@ -5,6 +5,7 @@ import ToolCard from "@/components/ToolCard";
 import { tools } from "@/data/tools";
 import { Button } from "@/components/ui/button";
 import { Grid, List, SlidersHorizontal } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const ToolCategories = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -35,7 +36,10 @@ const ToolCategories = () => {
             variant="outline"
             size="icon"
             onClick={() => setViewMode("grid")}
-            className={viewMode === "grid" ? "bg-gray-100" : ""}
+            className={cn(
+              "transition-colors duration-200",
+              viewMode === "grid" ? "bg-gray-100 text-gray-900" : "text-gray-500 hover:text-gray-900"
+            )}
           >
             <Grid className="h-4 w-4" />
           </Button>
@@ -43,7 +47,10 @@ const ToolCategories = () => {
             variant="outline"
             size="icon"
             onClick={() => setViewMode("list")}
-            className={viewMode === "list" ? "bg-gray-100" : ""}
+            className={cn(
+              "transition-colors duration-200",
+              viewMode === "list" ? "bg-gray-100 text-gray-900" : "text-gray-500 hover:text-gray-900"
+            )}
           >
             <List className="h-4 w-4" />
           </Button>
@@ -51,7 +58,10 @@ const ToolCategories = () => {
             variant="outline"
             size="icon"
             onClick={() => setShowFilters(!showFilters)}
-            className={showFilters ? "bg-gray-100" : ""}
+            className={cn(
+              "transition-colors duration-200",
+              showFilters ? "bg-gray-100 text-gray-900" : "text-gray-500 hover:text-gray-900"
+            )}
           >
             <SlidersHorizontal className="h-4 w-4" />
           </Button>
