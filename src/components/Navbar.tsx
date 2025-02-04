@@ -29,7 +29,7 @@ const Navbar = () => {
         <div className="flex justify-between items-center">
           <Link
             to="/"
-            className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent"
+            className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent hover:opacity-80 transition-opacity"
           >
             Relevence
           </Link>
@@ -37,16 +37,25 @@ const Navbar = () => {
             <Link
               to="/"
               className={cn(
-                "text-white/70 hover:text-white transition-colors",
+                "text-white/70 hover:text-white transition-colors font-medium",
                 location.pathname === "/" && "text-white"
               )}
             >
               Home
             </Link>
             <Link
+              to="/features"
+              className={cn(
+                "text-white/70 hover:text-white transition-colors font-medium",
+                location.pathname === "/features" && "text-white"
+              )}
+            >
+              Features
+            </Link>
+            <Link
               to="/pricing"
               className={cn(
-                "text-white/70 hover:text-white transition-colors",
+                "text-white/70 hover:text-white transition-colors font-medium",
                 location.pathname === "/pricing" && "text-white"
               )}
             >
@@ -55,7 +64,7 @@ const Navbar = () => {
             <Link
               to="/tools"
               className={cn(
-                "text-white/70 hover:text-white transition-colors",
+                "text-white/70 hover:text-white transition-colors font-medium",
                 location.pathname === "/tools" && "text-white"
               )}
             >
@@ -63,7 +72,7 @@ const Navbar = () => {
             </Link>
             <Button
               variant="outline"
-              className="text-white border-white hover:bg-white hover:text-black transition-all ml-4"
+              className="bg-white text-black hover:bg-white/90 border-2 border-white font-medium transition-all"
               asChild
             >
               <Link to="/auth">Sign In</Link>
