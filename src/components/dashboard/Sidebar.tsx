@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { Grid, ArrowLeft, Tool, Scale } from "lucide-react";
+import { Grid, ArrowLeft, Scale } from "lucide-react";
 
 const Sidebar = () => {
   const location = useLocation();
@@ -13,7 +13,7 @@ const Sidebar = () => {
     },
     {
       title: "My Tools",
-      icon: Tool,
+      icon: Grid, // Changed from Tool to Grid since Tool is not available
       path: "/my-tools",
     },
     {
