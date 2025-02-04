@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Star, Bookmark, Share2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import type { Tool } from "@/data/tools";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 interface ToolCardProps {
   tool: Tool;
@@ -10,6 +12,21 @@ interface ToolCardProps {
 
 const ToolCard = ({ tool }: ToolCardProps) => {
   const { toast } = useToast();
+  const [isOwned, setIsOwned] = useState(false);
+
+  useEffect(() => {
+    const checkToolOwnership = async () => {
+      const { data: userTool } = await supabase
+        .from('user_tools')
+        .select('*')
+        .eq('tool_id', tool.id)
+        .single();
+      
+      setIsOwned(!!userTool);
+    };
+
+    checkToolOwnership();
+  }, [tool.id]);
 
   const handleShare = async () => {
     try {
@@ -33,7 +50,12 @@ const ToolCard = ({ tool }: ToolCardProps) => {
         <div className="flex items-center gap-4">
           <img src={tool.logo} alt={tool.name} className="w-12 h-12 rounded-lg" />
           <div>
-            <h3 className="font-semibold text-lg text-gray-900">{tool.name}</h3>
+            <div className="flex items-center gap-2">
+              <h3 className="font-semibold text-lg text-gray-900">{tool.name}</h3>
+              {isOwned && (
+                <Star className="h-5 w-5 text-yellow-400 fill-yellow-400" />
+              )}
+            </div>
             <div className="flex items-center gap-2">
               <div className="flex">
                 {[...Array(5)].map((_, i) => (

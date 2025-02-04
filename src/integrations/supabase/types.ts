@@ -35,6 +35,7 @@ export type Database = {
           id: string
           notes: string | null
           purchase_date: string | null
+          subscription_details: Json | null
           subscription_status: string | null
           subscription_tier:
             | Database["public"]["Enums"]["subscription_tier"]
@@ -46,6 +47,7 @@ export type Database = {
           id?: string
           notes?: string | null
           purchase_date?: string | null
+          subscription_details?: Json | null
           subscription_status?: string | null
           subscription_tier?:
             | Database["public"]["Enums"]["subscription_tier"]
@@ -57,6 +59,7 @@ export type Database = {
           id?: string
           notes?: string | null
           purchase_date?: string | null
+          subscription_details?: Json | null
           subscription_status?: string | null
           subscription_tier?:
             | Database["public"]["Enums"]["subscription_tier"]
