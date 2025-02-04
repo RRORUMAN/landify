@@ -10,6 +10,7 @@ import Landing from "./pages/Landing";
 import Auth from "./pages/Auth";
 import MyTools from "./pages/MyTools";
 import Pricing from "./pages/Pricing";
+import Features from "./pages/Features";
 import Navbar from "./components/Navbar";
 
 const queryClient = new QueryClient();
@@ -46,6 +47,7 @@ const App = () => {
           <Navbar />
           <Routes>
             <Route path="/" element={session ? <Navigate to="/tools" /> : <Landing />} />
+            <Route path="/features" element={<Features />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/auth" element={!session ? <Auth /> : <Navigate to="/tools" />} />
             <Route
