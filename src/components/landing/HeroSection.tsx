@@ -11,19 +11,18 @@ const HeroSection = () => {
         <div className="text-center max-w-4xl mx-auto animate-fade-in space-y-8">
           <div className="inline-flex items-center gap-2 bg-blue-50 dark:bg-blue-900/30 px-4 py-2 rounded-full text-sm font-medium text-blue-600 dark:text-blue-400 mb-8 animate-fade-in">
             <Sparkles className="w-4 h-4 animate-pulse" />
-            <span>AI Tool Discovery & Analytics Platform</span>
+            <span>AI Tool Discovery & Management Platform</span>
           </div>
           
           <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-gray-900 dark:text-white">
-            Discover & Analyze the Perfect{" "}
+            Master Your AI Arsenal with{" "}
             <span className="bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600 bg-clip-text text-transparent animate-text">
-              AI Tools
+              Intelligence
             </span>
-            {" "}for Your Success
           </h1>
           
           <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed">
-            Navigate the AI landscape with confidence. Find, compare, and analyze the best AI tools for your specific needs with data-driven insights.
+            Your command center for discovering, managing, and optimizing AI tools. Turn chaos into clarity with our intelligent platform.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-12">
@@ -32,7 +31,7 @@ const HeroSection = () => {
               className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg rounded-xl w-full sm:w-auto animate-fade-in group transition-all duration-300 hover:scale-105"
               onClick={() => navigate("/auth")}
             >
-              Start Discovering{" "}
+              Start Your Journey{" "}
               <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
             </Button>
             <span className="text-sm text-gray-500 dark:text-gray-400 animate-fade-in">
