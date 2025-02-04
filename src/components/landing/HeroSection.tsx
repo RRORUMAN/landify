@@ -11,19 +11,18 @@ const HeroSection = () => {
         <div className="text-center max-w-4xl mx-auto animate-fade-in space-y-8">
           <div className="inline-flex items-center gap-2 bg-blue-50 dark:bg-blue-900/30 px-4 py-2 rounded-full text-sm font-medium text-blue-600 dark:text-blue-400 mb-8 animate-fade-in">
             <Sparkles className="w-4 h-4 animate-pulse" />
-            <span>Revolutionizing AI Tool Management</span>
+            <span>AI Tool Discovery & Management Platform</span>
           </div>
           
           <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-gray-900 dark:text-white">
-            Unlock the Full Potential of{" "}
+            Find Your Perfect{" "}
             <span className="bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600 bg-clip-text text-transparent animate-text">
-              AI Tools
+              AI Solution
             </span>
           </h1>
           
           <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed">
-            Discover, manage, and optimize your AI toolkit with our intelligent platform. 
-            Save time, reduce costs, and maximize ROI with data-driven insights.
+            Stop wasting time searching for the right AI tools. Our intelligent platform helps you discover, evaluate, and implement the perfect AI solutions for your needs in minutes, not months.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-12">
