@@ -1,4 +1,5 @@
 import { Search, Brain, Zap, CircuitBoard, Users, ChartBar } from "lucide-react";
+import { motion } from "framer-motion";
 
 const FeaturesSection = () => {
   return (
@@ -9,10 +10,10 @@ const FeaturesSection = () => {
             Core Features
           </div>
           <h2 className="text-4xl md:text-5xl font-bold mt-6 mb-6 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 dark:from-white dark:via-gray-100 dark:to-gray-200 bg-clip-text text-transparent">
-            Solve Your AI Tool Management Challenges
+            Discover, Analyze, and Optimize Your AI Stack
           </h2>
           <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto text-lg leading-relaxed">
-            Stop wasting time and money on inefficient AI tool management. Here's how we help:
+            Navigate the AI landscape with confidence using our comprehensive toolkit
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
@@ -20,50 +21,64 @@ const FeaturesSection = () => {
             {
               icon: Search,
               title: "Smart Discovery",
-              description: "Find the perfect AI tools in minutes, not hours. Our AI-powered search understands your needs.",
+              description: "Find the perfect AI tools in minutes with our AI-powered search that understands your specific needs and use cases.",
+              stats: "90% faster tool discovery",
             },
             {
               icon: Brain,
-              title: "Intelligent Recommendations",
-              description: "Get personalized tool suggestions based on your industry, budget, and specific use cases.",
+              title: "AI-Driven Analysis",
+              description: "Get data-driven insights and personalized recommendations based on your industry and requirements.",
+              stats: "95% match accuracy",
             },
             {
               icon: Zap,
-              title: "One-Click Integration",
-              description: "Connect your tools instantly with our automated setup process. No technical expertise needed.",
+              title: "Instant Comparison",
+              description: "Compare features, pricing, and user reviews side by side to make informed decisions quickly.",
+              stats: "Save 4 hours per tool",
             },
             {
               icon: CircuitBoard,
-              title: "Cost Optimization",
-              description: "Identify unused subscriptions and optimize spending across your AI tool stack.",
+              title: "ROI Tracking",
+              description: "Monitor the performance and value of your AI investments with detailed analytics.",
+              stats: "28% cost optimization",
             },
             {
               icon: Users,
               title: "Team Collaboration",
-              description: "Centralize tool access and permissions. Keep your team aligned and productive.",
+              description: "Streamline tool evaluation and decision-making across your organization.",
+              stats: "3x faster adoption",
             },
             {
               icon: ChartBar,
-              title: "Usage Analytics",
-              description: "Track ROI and tool effectiveness with detailed insights and custom reports.",
+              title: "Performance Analytics",
+              description: "Track usage patterns and optimize your AI tool stack for maximum efficiency.",
+              stats: "32% efficiency boost",
             },
           ].map((feature, index) => (
-            <div
+            <motion.div
               key={feature.title}
-              className="relative p-8 rounded-2xl bg-white dark:bg-gray-800/50 hover:shadow-2xl dark:hover:shadow-blue-500/5 transition-all duration-300 animate-fade-in group hover:-translate-y-2 border border-gray-100 dark:border-gray-700"
-              style={{ animationDelay: `${index * 0.1}s` }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1 }}
+              whileHover={{ scale: 1.05, y: -10 }}
+              className="relative p-8 rounded-2xl bg-white dark:bg-gray-800/50 shadow-lg hover:shadow-2xl dark:hover:shadow-blue-500/5 transition-all duration-300 group border border-gray-100 dark:border-gray-700 overflow-hidden"
             >
-              <div className="bg-gradient-to-br from-blue-500/10 to-indigo-500/10 dark:from-blue-500/20 dark:to-indigo-500/20 p-4 rounded-2xl w-fit mb-6 group-hover:scale-110 transition-transform duration-300">
-                <feature.icon className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+              <div className="relative z-10">
+                <div className="bg-gradient-to-br from-blue-500/10 to-indigo-500/10 dark:from-blue-500/20 dark:to-indigo-500/20 p-4 rounded-2xl w-fit mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <feature.icon className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                </div>
+                <h3 className="text-xl font-bold mb-3 text-gray-900 dark:text-white group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors">
+                  {feature.title}
+                </h3>
+                <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-4">
+                  {feature.description}
+                </p>
+                <div className="text-blue-600 dark:text-blue-400 font-semibold">
+                  {feature.stats}
+                </div>
               </div>
-              <h3 className="text-xl font-bold mb-3 text-gray-900 dark:text-white group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors">
-                {feature.title}
-              </h3>
-              <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                {feature.description}
-              </p>
-              <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-indigo-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-b-2xl" />
-            </div>
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-indigo-500/5 dark:from-blue-500/10 dark:to-indigo-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            </motion.div>
           ))}
         </div>
       </div>
