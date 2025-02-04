@@ -10,11 +10,8 @@ import {
   ChartBar,
   ArrowUpRight,
   Users,
-  LineChart,
-  BarChart3,
-  PieChart,
-  CheckCircle2,
   Star,
+  CheckCircle2,
 } from "lucide-react";
 
 const Landing = () => {
@@ -189,52 +186,6 @@ const Landing = () => {
                 </div>
                 <h3 className="text-xl font-bold mb-3 text-primary">{feature.title}</h3>
                 <p className="text-gray-600">{feature.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Innovation Hub Section - Replacing Data-Driven Insights */}
-      <div className="py-32 bg-[#D3E4FD]">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <span className="bg-blue-600 text-white px-4 py-1 rounded-full text-sm font-medium">
-              INNOVATION HUB
-            </span>
-            <h2 className="text-4xl font-bold mt-6 mb-4 text-[#222222]">
-              Powering the Future of AI
-            </h2>
-            <p className="text-gray-700 max-w-2xl mx-auto">
-              Experience the next generation of AI tool management and discovery
-            </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                title: "AI Integration",
-                description: "Seamlessly connect with 500+ AI tools",
-                metric: "98%",
-                subtext: "Integration Success Rate",
-              },
-              {
-                title: "Smart Discovery",
-                description: "Find the perfect AI tools for your needs",
-                metric: "2.5x",
-                subtext: "Faster Implementation",
-              },
-              {
-                title: "ROI Impact",
-                description: "Maximize your AI investment returns",
-                metric: "3.8x",
-                subtext: "Average ROI Increase",
-              },
-            ].map((item) => (
-              <div key={item.title} className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all">
-                <h3 className="text-2xl font-bold mb-2 text-blue-600">{item.title}</h3>
-                <p className="text-gray-600 mb-6">{item.description}</p>
-                <div className="text-4xl font-bold text-[#222222] mb-2">{item.metric}</div>
-                <p className="text-gray-500">{item.subtext}</p>
               </div>
             ))}
           </div>
