@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Landing from "./pages/Landing";
 import Features from "./pages/Features";
@@ -11,9 +11,9 @@ import CompareTools from "./pages/tools/CompareTools";
 import AIRecommendations from "./pages/tools/AIRecommendations";
 import Analytics from "./pages/tools/Analytics";
 import Sidebar from "./components/dashboard/Sidebar";
-import { useLocation } from "react-router-dom";
 
-function App() {
+// Create a wrapper component that uses the useLocation hook
+const AppContent = () => {
   const location = useLocation();
   
   const isDashboardRoute = (pathname: string) => {
@@ -46,6 +46,15 @@ function App() {
         </main>
       </div>
     </div>
+  );
+};
+
+// Main App component that provides the Router context
+function App() {
+  return (
+    <Router>
+      <AppContent />
+    </Router>
   );
 }
 
