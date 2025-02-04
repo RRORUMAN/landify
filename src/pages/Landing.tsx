@@ -8,35 +8,38 @@ import {
   Search,
   Wrench,
   Brain,
-  BarChart3,
-  LineChart,
-  PieChart,
+  Sparkles,
+  ArrowUpRight,
 } from "lucide-react";
 
 const Landing = () => {
   const navigate = useNavigate();
 
   const scrollToFeatures = () => {
-    const featuresSection = document.getElementById('features');
-    featuresSection?.scrollIntoView({ behavior: 'smooth' });
+    document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-black to-gray-900 text-white">
+    <div className="min-h-screen bg-[#0a0a0a] text-white">
       {/* Hero Section */}
       <div className="container mx-auto px-4 pt-32 pb-20">
         <div className="text-center max-w-4xl mx-auto animate-fade-in">
-          <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">
-            Discover the Perfect AI Tools for Your Business
+          <span className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-1 rounded-full text-sm font-medium mb-6 inline-block">
+            AI TOOL DISCOVERY
+          </span>
+          <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">
+            Find the Perfect AI Tools{" "}
+            <Zap className="inline-block w-12 h-12 text-blue-500" />{" "}
+            for Your Business
           </h1>
-          <p className="text-xl text-gray-300 mb-8">
-            Navigate the AI landscape with confidence. Find, compare, and implement the best AI tools
-            tailored to your specific needs.
+          <p className="text-xl text-gray-400 mb-8 max-w-2xl mx-auto">
+            Never worry about finding the right AI tools again. Get personalized recommendations,
+            compare features, and implement solutions that work for your needs.
           </p>
-          <div className="flex gap-4 justify-center">
+          <div className="flex gap-4 justify-center items-center">
             <Button
               size="lg"
-              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+              className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-6 text-lg rounded-xl"
               onClick={() => navigate("/auth")}
             >
               Get Started <ArrowRight className="ml-2" />
@@ -44,23 +47,85 @@ const Landing = () => {
             <Button
               size="lg"
               variant="outline"
-              className="border-purple-500 text-purple-400 hover:bg-purple-500/10"
+              className="border-gray-700 text-gray-300 hover:bg-gray-800 px-8 py-6 text-lg rounded-xl"
               onClick={scrollToFeatures}
             >
-              Learn More
+              See Features <ArrowUpRight className="ml-2" />
             </Button>
           </div>
         </div>
       </div>
 
-      {/* Features Section */}
-      <div id="features" className="container mx-auto px-4 py-20">
-        <div className="text-center max-w-4xl mx-auto mb-16">
-          <h2 className="text-4xl font-bold mb-6 bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">
-            Powerful Features
+      {/* Trusted By Section */}
+      <div className="border-t border-gray-800 py-16">
+        <div className="container mx-auto px-4">
+          <p className="text-center text-gray-500 text-sm mb-8">TRUSTED BY INNOVATIVE COMPANIES</p>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center justify-items-center opacity-50">
+            {["Company 1", "Company 2", "Company 3", "Company 4"].map((company) => (
+              <div key={company} className="text-2xl font-bold text-gray-600">
+                {company}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* How It Works Section */}
+      <div className="container mx-auto px-4 py-32" id="how-it-works">
+        <div className="text-center mb-16">
+          <span className="bg-blue-500/10 text-blue-400 px-4 py-1 rounded-full text-sm font-medium">
+            HOW IT WORKS
+          </span>
+          <h2 className="text-4xl font-bold mt-6 mb-4">
+            Three Simple Steps to AI Success
           </h2>
-          <p className="text-xl text-gray-300">
-            Everything you need to manage and optimize your AI tool stack
+          <p className="text-gray-400 max-w-2xl mx-auto">
+            Get started in minutes and transform your workflow with AI tools
+          </p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {[
+            {
+              icon: Search,
+              title: "1. Discover",
+              description: "Browse our curated collection of AI tools",
+            },
+            {
+              icon: Brain,
+              title: "2. Compare",
+              description: "Get personalized recommendations based on your needs",
+            },
+            {
+              icon: Sparkles,
+              title: "3. Implement",
+              description: "Seamlessly integrate the perfect tools into your workflow",
+            },
+          ].map((step, index) => (
+            <div
+              key={step.title}
+              className="p-8 rounded-2xl bg-gray-900/50 hover:bg-gray-900 transition-all"
+            >
+              <div className="bg-blue-500/10 p-3 rounded-xl w-fit mb-6">
+                <step.icon className="w-6 h-6 text-blue-400" />
+              </div>
+              <h3 className="text-xl font-bold mb-3">{step.title}</h3>
+              <p className="text-gray-400">{step.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Features Section */}
+      <div id="features" className="container mx-auto px-4 py-32 bg-gray-900/30">
+        <div className="text-center mb-16">
+          <span className="bg-blue-500/10 text-blue-400 px-4 py-1 rounded-full text-sm font-medium">
+            FEATURES
+          </span>
+          <h2 className="text-4xl font-bold mt-6 mb-4">
+            Everything You Need
+          </h2>
+          <p className="text-gray-400 max-w-2xl mx-auto">
+            Powerful features to help you find and manage the perfect AI tools
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -68,127 +133,60 @@ const Landing = () => {
             {
               icon: Search,
               title: "Smart Search",
-              description: "Find the perfect AI tools with our intelligent search system.",
-              color: "from-blue-400 to-blue-600",
+              description: "Find tools with advanced filters and categories",
             },
             {
               icon: Brain,
               title: "AI Recommendations",
-              description: "Get personalized suggestions based on your needs.",
-              color: "from-purple-400 to-purple-600",
+              description: "Get personalized suggestions based on your needs",
             },
             {
               icon: Shield,
               title: "Verified Tools",
-              description: "Every tool is thoroughly vetted for quality.",
-              color: "from-green-400 to-green-600",
-            },
-            {
-              icon: BarChart3,
-              title: "Usage Analytics",
-              description: "Track and analyze your AI tool usage patterns.",
-              color: "from-yellow-400 to-yellow-600",
+              description: "Every tool is thoroughly vetted for quality",
             },
             {
               icon: Wrench,
-              title: "Tool Management",
-              description: "Organize all your AI tools in one place.",
-              color: "from-red-400 to-red-600",
+              title: "Easy Integration",
+              description: "Seamlessly implement tools into your workflow",
             },
             {
               icon: Zap,
-              title: "Quick Integration",
-              description: "Seamlessly integrate tools into your workflow.",
-              color: "from-indigo-400 to-indigo-600",
+              title: "Quick Setup",
+              description: "Get started with any tool in minutes",
             },
-          ].map((feature, index) => (
+            {
+              icon: Sparkles,
+              title: "Regular Updates",
+              description: "Stay updated with the latest AI tools",
+            },
+          ].map((feature) => (
             <div
               key={feature.title}
-              className="p-8 rounded-xl bg-gray-800/50 hover:bg-gray-800/70 transition-all hover:transform hover:scale-105 animate-fade-in"
-              style={{ animationDelay: `${index * 0.1}s` }}
+              className="p-8 rounded-2xl bg-gray-800/50 hover:bg-gray-800 transition-all animate-fade-in"
             >
-              <div className={`bg-gradient-to-r ${feature.color} p-3 rounded-lg w-fit mb-4`}>
-                <feature.icon className="w-6 h-6 text-white" />
+              <div className="bg-blue-500/10 p-3 rounded-xl w-fit mb-6">
+                <feature.icon className="w-6 h-6 text-blue-400" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
+              <h3 className="text-xl font-bold mb-3">{feature.title}</h3>
               <p className="text-gray-400">{feature.description}</p>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Analytics Section */}
-      <div className="container mx-auto px-4 py-20 bg-gray-800/30">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent mb-4">
-            Track Your Progress
-          </h2>
-          <p className="text-xl text-gray-300">
-            Visualize your AI tool usage and optimize your workflow
-          </p>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {[
-            { icon: BarChart3, title: "Usage Analytics", description: "Monitor patterns" },
-            { icon: LineChart, title: "Growth Tracking", description: "Track ROI" },
-            { icon: PieChart, title: "Resource Distribution", description: "Optimize allocation" },
-          ].map((chart, index) => (
-            <div
-              key={chart.title}
-              className="p-8 rounded-xl bg-gray-800/50 hover:bg-gray-800/70 transition-all animate-fade-in flex flex-col items-center text-center"
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
-              <chart.icon className="w-16 h-16 mb-4 text-purple-400" />
-              <h4 className="text-xl font-semibold mb-2">{chart.title}</h4>
-              <p className="text-gray-400">{chart.description}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Benefits Section */}
-      <div className="container mx-auto px-4 py-20">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent mb-4">
-            Why Choose Relevence
-          </h2>
-          <p className="text-xl text-gray-300">
-            Transform your workflow with our comprehensive platform
-          </p>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-          {[
-            "Save time finding the right AI tools",
-            "Reduce costs with smart recommendations",
-            "Track and optimize tool usage",
-            "Access verified and reliable tools",
-            "Streamline your AI workflow",
-            "Get personalized suggestions",
-          ].map((benefit, index) => (
-            <div
-              key={benefit}
-              className="flex items-center p-4 rounded-lg bg-gray-800/50 animate-fade-in"
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
-              <Check className="w-6 h-6 text-green-400 mr-3 flex-shrink-0" />
-              <p className="text-gray-300">{benefit}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-
       {/* CTA Section */}
-      <div className="container mx-auto px-4 py-20">
+      <div className="container mx-auto px-4 py-32">
         <div className="text-center max-w-3xl mx-auto">
-          <h2 className="text-4xl font-bold mb-6 bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">
+          <h2 className="text-4xl font-bold mb-6">
             Ready to Transform Your Business with AI?
           </h2>
-          <p className="text-xl text-gray-300 mb-8">
+          <p className="text-xl text-gray-400 mb-8">
             Join thousands of businesses already using Relevence to find and implement the perfect AI tools.
           </p>
           <Button
             size="lg"
-            className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+            className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-6 text-lg rounded-xl"
             onClick={() => navigate("/auth")}
           >
             Get Started Now <Zap className="ml-2" />

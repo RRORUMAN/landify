@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { Check } from "lucide-react";
+import { Check, Star } from "lucide-react";
 
 const Pricing = () => {
   const navigate = useNavigate();
@@ -42,51 +42,58 @@ const Pricing = () => {
       buttonText: "Start Business Trial",
       popular: false,
     },
-    {
-      name: "Business Plus",
-      price: "€99.99",
-      features: [
-        "Unlimited tool recommendations",
-        "Custom categories",
-        "Priority 24/7 support",
-        "API access",
-        "Custom integration support",
-        "Dedicated account manager",
-      ],
-      buttonText: "Contact Sales",
-      popular: false,
-    },
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-black to-gray-900 text-white pt-24">
+    <div className="min-h-screen bg-[#0a0a0a] text-white pt-24">
       <div className="container mx-auto px-4 py-20">
-        <h2 className="text-4xl font-bold text-center mb-16 bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">Choose Your Plan</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="text-center mb-16">
+          <span className="bg-blue-500/10 text-blue-400 px-4 py-1 rounded-full text-sm font-medium">
+            PRICING
+          </span>
+          <h2 className="text-4xl font-bold mt-6 mb-4">
+            Choose Your Plan
+          </h2>
+          <p className="text-gray-400 max-w-2xl mx-auto">
+            Get started for free or upgrade for more powerful features
+          </p>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
           {plans.map((plan) => (
             <div
               key={plan.name}
-              className={`rounded-xl p-8 ${
+              className={`rounded-2xl p-8 relative ${
                 plan.popular
-                  ? "bg-gradient-to-b from-purple-600 to-pink-600 transform scale-105"
-                  : "bg-gray-800"
-              } transition-all hover:transform hover:scale-105 animate-fade-in`}
+                  ? "bg-blue-500/10 border-2 border-blue-500"
+                  : "bg-gray-900"
+              } transition-all hover:scale-105`}
             >
-              <h3 className="text-2xl font-bold mb-4">{plan.name}</h3>
-              <p className="text-4xl font-bold mb-6">{plan.price}<span className="text-sm font-normal">/month</span></p>
+              {plan.popular && (
+                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                  <span className="bg-blue-500 text-white px-4 py-1 rounded-full text-sm font-medium flex items-center">
+                    <Star className="w-4 h-4 mr-1" /> Most Popular
+                  </span>
+                </div>
+              )}
+              <h3 className="text-2xl font-bold mb-2">{plan.name}</h3>
+              <p className="text-4xl font-bold mb-6">
+                {plan.price}
+                <span className="text-sm font-normal text-gray-400">/month</span>
+              </p>
               <ul className="space-y-4 mb-8">
                 {plan.features.map((feature) => (
-                  <li key={feature} className="flex items-center">
-                    <Check className="h-5 w-5 mr-2 text-green-400" />
+                  <li key={feature} className="flex items-center text-gray-300">
+                    <Check className="h-5 w-5 mr-2 text-blue-400 flex-shrink-0" />
                     {feature}
                   </li>
                 ))}
               </ul>
               <Button
-                className={`w-full ${
+                className={`w-full py-6 text-lg ${
                   plan.popular
-                    ? "bg-white text-purple-600 hover:bg-gray-100"
-                    : "bg-purple-600 hover:bg-purple-700"
+                    ? "bg-blue-500 hover:bg-blue-600 text-white"
+                    : "bg-gray-800 hover:bg-gray-700 text-gray-300"
                 }`}
                 onClick={() => navigate("/auth")}
               >
