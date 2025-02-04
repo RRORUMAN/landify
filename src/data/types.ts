@@ -11,9 +11,9 @@ export type Tool = {
   tags: string[];
   category: string;
   featured: boolean;
-  dealUrl?: string;
-  visitUrl: string;
+  visit_url: string;
   bookmarks: number;
+  created_at?: string | null;
 };
 
 export type Category = {

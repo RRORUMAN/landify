@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
-import type { Tool } from "@/data/tools";
+import type { Tool } from "@/data/types";
 import { Badge } from "@/components/ui/badge";
 
 type SortOption = "rating" | "reviews" | "bookmarks" | "newest" | "price";
@@ -51,14 +51,9 @@ const ToolCategories = () => {
           return;
         }
 
-        // Transform the data to match the Tool type
-        const transformedTools = data.map(tool => ({
-          ...tool,
-          visitUrl: tool.visit_url,
-          dealUrl: tool.deal_url
-        }));
-
-        setTools(transformedTools);
+        if (data) {
+          setTools(data as Tool[]);
+        }
       } catch (error) {
         console.error('Error:', error);
       } finally {

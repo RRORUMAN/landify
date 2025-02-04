@@ -2,7 +2,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Star, Bookmark, Share2, ExternalLink } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import type { Tool } from "@/data/tools";
+import type { Tool } from "@/data/types";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -38,10 +38,10 @@ const ToolCard = ({ tool }: ToolCardProps) => {
       await navigator.share({
         title: tool.name,
         text: tool.description,
-        url: tool.visitUrl,
+        url: tool.visit_url,
       });
     } catch (error) {
-      navigator.clipboard.writeText(tool.visitUrl);
+      navigator.clipboard.writeText(tool.visit_url);
       toast({
         title: "Link copied to clipboard",
         description: "You can now share it with others!",
@@ -131,20 +131,11 @@ const ToolCard = ({ tool }: ToolCardProps) => {
           <Button
             variant="default"
             className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white gap-2"
-            onClick={() => window.open(tool.visitUrl, "_blank")}
+            onClick={() => window.open(tool.visit_url, "_blank")}
           >
             Visit Tool
             <ExternalLink className="h-4 w-4" />
           </Button>
-          {tool.dealUrl && (
-            <Button
-              variant="outline"
-              className="flex-1 border-gray-200 hover:bg-gray-50 text-gray-700"
-              onClick={() => window.open(tool.dealUrl, "_blank")}
-            >
-              Get Deal
-            </Button>
-          )}
         </div>
       </div>
     </Card>
