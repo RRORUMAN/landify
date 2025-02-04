@@ -1,47 +1,77 @@
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { Search, Plus, Scale, Brain } from "lucide-react";
+import { Search, Plus, Scale, Brain, Sun, Moon, Settings } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
 
 const Sidebar = () => {
   const location = useLocation();
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   const menuItems = [
     {
-      title: "Search Tools by Categories",
+      title: "Browse Tools",
       icon: Search,
       path: "/tools/categories",
-      description: "Browse tools organized by category",
+      description: "Search and filter tools",
       isNew: false,
     },
     {
-      title: "Add Own Tools",
+      title: "Add Tools",
       icon: Plus,
       path: "/tools/add",
-      description: "Add and manage your custom tools",
+      description: "Add custom tools",
       isNew: true,
     },
     {
-      title: "Compare Tools",
+      title: "Compare",
       icon: Scale,
       path: "/tools/compare",
-      description: "Compare different tools side by side",
+      description: "Compare tool features",
       isNew: false,
     },
     {
-      title: "AI Tool Recommendations",
+      title: "AI Suggestions",
       icon: Brain,
       path: "/tools/recommendations",
-      description: "Get personalized AI tool suggestions",
+      description: "Get personalized recommendations",
       isNew: true,
     },
   ];
 
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+    document.documentElement.classList.toggle('dark');
+  };
+
   return (
-    <div className="min-h-screen w-64 bg-white border-r border-gray-100 shadow-xl p-4 relative">
+    <div className={cn(
+      "min-h-screen w-64 bg-white border-r border-gray-100 shadow-lg p-4 relative transition-colors duration-300",
+      isDarkMode && "bg-gray-900 border-gray-800"
+    )}>
       <div className="space-y-6">
-        <div className="px-2">
-          <h2 className="text-lg font-semibold text-gray-900 mb-1">Tools Dashboard</h2>
-          <p className="text-sm text-gray-500">Manage and discover AI tools</p>
+        <div className="flex items-center justify-between px-2">
+          <div>
+            <h2 className={cn(
+              "text-lg font-semibold mb-1",
+              isDarkMode ? "text-white" : "text-gray-900"
+            )}>Dashboard</h2>
+            <p className={cn(
+              "text-sm",
+              isDarkMode ? "text-gray-400" : "text-gray-500"
+            )}>Manage tools</p>
+          </div>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={toggleDarkMode}
+            className={cn(
+              "rounded-full",
+              isDarkMode ? "text-white hover:text-gray-300" : "text-gray-600 hover:text-gray-900"
+            )}
+          >
+            {isDarkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+          </Button>
         </div>
         
         <nav className="space-y-2">
@@ -52,8 +82,12 @@ const Sidebar = () => {
               className={cn(
                 "group flex items-start gap-3 px-4 py-3 rounded-lg transition-all duration-300 relative overflow-hidden",
                 location.pathname === item.path
-                  ? "bg-gradient-to-r from-gray-900 to-gray-800 text-white shadow-lg transform -translate-x-1"
-                  : "text-gray-600 hover:bg-gray-50 hover:shadow-md"
+                  ? isDarkMode 
+                    ? "bg-blue-600 text-white shadow-lg transform -translate-x-1"
+                    : "bg-gradient-to-r from-gray-900 to-gray-800 text-white shadow-lg transform -translate-x-1"
+                  : isDarkMode
+                    ? "text-gray-300 hover:bg-gray-800"
+                    : "text-gray-600 hover:bg-gray-50"
               )}
             >
               {item.isNew && (
@@ -66,7 +100,9 @@ const Sidebar = () => {
                 "h-5 w-5 mt-0.5 transition-transform duration-300 group-hover:scale-110",
                 location.pathname === item.path
                   ? "text-white"
-                  : "text-gray-400 group-hover:text-gray-600"
+                  : isDarkMode
+                    ? "text-gray-400 group-hover:text-gray-300"
+                    : "text-gray-400 group-hover:text-gray-600"
               )} />
               <div className="flex flex-col">
                 <span className="text-sm font-medium leading-none mb-1">{item.title}</span>
@@ -74,7 +110,9 @@ const Sidebar = () => {
                   "text-xs transition-colors duration-300",
                   location.pathname === item.path
                     ? "text-gray-200"
-                    : "text-gray-400 group-hover:text-gray-500"
+                    : isDarkMode
+                      ? "text-gray-500 group-hover:text-gray-400"
+                      : "text-gray-400 group-hover:text-gray-500"
                 )}>{item.description}</span>
               </div>
             </Link>
@@ -82,10 +120,21 @@ const Sidebar = () => {
         </nav>
 
         <div className="absolute bottom-4 left-4 right-4">
-          <div className="bg-blue-50 rounded-lg p-4">
-            <h3 className="text-sm font-medium text-blue-900 mb-1">Need Help?</h3>
-            <p className="text-xs text-blue-700">Check out our guide on how to make the most of your AI tools.</p>
-          </div>
+          <Link
+            to="/settings"
+            className={cn(
+              "flex items-center gap-2 p-4 rounded-lg transition-colors duration-200",
+              isDarkMode
+                ? "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                : "bg-blue-50 text-blue-900 hover:bg-blue-100"
+            )}
+          >
+            <Settings className="h-5 w-5" />
+            <div>
+              <h3 className="text-sm font-medium mb-1">Customize</h3>
+              <p className="text-xs opacity-80">Layout & preferences</p>
+            </div>
+          </Link>
         </div>
       </div>
     </div>

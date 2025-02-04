@@ -32,6 +32,8 @@ export default {
         card: {
           DEFAULT: "white",
           hover: "#f8fafc",
+          dark: "#1f2937",
+          "dark-hover": "#374151",
         },
         brand: {
           blue: "#D3E4FD",
