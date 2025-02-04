@@ -76,7 +76,7 @@ const Sidebar = () => {
 
   return (
     <div className={cn(
-      "min-h-screen w-64 bg-white border-r border-gray-100 shadow-lg p-4 relative transition-colors duration-300",
+      "min-h-screen w-64 bg-white border-l border-gray-100 shadow-lg p-4 relative transition-colors duration-300",
       isDarkMode && "bg-gray-900 border-gray-800"
     )}>
       <div className="space-y-6">

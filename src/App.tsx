@@ -9,6 +9,7 @@ import ToolCategories from "./pages/tools/ToolCategories";
 import AddTool from "./pages/tools/AddTool";
 import CompareTools from "./pages/tools/CompareTools";
 import AIRecommendations from "./pages/tools/AIRecommendations";
+import Sidebar from "./components/dashboard/Sidebar";
 
 function App() {
   const isDashboardRoute = (pathname: string) => {
@@ -19,20 +20,25 @@ function App() {
     <Router>
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         {!isDashboardRoute(window.location.pathname) && <Navbar />}
-        <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route path="/features" element={<Features />} />
-          <Route path="/pricing" element={<Pricing />} />
-          <Route path="/auth" element={<Auth />} />
-          <Route path="/my-tools" element={<MyTools />} />
-          <Route path="/tools">
-            <Route index element={<Navigate to="/tools/categories" replace />} />
-            <Route path="categories" element={<ToolCategories />} />
-            <Route path="add" element={<AddTool />} />
-            <Route path="compare" element={<CompareTools />} />
-            <Route path="recommendations" element={<AIRecommendations />} />
-          </Route>
-        </Routes>
+        <div className="flex">
+          {isDashboardRoute(window.location.pathname) && <Sidebar />}
+          <main className="flex-1">
+            <Routes>
+              <Route path="/" element={<Landing />} />
+              <Route path="/features" element={<Features />} />
+              <Route path="/pricing" element={<Pricing />} />
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/my-tools" element={<MyTools />} />
+              <Route path="/tools">
+                <Route index element={<Navigate to="/tools/categories" replace />} />
+                <Route path="categories" element={<ToolCategories />} />
+                <Route path="add" element={<AddTool />} />
+                <Route path="compare" element={<CompareTools />} />
+                <Route path="recommendations" element={<AIRecommendations />} />
+              </Route>
+            </Routes>
+          </main>
+        </div>
       </div>
     </Router>
   );
