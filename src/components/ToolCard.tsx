@@ -84,7 +84,7 @@ const ToolCard = ({ tool }: ToolCardProps) => {
       <div className="mt-6 flex gap-3">
         <Button
           variant="default"
-          className="flex-1 bg-[#0EA5E9] hover:bg-[#0EA5E9]/90 text-white"
+          className="flex-1 bg-gradient-to-r from-gray-900 to-gray-800 hover:from-gray-800 hover:to-gray-700 text-white"
           onClick={() => window.open(tool.visitUrl, "_blank")}
         >
           Visit
