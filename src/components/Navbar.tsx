@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -15,6 +16,22 @@ const Navbar = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const handleFeaturesClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (location.pathname !== '/') {
+      navigate('/?section=features');
+    } else {
+      document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  useEffect(() => {
+    if (location.search === '?section=features') {
+      document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' });
+      navigate('/', { replace: true });
+    }
+  }, [location, navigate]);
 
   return (
     <nav
@@ -43,15 +60,13 @@ const Navbar = () => {
             >
               Home
             </Link>
-            <Link
-              to="/features"
-              className={cn(
-                "text-white/70 hover:text-white transition-colors font-medium",
-                location.pathname === "/features" && "text-white"
-              )}
+            <a
+              href="#features"
+              onClick={handleFeaturesClick}
+              className="text-white/70 hover:text-white transition-colors font-medium cursor-pointer"
             >
               Features
-            </Link>
+            </a>
             <Link
               to="/pricing"
               className={cn(
