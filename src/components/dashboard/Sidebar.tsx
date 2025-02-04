@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { Search, Plus, Scale, Brain, Sun, Moon, LogOut } from "lucide-react";
+import { Search, Plus, Scale, Brain, Sun, Moon, LogOut, BarChart3 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -49,6 +49,13 @@ const Sidebar = () => {
       description: "Get personalized recommendations",
       isNew: true,
     },
+    {
+      title: "Analytics",
+      icon: BarChart3,
+      path: "/tools/analytics",
+      description: "Track spending and usage",
+      isNew: true,
+    },
   ];
 
   const toggleDarkMode = () => {
@@ -76,14 +83,14 @@ const Sidebar = () => {
 
   return (
     <div className={cn(
-      "min-h-screen w-64 bg-white border-l border-gray-100 shadow-lg p-4 relative transition-colors duration-300",
+      "min-h-screen w-72 bg-white border-l border-gray-100 shadow-lg p-6 relative transition-colors duration-300",
       isDarkMode && "bg-gray-900 border-gray-800"
     )}>
-      <div className="space-y-6">
+      <div className="space-y-8">
         <div className="flex items-center justify-between px-2">
           <div>
             <h2 className={cn(
-              "text-lg font-semibold mb-1",
+              "text-xl font-semibold mb-2",
               isDarkMode ? "text-white" : "text-gray-900"
             )}>Dashboard</h2>
             <p className={cn(
@@ -93,13 +100,13 @@ const Sidebar = () => {
           </div>
         </div>
         
-        <nav className="space-y-2">
+        <nav className="space-y-3">
           {menuItems.map((item) => (
             <Link
               key={item.title}
               to={item.path}
               className={cn(
-                "group flex items-start gap-3 px-4 py-3 rounded-lg transition-all duration-300 relative overflow-hidden",
+                "group flex items-start gap-4 px-4 py-4 rounded-lg transition-all duration-300 relative overflow-hidden",
                 location.pathname === item.path
                   ? "bg-gradient-to-r from-gray-900 to-gray-800 text-white shadow-lg transform -translate-x-1"
                   : isDarkMode
@@ -136,13 +143,13 @@ const Sidebar = () => {
           ))}
         </nav>
 
-        <div className="absolute bottom-4 left-4 right-4 space-y-2">
+        <div className="absolute bottom-6 left-6 right-6 space-y-3">
           <Button
             variant="ghost"
             size="lg"
             onClick={toggleDarkMode}
             className={cn(
-              "w-full justify-start gap-2",
+              "w-full justify-start gap-3 text-sm",
               isDarkMode ? "text-white hover:text-gray-300" : "text-gray-600 hover:text-gray-900"
             )}
           >
@@ -155,7 +162,7 @@ const Sidebar = () => {
             size="lg"
             onClick={handleSignOut}
             className={cn(
-              "w-full justify-start gap-2 text-red-600 hover:text-red-700 hover:bg-red-50",
+              "w-full justify-start gap-3 text-sm text-red-600 hover:text-red-700 hover:bg-red-50",
               isDarkMode && "hover:bg-red-900/10"
             )}
           >
