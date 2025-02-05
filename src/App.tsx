@@ -1,5 +1,6 @@
 
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Navbar from "./components/Navbar";
 import Landing from "./pages/Landing";
 import Pricing from "./pages/Pricing";
@@ -11,6 +12,9 @@ import CompareTools from "./pages/tools/CompareTools";
 import AIRecommendations from "./pages/tools/AIRecommendations";
 import Analytics from "./pages/tools/Analytics";
 import Sidebar from "./components/dashboard/Sidebar";
+
+// Create a client
+const queryClient = new QueryClient();
 
 const AppContent = () => {
   const location = useLocation();
@@ -49,9 +53,11 @@ const AppContent = () => {
 
 function App() {
   return (
-    <Router>
-      <AppContent />
-    </Router>
+    <QueryClientProvider client={queryClient}>
+      <Router>
+        <AppContent />
+      </Router>
+    </QueryClientProvider>
   );
 }
 

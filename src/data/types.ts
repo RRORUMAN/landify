@@ -1,3 +1,4 @@
+
 import { LucideIcon } from "lucide-react";
 
 export interface Tool {
@@ -20,6 +21,7 @@ export interface Tool {
   integrations_count?: number | null;
   monthly_active_users?: number | null;
   created_at?: string | null;
+  special_pricing?: boolean;
 }
 
 export interface Category {
