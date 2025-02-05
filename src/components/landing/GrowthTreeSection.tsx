@@ -33,7 +33,7 @@ const GrowthTreeSection = () => {
     <div className="py-24 bg-gradient-to-b from-blue-50/50 to-transparent dark:from-gray-900/50 dark:to-transparent">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent">
+          <h2 className="text-4xl font-bold text-black dark:text-white mb-4">
             Your AI Journey
           </h2>
           <p className="text-gray-600 dark:text-gray-300 mt-4 max-w-xl mx-auto">
@@ -49,17 +49,17 @@ const GrowthTreeSection = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: benefit.delay }}
-                className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 dark:border-gray-700"
+                className="bg-white dark:bg-gray-800/50 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-blue-100 dark:border-blue-900/20 backdrop-blur-sm"
               >
                 <div className="flex items-start gap-4">
-                  <div className="p-2 rounded-lg bg-blue-50 dark:bg-blue-900/30">
-                    <benefit.icon className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                  <div className="p-3 rounded-lg bg-brand-blue-light/10 dark:bg-blue-900/30">
+                    <benefit.icon className="w-6 h-6 text-brand-blue dark:text-blue-400" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
+                    <h3 className="text-xl font-semibold text-black dark:text-white mb-2">
                       {benefit.title}
                     </h3>
-                    <p className="text-gray-600 dark:text-gray-300 text-sm">
+                    <p className="text-gray-600 dark:text-gray-300">
                       {benefit.description}
                     </p>
                   </div>
