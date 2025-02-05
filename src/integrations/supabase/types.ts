@@ -53,6 +53,7 @@ export type Database = {
       comparison_features: {
         Row: {
           created_at: string | null
+          data_quality_score: number | null
           feature_category: string
           feature_details: Json | null
           feature_group: string | null
@@ -62,11 +63,15 @@ export type Database = {
           id: string
           importance: string | null
           is_premium: boolean | null
+          last_verified_date: string | null
           sort_order: number | null
           tool_id: string | null
+          verification_source: string | null
+          weight: number | null
         }
         Insert: {
           created_at?: string | null
+          data_quality_score?: number | null
           feature_category: string
           feature_details?: Json | null
           feature_group?: string | null
@@ -76,11 +81,15 @@ export type Database = {
           id?: string
           importance?: string | null
           is_premium?: boolean | null
+          last_verified_date?: string | null
           sort_order?: number | null
           tool_id?: string | null
+          verification_source?: string | null
+          weight?: number | null
         }
         Update: {
           created_at?: string | null
+          data_quality_score?: number | null
           feature_category?: string
           feature_details?: Json | null
           feature_group?: string | null
@@ -90,8 +99,11 @@ export type Database = {
           id?: string
           importance?: string | null
           is_premium?: boolean | null
+          last_verified_date?: string | null
           sort_order?: number | null
           tool_id?: string | null
+          verification_source?: string | null
+          weight?: number | null
         }
         Relationships: [
           {
@@ -217,6 +229,45 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      saved_comparisons: {
+        Row: {
+          comparison_data: Json
+          created_at: string | null
+          custom_weights: Json | null
+          exported_count: number | null
+          id: string
+          is_public: boolean | null
+          name: string
+          tool_ids: string[]
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          comparison_data: Json
+          created_at?: string | null
+          custom_weights?: Json | null
+          exported_count?: number | null
+          id?: string
+          is_public?: boolean | null
+          name: string
+          tool_ids: string[]
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          comparison_data?: Json
+          created_at?: string | null
+          custom_weights?: Json | null
+          exported_count?: number | null
+          id?: string
+          is_public?: boolean | null
+          name?: string
+          tool_ids?: string[]
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
       }
       spend_forecasts: {
         Row: {
@@ -474,17 +525,22 @@ export type Database = {
           company_size: string | null
           created_at: string | null
           description: string
+          feature_screenshots: Json | null
           featured: boolean
           founding_year: number | null
           id: string
           integrations_count: number | null
+          last_updated: string | null
           logo: string
           monthly_active_users: number | null
           name: string
           pricing: string
           rating: number
           reviews: number
+          roi_metrics: Json | null
+          screenshots: Json[] | null
           tags: string[]
+          version_history: Json | null
           visit_url: string
         }
         Insert: {
@@ -495,17 +551,22 @@ export type Database = {
           company_size?: string | null
           created_at?: string | null
           description: string
+          feature_screenshots?: Json | null
           featured?: boolean
           founding_year?: number | null
           id: string
           integrations_count?: number | null
+          last_updated?: string | null
           logo: string
           monthly_active_users?: number | null
           name: string
           pricing?: string
           rating?: number
           reviews?: number
+          roi_metrics?: Json | null
+          screenshots?: Json[] | null
           tags?: string[]
+          version_history?: Json | null
           visit_url: string
         }
         Update: {
@@ -516,17 +577,22 @@ export type Database = {
           company_size?: string | null
           created_at?: string | null
           description?: string
+          feature_screenshots?: Json | null
           featured?: boolean
           founding_year?: number | null
           id?: string
           integrations_count?: number | null
+          last_updated?: string | null
           logo?: string
           monthly_active_users?: number | null
           name?: string
           pricing?: string
           rating?: number
           reviews?: number
+          roi_metrics?: Json | null
+          screenshots?: Json[] | null
           tags?: string[]
+          version_history?: Json | null
           visit_url?: string
         }
         Relationships: []
