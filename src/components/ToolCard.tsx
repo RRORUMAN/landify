@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Star, Bookmark } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import type { Tool } from "@/data/tools";
+import type { Tool } from "@/data/types";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -35,7 +35,7 @@ const ToolCard = ({ tool }: ToolCardProps) => {
   }, [tool.id]);
 
   return (
-    <Card className="overflow-hidden bg-white border border-gray-100 rounded-lg hover:shadow-md transition-all duration-300">
+    <Card className="overflow-hidden border border-gray-100 rounded-lg hover:shadow-md transition-all duration-300">
       <div className="p-6">
         <div className="flex flex-col gap-4">
           <div className="flex justify-between items-start">
@@ -43,7 +43,7 @@ const ToolCard = ({ tool }: ToolCardProps) => {
               <img 
                 src={tool.logo} 
                 alt={tool.name} 
-                className="w-12 h-12 rounded-lg object-cover bg-gray-100"
+                className="w-[60px] h-[60px] rounded-lg object-cover bg-gray-100"
               />
               <div>
                 <h3 className="font-semibold text-gray-900">
@@ -62,12 +62,10 @@ const ToolCard = ({ tool }: ToolCardProps) => {
                 </div>
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              <span className="text-sm text-gray-500 flex items-center gap-1">
-                <Bookmark className="h-4 w-4" />
-                {tool.bookmarks}
-              </span>
-            </div>
+            <span className="text-sm text-gray-500 flex items-center gap-1">
+              <Bookmark className="h-4 w-4" />
+              {tool.bookmarks}
+            </span>
           </div>
 
           <p className="text-gray-600 text-sm line-clamp-2">
