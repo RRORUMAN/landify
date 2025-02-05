@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useMemo } from "react";
 import SearchBar from "@/components/SearchBar";
 import ToolCard from "@/components/ToolCard";
@@ -15,7 +16,10 @@ import {
   ClipboardList,
   MessageSquare,
   VideoIcon,
-  Filter,
+  Graduation,
+  Heart,
+  DollarSign,
+  Palette,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import type { Tool } from "@/data/types";
@@ -46,6 +50,10 @@ const categories: CategoryType[] = [
   { name: "Communication", icon: MessageSquare },
   { name: "Media Production", icon: VideoIcon },
   { name: "Analytics", icon: BarChart3 },
+  { name: "Education & Learning", icon: Graduation },
+  { name: "Healthcare & Wellness", icon: Heart },
+  { name: "Financial Management", icon: DollarSign },
+  { name: "Creative & Design", icon: Palette },
 ];
 
 const ToolCategories = () => {
@@ -57,7 +65,10 @@ const ToolCategories = () => {
   useEffect(() => {
     const fetchTools = async () => {
       try {
-        const { data, error } = await supabase.from('tools').select('*');
+        const { data, error } = await supabase
+          .from('tools')
+          .select('*')
+          .order('featured', { ascending: false });
         
         if (error) {
           console.error('Error fetching tools:', error);
@@ -108,6 +119,13 @@ const ToolCategories = () => {
     return filteredTools.filter(tool => !tool.featured);
   }, [filteredTools]);
 
+  const categoryCount = useMemo(() => {
+    return tools.reduce((acc, tool) => {
+      acc[tool.category] = (acc[tool.category] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+  }, [tools]);
+
   return (
     <TooltipProvider>
       <div className="min-h-screen bg-gradient-to-br from-white via-gray-50 to-blue-50">
@@ -127,9 +145,9 @@ const ToolCategories = () => {
               animate={{ opacity: 1, x: 0 }}
               className="lg:col-span-1"
             >
-              <div className="backdrop-blur-md bg-white/70 rounded-xl p-6 shadow-lg border border-white/20">
+              <div className="backdrop-blur-md bg-white/70 rounded-xl p-6 shadow-lg border border-white/20 sticky top-8">
                 <h2 className="text-xl font-semibold text-gray-900 mb-6">Categories</h2>
-                <div className="space-y-1">
+                <div className="space-y-1 max-h-[600px] overflow-y-auto">
                   <Button
                     variant={selectedCategory === null ? "default" : "ghost"}
                     className={`w-full justify-start text-sm transition-all duration-200 ${
@@ -139,11 +157,12 @@ const ToolCategories = () => {
                     }`}
                     onClick={() => setSelectedCategory(null)}
                   >
-                    All Tools
+                    All Tools ({tools.length})
                   </Button>
                   
                   {categories.map((category) => {
                     const Icon = category.icon;
+                    const count = categoryCount[category.name] || 0;
                     return (
                       <Tooltip key={category.name}>
                         <TooltipTrigger asChild>
@@ -157,11 +176,12 @@ const ToolCategories = () => {
                             onClick={() => setSelectedCategory(category.name)}
                           >
                             <Icon className="mr-2 h-4 w-4" />
-                            {category.name}
+                            <span className="flex-1 text-left">{category.name}</span>
+                            <span className="text-xs text-gray-400">({count})</span>
                           </Button>
                         </TooltipTrigger>
                         <TooltipContent>
-                          <p>View {category.name} tools</p>
+                          <p>View {category.name} tools ({count} tools)</p>
                         </TooltipContent>
                       </Tooltip>
                     );
@@ -181,7 +201,7 @@ const ToolCategories = () => {
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
                   <input
                     type="text"
-                    placeholder="Search AI tools..."
+                    placeholder="Search AI tools by name, category, or tags..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="w-full pl-10 pr-4 py-3 bg-white/50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
@@ -235,7 +255,12 @@ const ToolCategories = () => {
                     animate={{ opacity: 1, y: 0 }}
                     className="space-y-6"
                   >
-                    <h2 className="text-2xl font-semibold text-gray-900 mb-6">All Tools</h2>
+                    <h2 className="text-2xl font-semibold text-gray-900 mb-6">
+                      {selectedCategory || "All Tools"}
+                      <span className="text-gray-500 text-lg ml-2">
+                        ({regularTools.length} tools)
+                      </span>
+                    </h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <AnimatePresence>
                         {regularTools.map((tool) => (
