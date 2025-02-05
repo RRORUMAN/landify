@@ -36,9 +36,17 @@ export default {
           "dark-hover": "#374151",
         },
         brand: {
-          blue: "#D3E4FD",
+          blue: {
+            light: "#E3F2FD",
+            DEFAULT: "#2196F3",
+            dark: "#1976D2",
+          },
           dark: "#222222",
           gray: "#403E43",
+        },
+        heading: {
+          DEFAULT: "#222222", // Black for section headings
+          gradient: "linear-gradient(to right, #2196F3, #1976D2)", // Blue gradient for special headings
         },
       },
       animation: {
