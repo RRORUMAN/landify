@@ -14,30 +14,42 @@ export type Database = {
           created_at: string | null
           feature_category: string
           feature_details: Json | null
+          feature_group: string | null
           feature_name: string
           feature_value: string | null
+          help_text: string | null
           id: string
+          importance: string | null
           is_premium: boolean | null
+          sort_order: number | null
           tool_id: string | null
         }
         Insert: {
           created_at?: string | null
           feature_category: string
           feature_details?: Json | null
+          feature_group?: string | null
           feature_name: string
           feature_value?: string | null
+          help_text?: string | null
           id?: string
+          importance?: string | null
           is_premium?: boolean | null
+          sort_order?: number | null
           tool_id?: string | null
         }
         Update: {
           created_at?: string | null
           feature_category?: string
           feature_details?: Json | null
+          feature_group?: string | null
           feature_name?: string
           feature_value?: string | null
+          help_text?: string | null
           id?: string
+          importance?: string | null
           is_premium?: boolean | null
+          sort_order?: number | null
           tool_id?: string | null
         }
         Relationships: [
