@@ -9,6 +9,33 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      spend_forecasts: {
+        Row: {
+          created_at: string | null
+          forecast_date: string
+          forecast_details: Json | null
+          forecasted_amount: number
+          id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          forecast_date: string
+          forecast_details?: Json | null
+          forecasted_amount: number
+          id?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          forecast_date?: string
+          forecast_details?: Json | null
+          forecasted_amount?: number
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       subscription_limits: {
         Row: {
           features: Json
@@ -121,7 +148,10 @@ export type Database = {
       }
       user_tools: {
         Row: {
+          billing_cycle: string | null
           id: string
+          monthly_cost: number | null
+          next_billing_date: string | null
           notes: string | null
           purchase_date: string | null
           subscription_details: Json | null
@@ -130,10 +160,14 @@ export type Database = {
             | Database["public"]["Enums"]["subscription_tier"]
             | null
           tool_id: string
+          usage_stats: Json | null
           user_id: string
         }
         Insert: {
+          billing_cycle?: string | null
           id?: string
+          monthly_cost?: number | null
+          next_billing_date?: string | null
           notes?: string | null
           purchase_date?: string | null
           subscription_details?: Json | null
@@ -142,10 +176,14 @@ export type Database = {
             | Database["public"]["Enums"]["subscription_tier"]
             | null
           tool_id: string
+          usage_stats?: Json | null
           user_id: string
         }
         Update: {
+          billing_cycle?: string | null
           id?: string
+          monthly_cost?: number | null
+          next_billing_date?: string | null
           notes?: string | null
           purchase_date?: string | null
           subscription_details?: Json | null
@@ -154,6 +192,7 @@ export type Database = {
             | Database["public"]["Enums"]["subscription_tier"]
             | null
           tool_id?: string
+          usage_stats?: Json | null
           user_id?: string
         }
         Relationships: []
