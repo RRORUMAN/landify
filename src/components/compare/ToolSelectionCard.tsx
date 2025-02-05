@@ -54,14 +54,14 @@ const ToolSelectionCard = ({
           />
         </div>
         <Select
-          value={selectedCategory || ""}
-          onValueChange={(value) => setSelectedCategory(value || null)}
+          value={selectedCategory || "all"}
+          onValueChange={(value) => setSelectedCategory(value === "all" ? null : value)}
         >
           <SelectTrigger className="w-[200px]">
             <SelectValue placeholder="All Categories" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">All Categories</SelectItem>
+            <SelectItem value="all">All Categories</SelectItem>
             {categories.map((category) => (
               <SelectItem key={category.name} value={category.name}>
                 {category.name}
@@ -96,3 +96,4 @@ const ToolSelectionCard = ({
 };
 
 export default ToolSelectionCard;
+
