@@ -469,7 +469,7 @@ export type Database = {
           {
             foreignKeyName: "tool_reviews_sentiment_tool_id_fkey"
             columns: ["tool_id"]
-            isOneToOne: false
+            isOneToOne: true
             referencedRelation: "tools"
             referencedColumns: ["id"]
           },
