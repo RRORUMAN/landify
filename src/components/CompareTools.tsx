@@ -30,8 +30,8 @@ const CompareTools = () => {
     queryFn: async () => {
       let query = supabase
         .from('tools')
-        .select('*')
-        .order('name');
+        .select('*, trending_tools(*)')
+        .order('featured', { ascending: false });
       
       if (selectedCategory) {
         query = query.eq('category', selectedCategory);
@@ -48,6 +48,12 @@ const CompareTools = () => {
     if (selectedTools.length < 4 && !selectedTools.includes(tool)) {
       setSelectedTools([...selectedTools, tool]);
       setIsSelecting(false);
+    } else if (selectedTools.length >= 4) {
+      toast({
+        title: "Maximum tools reached",
+        description: "You can compare up to 4 tools at a time.",
+        variant: "destructive",
+      });
     }
   };
 

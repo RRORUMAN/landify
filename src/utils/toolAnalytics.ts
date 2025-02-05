@@ -3,6 +3,8 @@ import { supabase } from "@/integrations/supabase/client";
 
 export const trackToolInteraction = async (toolId: string, interactionType: 'view' | 'click' | 'bookmark' | 'share') => {
   try {
+    const { data: { user } } = await supabase.auth.getUser();
+    
     const { error } = await supabase
       .from('tool_analytics')
       .insert({
@@ -10,13 +12,25 @@ export const trackToolInteraction = async (toolId: string, interactionType: 'vie
         usage_type: interactionType,
         usage_details: {
           source: 'web',
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
+          page: window.location.pathname
         },
-        // Allow anonymous analytics tracking
-        user_id: (await supabase.auth.getUser()).data.user?.id || null
+        user_id: user?.id || null
       });
 
     if (error) throw error;
+
+    // Update tool bookmarks count if it's a bookmark interaction
+    if (interactionType === 'bookmark') {
+      const { error: updateError } = await supabase
+        .from('tools')
+        .update({
+          bookmarks: supabase.raw('bookmarks + 1')
+        })
+        .eq('id', toolId);
+
+      if (updateError) throw updateError;
+    }
   } catch (error) {
     console.error('Error tracking tool interaction:', error);
   }

@@ -1,4 +1,3 @@
-
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Star, Bookmark } from "lucide-react";
@@ -18,6 +17,7 @@ const ToolCard = ({ tool }: ToolCardProps) => {
   const [isOwned, setIsOwned] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [bookmarkCount, setBookmarkCount] = useState(tool.bookmarks);
+  const isTrending = tool.trending_tools && tool.trending_tools.length > 0;
 
   useEffect(() => {
     const checkToolOwnership = async () => {
@@ -111,11 +111,18 @@ const ToolCard = ({ tool }: ToolCardProps) => {
                 animate={{ scale: isHovered ? 1.02 : 1 }}
                 transition={{ duration: 0.2 }}
               >
-                <img 
-                  src={tool.logo} 
-                  alt={tool.name} 
-                  className="w-[60px] h-[60px] rounded-lg object-cover bg-gray-50 transition-transform duration-300"
-                />
+                <div className="relative">
+                  <img 
+                    src={tool.logo} 
+                    alt={tool.name} 
+                    className="w-[60px] h-[60px] rounded-lg object-cover bg-gray-50 transition-transform duration-300"
+                  />
+                  {isTrending && (
+                    <div className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">
+                      Trending
+                    </div>
+                  )}
+                </div>
                 <div>
                   <h3 className="font-semibold text-gray-900 dark:text-white">
                     {tool.name}
