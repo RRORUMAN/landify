@@ -1,6 +1,7 @@
 
 import { Tool } from "@/data/types";
 import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Star, Clock, ThumbsUp, DollarSign } from "lucide-react";
 
 interface CompareStatsProps {
@@ -71,3 +72,4 @@ const CompareStats = ({ tools }: CompareStatsProps) => {
 };
 
 export default CompareStats;
+
