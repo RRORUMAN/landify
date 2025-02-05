@@ -1,3 +1,4 @@
+```typescript
 import { motion } from "framer-motion";
 import { TreeDeciduous, Sprout, LeafyGreen, GitBranch, TreePine } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -62,7 +63,7 @@ const DashboardTreeSection = () => {
   ];
 
   return (
-    <section className="py-24 bg-gradient-to-b from-blue-50/50 to-white dark:from-gray-800 dark:to-gray-900">
+    <section className="py-24 bg-gradient-to-b from-blue-50/50 to-white">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -71,22 +72,21 @@ const DashboardTreeSection = () => {
           transition={{ duration: 0.5 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl font-bold bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600 bg-clip-text text-transparent animate-text mb-4">
+          <h2 className="text-4xl font-bold text-black mb-4">
             Your AI Command Center
           </h2>
-          <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+          <p className="text-black max-w-2xl mx-auto">
             Unlock the full potential of your AI toolkit with our comprehensive dashboard
           </p>
         </motion.div>
 
         <div className="relative">
-          {/* Vertical line */}
           <motion.div
             initial={{ height: 0 }}
             whileInView={{ height: "100%" }}
             viewport={{ once: true }}
             transition={{ duration: 1.5, ease: "easeOut" }}
-            className="absolute left-1/2 transform -translate-x-1/2 w-0.5 bg-gradient-to-b from-blue-500 to-purple-500 h-full"
+            className="absolute left-1/2 transform -translate-x-1/2 w-0.5 bg-blue-600 h-full"
           />
 
           <div className="relative z-10 space-y-24">
@@ -104,32 +104,30 @@ const DashboardTreeSection = () => {
                 <div className={`flex-1 ${index % 2 === 0 ? "text-right" : "text-left"}`}>
                   <motion.div
                     whileHover={{ scale: 1.02 }}
-                    className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 glass-morphism"
+                    className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
                   >
-                    <h3 className="text-2xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                    <h3 className="text-2xl font-bold mb-4 text-black">
                       {feature.title}
                     </h3>
-                    <p className="text-gray-600 dark:text-gray-300 mb-6">{feature.description}</p>
+                    <p className="text-black mb-6">{feature.description}</p>
                     
-                    {/* Stats Grid */}
                     <div className="grid grid-cols-2 gap-4 mb-6">
                       {feature.stats.map((stat, i) => (
-                        <div key={i} className="text-center p-3 bg-blue-50 dark:bg-blue-900/30 rounded-lg">
-                          <div className="text-xl font-bold text-blue-600 dark:text-blue-400">
+                        <div key={i} className="text-center p-3 bg-blue-50 rounded-lg">
+                          <div className="text-xl font-bold text-blue-600">
                             {stat.value}
                           </div>
-                          <div className="text-sm text-gray-600 dark:text-gray-400">
+                          <div className="text-sm text-black">
                             {stat.label}
                           </div>
                         </div>
                       ))}
                     </div>
 
-                    {/* Benefits List */}
                     <ul className="space-y-2">
                       {feature.benefits.map((benefit, i) => (
-                        <li key={i} className="flex items-center text-gray-600 dark:text-gray-300">
-                          <span className="w-2 h-2 bg-blue-500 rounded-full mr-2" />
+                        <li key={i} className="flex items-center text-black">
+                          <span className="w-2 h-2 bg-blue-600 rounded-full mr-2" />
                           {benefit}
                         </li>
                       ))}
@@ -137,7 +135,7 @@ const DashboardTreeSection = () => {
 
                     <Button
                       variant="ghost"
-                      className="mt-4 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30"
+                      className="mt-4 text-blue-600 hover:bg-blue-50"
                     >
                       Learn More →
                     </Button>
@@ -148,9 +146,9 @@ const DashboardTreeSection = () => {
                   <motion.div
                     whileHover={{ rotate: 360 }}
                     transition={{ duration: 0.5 }}
-                    className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center shadow-lg"
+                    className="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center shadow-lg"
                   >
-                    <feature.icon className="w-8 h-8 text-white" />
+                    <feature.icon className="w-8 h-8 text-blue-600" />
                   </motion.div>
                 </div>
 
@@ -165,3 +163,4 @@ const DashboardTreeSection = () => {
 };
 
 export default DashboardTreeSection;
+```
