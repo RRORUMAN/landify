@@ -4,12 +4,16 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import type { Tool } from "@/data/types";
 import { ArrowLeft, Download, Save, Filter } from "lucide-react";
-import CompareStats from "./compare/CompareStats";
 import { useQuery } from "@tanstack/react-query";
 import ToolSelectionCard from "./compare/ToolSelectionCard";
 import SelectedToolsGrid from "./compare/SelectedToolsGrid";
 import { useToast } from "@/components/ui/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
+import CompareFeatureGrid from "./compare/CompareFeatureGrid";
+import CompareStats from "./compare/CompareStats";
+import QuickCompare from "./compare/QuickCompare";
+import CompareROI from "./compare/CompareROI";
+import ComparePricing from "./compare/ComparePricing";
 
 const CompareTools = () => {
   const [selectedTools, setSelectedTools] = useState<Tool[]>([]);
@@ -125,21 +129,6 @@ const CompareTools = () => {
     );
   }
 
-  if (isSelecting) {
-    return (
-      <ToolSelectionCard
-        tools={tools}
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
-        handleSelectTool={handleSelectTool}
-        selectedTools={selectedTools}
-        setIsSelecting={setIsSelecting}
-        selectedCategory={selectedCategory}
-        setSelectedCategory={setSelectedCategory}
-      />
-    );
-  }
-
   return (
     <div>
       {selectedTools.length > 0 ? (
@@ -178,7 +167,11 @@ const CompareTools = () => {
             setIsSelecting={setIsSelecting}
           />
 
+          <QuickCompare tools={selectedTools} />
           <CompareStats tools={selectedTools} />
+          <CompareFeatureGrid tools={selectedTools} />
+          <CompareROI tools={selectedTools} />
+          <ComparePricing tools={selectedTools} />
         </div>
       ) : (
         <ToolSelectionCard
