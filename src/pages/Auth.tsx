@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -87,7 +88,7 @@ const Auth = () => {
                   placeholder="Enter your email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="pl-10 border-gray-200"
+                  className="pl-10 border-gray-200 text-gray-900" // Added text color here
                   required
                 />
               </div>
@@ -102,7 +103,7 @@ const Auth = () => {
                   placeholder="Enter your password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="pl-10 border-gray-200"
+                  className="pl-10 border-gray-200 text-gray-900" // Added text color here
                   required
                 />
               </div>
