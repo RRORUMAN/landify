@@ -57,10 +57,12 @@ const HeroSection = () => {
         >
           <motion.div 
             variants={itemVariants}
-            className="inline-flex items-center gap-2 bg-blue-50 dark:bg-blue-900/30 px-4 py-2 rounded-full text-sm font-medium text-blue-600 dark:text-blue-400"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium neo-blur"
           >
-            <Sparkles className="w-4 h-4 animate-pulse" />
-            <span>Your AI Tool Discovery Platform</span>
+            <Sparkles className="w-4 h-4 text-blue-500 animate-pulse" />
+            <span className="bg-gradient-to-r from-blue-500 to-violet-500 bg-clip-text text-transparent">
+              Your AI Tool Discovery Platform
+            </span>
           </motion.div>
           
           <motion.h1 
@@ -84,28 +86,39 @@ const HeroSection = () => {
             variants={itemVariants}
             className="flex flex-col items-center justify-center mt-12"
           >
-            <Button
-              size="lg"
-              className="bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 text-white px-8 py-6 text-lg rounded-xl w-full sm:w-auto group transition-all duration-300 hover:scale-105 mb-4 relative overflow-hidden"
-              onClick={() => navigate("/auth")}
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="relative group"
             >
-              <span className="relative z-10">Start Discovering AI Tools</span>
-              <motion.div
-                className="absolute inset-0 bg-white opacity-20"
-                animate={{
-                  x: ["100%", "-100%"],
-                }}
-                transition={{
-                  repeat: Infinity,
-                  duration: 2,
-                  ease: "linear",
-                }}
-              />
-              <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform relative z-10" />
-            </Button>
+              <Button
+                size="lg"
+                className="relative overflow-hidden bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 text-white px-8 py-6 text-lg rounded-xl w-full sm:w-auto transition-all duration-500 ease-out transform hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)]"
+                onClick={() => navigate("/auth")}
+              >
+                <span className="relative z-10 flex items-center">
+                  Start Discovering AI Tools
+                  <ArrowRight className="ml-2 transition-transform duration-300 group-hover:translate-x-1" />
+                </span>
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-blue-400 to-violet-400"
+                  initial={{ x: "100%" }}
+                  animate={{ x: "-100%" }}
+                  transition={{
+                    repeat: Infinity,
+                    duration: 2,
+                    ease: "linear",
+                  }}
+                  style={{
+                    opacity: 0.2,
+                  }}
+                />
+              </Button>
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-violet-500 rounded-xl blur opacity-30 group-hover:opacity-50 transition duration-500" />
+            </motion.div>
             <motion.span 
               variants={itemVariants}
-              className="text-sm text-gray-500 dark:text-gray-400"
+              className="text-sm text-gray-500 dark:text-gray-400 mt-4"
             >
               Free forever • No credit card required
             </motion.span>
