@@ -1,3 +1,4 @@
+
 import { motion } from "framer-motion";
 import { TreeDeciduous, Sprout, LeafyGreen, GitBranch, TreePine } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -8,9 +9,9 @@ const DashboardTreeSection = () => {
       icon: TreeDeciduous,
       title: "Smart Tool Discovery",
       description: "AI-powered recommendations to find the perfect tools for your needs",
-      stats: [
-        { label: "Average Time to Find Tools", value: "75% Faster" },
-        { label: "Recommendation Accuracy", value: "98%" }
+      metrics: [
+        { value: "75% Faster", label: "Average Time to Find Tools" },
+        { value: "98%", label: "Recommendation Accuracy" }
       ],
       benefits: ["Personalized AI recommendations", "Category-based filtering", "Real-time updates"],
       delay: 0.2,
@@ -18,10 +19,10 @@ const DashboardTreeSection = () => {
     {
       icon: Sprout,
       title: "Cost Optimization",
-      description: "Track spending and optimize your AI tool investments",
-      stats: [
-        { label: "Average Cost Savings", value: "32%" },
-        { label: "ROI Improvement", value: "3.5x" }
+      description: "Track and optimize your AI tool investments effortlessly",
+      metrics: [
+        { value: "32%", label: "Average Cost Savings" },
+        { value: "3.5x", label: "ROI Improvement" }
       ],
       benefits: ["Automated spend tracking", "Budget alerts", "Cost forecasting"],
       delay: 0.4,
@@ -29,10 +30,10 @@ const DashboardTreeSection = () => {
     {
       icon: LeafyGreen,
       title: "Usage Analytics",
-      description: "Deep insights into tool usage and team productivity",
-      stats: [
-        { label: "Productivity Increase", value: "45%" },
-        { label: "Team Adoption Rate", value: "89%" }
+      description: "Get deep insights into tool usage and team productivity",
+      metrics: [
+        { value: "45%", label: "Productivity Increase" },
+        { value: "89%", label: "Team Adoption Rate" }
       ],
       benefits: ["Real-time usage metrics", "Team performance tracking", "Integration insights"],
       delay: 0.6,
@@ -40,10 +41,10 @@ const DashboardTreeSection = () => {
     {
       icon: GitBranch,
       title: "Custom Collections",
-      description: "Organize tools your way with personalized categories",
-      stats: [
-        { label: "Time Saved", value: "12 hrs/week" },
-        { label: "Team Satisfaction", value: "96%" }
+      description: "Organize and access your tools with personalized categories",
+      metrics: [
+        { value: "12 hrs/week", label: "Time Saved" },
+        { value: "96%", label: "Team Satisfaction" }
       ],
       benefits: ["Flexible organization", "Team sharing", "Quick access"],
       delay: 0.8,
@@ -51,10 +52,10 @@ const DashboardTreeSection = () => {
     {
       icon: TreePine,
       title: "Integration Hub",
-      description: "Seamlessly connect and monitor all your AI tools",
-      stats: [
-        { label: "Integration Success Rate", value: "99.9%" },
-        { label: "Setup Time", value: "< 5 mins" }
+      description: "Connect and monitor all your AI tools seamlessly",
+      metrics: [
+        { value: "99.9%", label: "Integration Success" },
+        { value: "< 5 mins", label: "Setup Time" }
       ],
       benefits: ["One-click integrations", "Health monitoring", "Auto-sync"],
       delay: 1.0,
@@ -62,7 +63,7 @@ const DashboardTreeSection = () => {
   ];
 
   return (
-    <section className="py-24 bg-gradient-to-b from-blue-50/50 to-white">
+    <section className="py-24 bg-white">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -74,87 +75,71 @@ const DashboardTreeSection = () => {
           <h2 className="text-4xl font-bold text-black mb-4">
             Your AI Command Center
           </h2>
-          <p className="text-black max-w-2xl mx-auto">
+          <p className="text-gray-600 max-w-2xl mx-auto">
             Unlock the full potential of your AI toolkit with our comprehensive dashboard
           </p>
         </motion.div>
 
-        <div className="relative">
-          <motion.div
-            initial={{ height: 0 }}
-            whileInView={{ height: "100%" }}
-            viewport={{ once: true }}
-            transition={{ duration: 1.5, ease: "easeOut" }}
-            className="absolute left-1/2 transform -translate-x-1/2 w-0.5 bg-blue-600 h-full"
-          />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {features.map((feature) => (
+            <motion.div
+              key={feature.title}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: feature.delay }}
+              whileHover={{ y: -5 }}
+              className="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition-all duration-300"
+            >
+              <div className="flex items-center gap-4 mb-6">
+                <motion.div
+                  whileHover={{ rotate: 360 }}
+                  transition={{ duration: 0.5 }}
+                  className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center"
+                >
+                  <feature.icon className="w-6 h-6 text-blue-600" />
+                </motion.div>
+                <h3 className="text-2xl font-bold text-black">{feature.title}</h3>
+              </div>
 
-          <div className="relative z-10 space-y-24">
-            {features.map((feature, index) => (
-              <motion.div
-                key={feature.title}
-                initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: feature.delay }}
-                className={`flex items-center gap-8 ${
-                  index % 2 === 0 ? "flex-row" : "flex-row-reverse"
-                }`}
-              >
-                <div className={`flex-1 ${index % 2 === 0 ? "text-right" : "text-left"}`}>
-                  <motion.div
-                    whileHover={{ scale: 1.02 }}
-                    className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
-                  >
-                    <h3 className="text-2xl font-bold mb-4 text-black">
-                      {feature.title}
-                    </h3>
-                    <p className="text-black mb-6">{feature.description}</p>
-                    
-                    <div className="grid grid-cols-2 gap-4 mb-6">
-                      {feature.stats.map((stat, i) => (
-                        <div key={i} className="text-center p-3 bg-blue-50 rounded-lg">
-                          <div className="text-xl font-bold text-blue-600">
-                            {stat.value}
-                          </div>
-                          <div className="text-sm text-black">
-                            {stat.label}
-                          </div>
-                        </div>
-                      ))}
+              <p className="text-gray-600 mb-6">{feature.description}</p>
+
+              <div className="grid grid-cols-2 gap-4 mb-6">
+                {feature.metrics.map((metric, i) => (
+                  <div key={i} className="bg-blue-50 rounded-lg p-4">
+                    <div className="text-2xl font-bold text-blue-600 mb-1">
+                      {metric.value}
                     </div>
+                    <div className="text-sm text-gray-600">
+                      {metric.label}
+                    </div>
+                  </div>
+                ))}
+              </div>
 
-                    <ul className="space-y-2">
-                      {feature.benefits.map((benefit, i) => (
-                        <li key={i} className="flex items-center text-black">
-                          <span className="w-2 h-2 bg-blue-600 rounded-full mr-2" />
-                          {benefit}
-                        </li>
-                      ))}
-                    </ul>
-
-                    <Button
-                      variant="ghost"
-                      className="mt-4 text-blue-600 hover:bg-blue-50"
-                    >
-                      Learn More →
-                    </Button>
-                  </motion.div>
-                </div>
-
-                <div className="relative">
-                  <motion.div
-                    whileHover={{ rotate: 360 }}
-                    transition={{ duration: 0.5 }}
-                    className="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center shadow-lg"
+              <ul className="space-y-3 mb-6">
+                {feature.benefits.map((benefit, i) => (
+                  <motion.li
+                    key={i}
+                    initial={{ opacity: 0, x: -10 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ delay: feature.delay + (i * 0.1) }}
+                    className="flex items-center text-gray-600"
                   >
-                    <feature.icon className="w-8 h-8 text-blue-600" />
-                  </motion.div>
-                </div>
+                    <span className="w-2 h-2 bg-blue-600 rounded-full mr-2" />
+                    {benefit}
+                  </motion.li>
+                ))}
+              </ul>
 
-                <div className="flex-1" />
-              </motion.div>
-            ))}
-          </div>
+              <Button
+                variant="ghost"
+                className="w-full text-blue-600 hover:bg-blue-50 transition-colors"
+              >
+                Learn More →
+              </Button>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>
