@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -40,19 +41,27 @@ const Index = () => {
     return matchesCategory && matchesSearch;
   });
 
+  const featuredTools = filteredTools.filter(tool => tool.featured);
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       <div className="p-8">
         <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-6">AI Tools Directory</h1>
           <SearchBar value={searchQuery} onChange={setSearchQuery} />
         </div>
 
-        <RecentlyAdded />
+        {featuredTools.length > 0 && (
+          <div className="mb-12">
+            <h2 className="text-2xl font-semibold text-gray-900 mb-6">Featured Tools</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {featuredTools.map((tool) => (
+                <ToolCard key={tool.id} tool={tool} />
+              ))}
+            </div>
+          </div>
+        )}
         
-        <div id="compare">
-          <CompareTools />
-        </div>
-
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           <div className="lg:col-span-1">
             <CategoryFilter
@@ -62,7 +71,7 @@ const Index = () => {
           </div>
           <div className="lg:col-span-3">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {filteredTools.map((tool) => (
+              {filteredTools.filter(tool => !tool.featured).map((tool) => (
                 <ToolCard key={tool.id} tool={tool} />
               ))}
             </div>

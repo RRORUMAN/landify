@@ -30,6 +30,47 @@ export type Database = {
         }
         Relationships: []
       }
+      tool_analytics: {
+        Row: {
+          created_at: string | null
+          id: string
+          tool_id: string
+          usage_date: string | null
+          usage_details: Json | null
+          usage_duration: number | null
+          usage_type: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          tool_id: string
+          usage_date?: string | null
+          usage_details?: Json | null
+          usage_duration?: number | null
+          usage_type?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          tool_id?: string
+          usage_date?: string | null
+          usage_details?: Json | null
+          usage_duration?: number | null
+          usage_type?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tool_analytics_tool_id_fkey"
+            columns: ["tool_id"]
+            isOneToOne: false
+            referencedRelation: "tools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tools: {
         Row: {
           bookmarks: number

@@ -1,6 +1,6 @@
+
 import { Button } from "@/components/ui/button";
 import { categories } from "@/data/categories";
-import { DragHandleDots2Icon } from "@radix-ui/react-icons";
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -14,7 +14,6 @@ interface CategoryFilterProps {
 const CategoryFilter = ({ selectedCategory, onSelectCategory }: CategoryFilterProps) => {
   const [customTags, setCustomTags] = useState<string[]>([]);
   const [newTag, setNewTag] = useState("");
-  const [orderedCategories, setOrderedCategories] = useState(categories);
 
   const handleAddTag = () => {
     if (newTag && !customTags.includes(newTag)) {
@@ -28,50 +27,48 @@ const CategoryFilter = ({ selectedCategory, onSelectCategory }: CategoryFilterPr
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
-      <h2 className="text-xl font-semibold text-heading mb-6">Categories</h2>
-      <div className="space-y-4">
+    <div className="bg-white rounded-lg border border-gray-100 p-6">
+      <h2 className="text-lg font-semibold text-gray-900 mb-4">Categories</h2>
+      <div className="space-y-2">
         <Button
           variant={selectedCategory === null ? "default" : "ghost"}
-          className={`w-full justify-start py-3 px-4 text-base font-medium ${
+          className={`w-full justify-start text-sm ${
             selectedCategory === null 
-              ? "bg-brand-blue text-white hover:bg-brand-blue-dark"
-              : "text-gray-600 dark:text-gray-300 hover:text-gray-900 hover:bg-gray-50 dark:hover:bg-gray-700"
+              ? "bg-blue-50 text-blue-600 hover:bg-blue-100"
+              : "text-gray-600 hover:bg-gray-50"
           }`}
           onClick={() => onSelectCategory(null)}
         >
           All Tools
         </Button>
         
-        {orderedCategories.map((category) => {
+        {categories.map((category) => {
           const Icon = category.icon;
           return (
-            <div key={category.name} className="flex items-center gap-2">
-              <DragHandleDots2Icon className="h-5 w-5 text-gray-400 cursor-move" />
-              <Button
-                variant={selectedCategory === category.name ? "default" : "ghost"}
-                className={`flex-1 justify-start py-3 px-4 text-base font-medium ${
-                  selectedCategory === category.name
-                    ? "bg-brand-blue text-white hover:bg-brand-blue-dark"
-                    : "text-gray-600 dark:text-gray-300 hover:text-gray-900 hover:bg-gray-50 dark:hover:bg-gray-700"
-                }`}
-                onClick={() => onSelectCategory(category.name)}
-              >
-                <Icon className="mr-3 h-5 w-5" />
-                {category.name}
-              </Button>
-            </div>
+            <Button
+              key={category.name}
+              variant={selectedCategory === category.name ? "default" : "ghost"}
+              className={`w-full justify-start text-sm ${
+                selectedCategory === category.name
+                  ? "bg-blue-50 text-blue-600 hover:bg-blue-100"
+                  : "text-gray-600 hover:bg-gray-50"
+              }`}
+              onClick={() => onSelectCategory(category.name)}
+            >
+              <Icon className="mr-2 h-4 w-4" />
+              {category.name}
+            </Button>
           );
         })}
 
-        <div className="pt-4 border-t border-gray-100 dark:border-gray-700">
-          <h3 className="text-sm font-medium text-heading mb-3">Custom Tags</h3>
+        <div className="pt-4 mt-4 border-t border-gray-100">
+          <h3 className="text-sm font-medium text-gray-900 mb-3">Custom Tags</h3>
           <div className="flex flex-wrap gap-2 mb-3">
             {customTags.map((tag) => (
               <Badge
                 key={tag}
                 variant="secondary"
-                className="cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700"
+                className="cursor-pointer hover:bg-gray-100"
                 onClick={() => handleRemoveTag(tag)}
               >
                 {tag} ×
