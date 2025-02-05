@@ -9,6 +9,94 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      comparison_features: {
+        Row: {
+          created_at: string | null
+          feature_category: string
+          feature_details: Json | null
+          feature_name: string
+          feature_value: string | null
+          id: string
+          is_premium: boolean | null
+          tool_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          feature_category: string
+          feature_details?: Json | null
+          feature_name: string
+          feature_value?: string | null
+          id?: string
+          is_premium?: boolean | null
+          tool_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          feature_category?: string
+          feature_details?: Json | null
+          feature_name?: string
+          feature_value?: string | null
+          id?: string
+          is_premium?: boolean | null
+          tool_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "comparison_features_tool_id_fkey"
+            columns: ["tool_id"]
+            isOneToOne: false
+            referencedRelation: "tools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      performance_metrics: {
+        Row: {
+          confidence_score: number | null
+          created_at: string | null
+          id: string
+          last_updated: string | null
+          metric_details: Json | null
+          metric_name: string
+          metric_unit: string | null
+          metric_value: number | null
+          sample_size: number | null
+          tool_id: string | null
+        }
+        Insert: {
+          confidence_score?: number | null
+          created_at?: string | null
+          id?: string
+          last_updated?: string | null
+          metric_details?: Json | null
+          metric_name: string
+          metric_unit?: string | null
+          metric_value?: number | null
+          sample_size?: number | null
+          tool_id?: string | null
+        }
+        Update: {
+          confidence_score?: number | null
+          created_at?: string | null
+          id?: string
+          last_updated?: string | null
+          metric_details?: Json | null
+          metric_name?: string
+          metric_unit?: string | null
+          metric_value?: number | null
+          sample_size?: number | null
+          tool_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "performance_metrics_tool_id_fkey"
+            columns: ["tool_id"]
+            isOneToOne: false
+            referencedRelation: "tools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       spend_forecasts: {
         Row: {
           created_at: string | null
