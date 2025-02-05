@@ -1,26 +1,113 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { BarChart, DollarSign, TrendingUp, Zap, Building2, Receipt, CreditCard, PieChart, Calculator } from "lucide-react";
-import { tools } from "@/data/tools";
+import { BarChart, DollarSign, Zap, Building2, Receipt, CreditCard, PieChart, Calculator } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+import type { UserTool, SpendForecast } from "@/data/types";
 
 const Analytics = () => {
-  const [connectedApps, setConnectedApps] = useState<string[]>([]);
+  const [userTools, setUserTools] = useState<UserTool[]>([]);
   const [monthlySpend, setMonthlySpend] = useState(0);
   const [selectedDepartment, setSelectedDepartment] = useState("All");
+  const [loading, setLoading] = useState(true);
+  const [forecasts, setForecasts] = useState<SpendForecast[]>([]);
+  const { toast } = useToast();
 
-  const handleConnectApp = (appName: string) => {
-    if (!connectedApps.includes(appName)) {
-      setConnectedApps([...connectedApps, appName]);
-      console.log(`Connecting ${appName}...`);
+  useEffect(() => {
+    fetchUserToolsAndForecasts();
+  }, []);
+
+  const fetchUserToolsAndForecasts = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        toast({
+          title: "Authentication required",
+          description: "Please sign in to view analytics",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      // Fetch user tools
+      const { data: toolsData, error: toolsError } = await supabase
+        .from('user_tools')
+        .select('*')
+        .eq('user_id', user.id);
+
+      if (toolsError) throw toolsError;
+
+      // Fetch forecasts
+      const { data: forecastsData, error: forecastsError } = await supabase
+        .from('spend_forecasts')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('forecast_date', { ascending: true });
+
+      if (forecastsError) throw forecastsError;
+
+      setUserTools(toolsData || []);
+      setForecasts(forecastsData || []);
+      
+      // Calculate total monthly spend
+      const totalSpend = (toolsData || []).reduce((sum, tool) => 
+        sum + (tool.monthly_cost || 0), 0);
+      setMonthlySpend(totalSpend);
+
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load analytics data",
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleConnectApp = async (toolId: string) => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data, error } = await supabase
+        .from('user_tools')
+        .insert([{
+          user_id: user.id,
+          tool_id: toolId,
+          subscription_status: 'active',
+          monthly_cost: 0, // Default value, should be updated by user
+          billing_cycle: 'monthly',
+          usage_stats: {},
+        }])
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      toast({
+        title: "Tool connected",
+        description: "Successfully added to your dashboard",
+      });
+
+      await fetchUserToolsAndForecasts();
+    } catch (error) {
+      console.error('Error connecting tool:', error);
+      toast({
+        title: "Error",
+        description: "Failed to connect tool",
+        variant: "destructive"
+      });
     }
   };
 
   const departments = [
-    { name: "All", spend: 2450 },
+    { name: "All", spend: monthlySpend },
     { name: "Marketing", spend: 850 },
     { name: "Sales", spend: 600 },
     { name: "Engineering", spend: 500 },
@@ -28,7 +115,15 @@ const Analytics = () => {
     { name: "Finance", spend: 200 },
   ];
 
-  const availableTools = [...new Set(tools.map(tool => tool.name))];
+  if (loading) {
+    return (
+      <div className="p-6 flex justify-center items-center min-h-screen">
+        <div className="animate-pulse text-gray-600 dark:text-gray-300">
+          Loading analytics...
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 max-w-7xl mx-auto">
@@ -65,8 +160,8 @@ const Analytics = () => {
                   <Building2 className="h-6 w-6 text-green-600 dark:text-green-400" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600 dark:text-gray-300">Departments</p>
-                  <p className="text-2xl font-semibold text-gray-900 dark:text-white">{departments.length - 1}</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-300">Active Tools</p>
+                  <p className="text-2xl font-semibold text-gray-900 dark:text-white">{userTools.length}</p>
                 </div>
               </div>
             </Card>
@@ -77,8 +172,14 @@ const Analytics = () => {
                   <Receipt className="h-6 w-6 text-purple-600 dark:text-purple-400" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600 dark:text-gray-300">Active Subscriptions</p>
-                  <p className="text-2xl font-semibold text-gray-900 dark:text-white">{connectedApps.length}</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-300">Renewals This Month</p>
+                  <p className="text-2xl font-semibold text-gray-900 dark:text-white">
+                    {userTools.filter(tool => {
+                      const nextBilling = new Date(tool.next_billing_date || '');
+                      const now = new Date();
+                      return nextBilling.getMonth() === now.getMonth();
+                    }).length}
+                  </p>
                 </div>
               </div>
             </Card>
@@ -90,8 +191,58 @@ const Analytics = () => {
                 </div>
                 <div>
                   <p className="text-sm text-gray-600 dark:text-gray-300">Forecast (Next Month)</p>
-                  <p className="text-2xl font-semibold text-gray-900 dark:text-white">+12%</p>
+                  <p className="text-2xl font-semibold text-gray-900 dark:text-white">
+                    {forecasts.length > 0 ? `$${forecasts[0].forecasted_amount}` : '-'}
+                  </p>
                 </div>
+              </div>
+            </Card>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <Card className="p-6 bg-white dark:bg-gray-800/50 backdrop-blur-lg border border-gray-200 dark:border-gray-700">
+              <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Active Subscriptions</h2>
+              <ScrollArea className="h-[300px] pr-4">
+                <div className="space-y-4">
+                  {userTools.map((tool) => (
+                    <div
+                      key={tool.id}
+                      className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg flex justify-between items-center"
+                    >
+                      <div>
+                        <h3 className="font-medium text-gray-900 dark:text-white">{tool.tool_id}</h3>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                          {tool.billing_cycle} • Next billing: {new Date(tool.next_billing_date || '').toLocaleDateString()}
+                        </p>
+                      </div>
+                      <span className="font-semibold text-gray-900 dark:text-white">
+                        ${tool.monthly_cost || 0}/mo
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </ScrollArea>
+            </Card>
+
+            <Card className="p-6 bg-white dark:bg-gray-800/50 backdrop-blur-lg border border-gray-200 dark:border-gray-700">
+              <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Spending Forecast</h2>
+              <div className="space-y-4">
+                {forecasts.slice(0, 3).map((forecast) => (
+                  <div
+                    key={forecast.id}
+                    className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg flex justify-between items-center"
+                  >
+                    <div>
+                      <h3 className="font-medium text-gray-900 dark:text-white">
+                        {new Date(forecast.forecast_date).toLocaleDateString()}
+                      </h3>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">Projected spend</p>
+                    </div>
+                    <span className="font-semibold text-gray-900 dark:text-white">
+                      ${forecast.forecasted_amount}
+                    </span>
+                  </div>
+                ))}
               </div>
             </Card>
           </div>
@@ -167,9 +318,9 @@ const Analytics = () => {
                   <h3 className="font-medium text-purple-900 dark:text-purple-300 mb-2">Payment Schedule</h3>
                   <ScrollArea className="h-[200px]">
                     <div className="space-y-3">
-                      {connectedApps.map((app) => (
-                        <div key={app} className="flex justify-between items-center">
-                          <span className="text-sm text-purple-800 dark:text-purple-200">{app}</span>
+                      {userTools.map((tool) => (
+                        <div key={tool.id} className="flex justify-between items-center">
+                          <span className="text-sm text-purple-800 dark:text-purple-200">{tool.tool_id}</span>
                           <Button variant="outline" className="dark:bg-purple-900/20 dark:text-purple-200 dark:hover:bg-purple-800/30">
                             Schedule Payment
                           </Button>
@@ -192,9 +343,9 @@ const Analytics = () => {
                   <h3 className="font-medium text-indigo-900 dark:text-indigo-300 mb-2">Recent Invoices</h3>
                   <ScrollArea className="h-[200px]">
                     <div className="space-y-3">
-                      {connectedApps.map((app) => (
-                        <div key={app} className="flex justify-between items-center">
-                          <span className="text-sm text-indigo-800 dark:text-indigo-200">{app}</span>
+                      {userTools.map((tool) => (
+                        <div key={tool.id} className="flex justify-between items-center">
+                          <span className="text-sm text-indigo-800 dark:text-indigo-200">{tool.tool_id}</span>
                           <Button variant="ghost" className="dark:text-indigo-200 dark:hover:bg-indigo-800/30">
                             View Invoice
                           </Button>
@@ -216,70 +367,6 @@ const Analytics = () => {
           </Card>
         </TabsContent>
       </Tabs>
-
-      <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <Card className="p-6 bg-white dark:bg-gray-800/50 backdrop-blur-lg border border-gray-200 dark:border-gray-700">
-          <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Connect AI Tools</h2>
-          <div className="space-y-4">
-            <div className="flex items-center gap-4">
-              <Input 
-                type="text" 
-                placeholder="Enter tool API key"
-                className="dark:bg-gray-700/50 dark:text-white dark:border-gray-600 dark:placeholder-gray-400"
-              />
-              <Button 
-                onClick={() => handleConnectApp("Custom Tool")}
-                className="dark:bg-blue-600 dark:hover:bg-blue-700"
-              >
-                Connect
-              </Button>
-            </div>
-            <ScrollArea className="h-[300px] pr-4">
-              <div className="grid grid-cols-1 gap-3">
-                {availableTools.map((app) => (
-                  <Button
-                    key={app}
-                    variant={connectedApps.includes(app) ? "secondary" : "outline"}
-                    onClick={() => handleConnectApp(app)}
-                    className={`w-full justify-start gap-2 transition-all duration-200
-                      ${connectedApps.includes(app) 
-                        ? 'dark:bg-gray-700 dark:text-white' 
-                        : 'dark:bg-transparent dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700/50'}`}
-                  >
-                    <Zap className="h-4 w-4" />
-                    {app}
-                  </Button>
-                ))}
-              </div>
-            </ScrollArea>
-          </div>
-        </Card>
-
-        <Card className="p-6 bg-white dark:bg-gray-800/50 backdrop-blur-lg border border-gray-200 dark:border-gray-700">
-          <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Spend Forecasting</h2>
-          <div className="space-y-4">
-            <div className="p-4 bg-teal-50 dark:bg-teal-900/20 rounded-lg border border-teal-100 dark:border-teal-800">
-              <h3 className="font-medium text-teal-900 dark:text-teal-300 mb-2">Projected Spending</h3>
-              <p className="text-sm text-teal-800 dark:text-teal-200">Based on current usage patterns and growth trends</p>
-              <div className="mt-4 space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span className="text-teal-800 dark:text-teal-200">Next Month</span>
-                  <span className="font-semibold text-teal-900 dark:text-teal-100">$2,745</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-teal-800 dark:text-teal-200">Q4 2024</span>
-                  <span className="font-semibold text-teal-900 dark:text-teal-100">$8,950</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="p-4 bg-rose-50 dark:bg-rose-900/20 rounded-lg border border-rose-100 dark:border-rose-800">
-              <h3 className="font-medium text-rose-900 dark:text-rose-300 mb-2">Budget Alerts</h3>
-              <p className="text-sm text-rose-800 dark:text-rose-200">Marketing department projected to exceed budget by 15% next month</p>
-            </div>
-          </div>
-        </Card>
-      </div>
     </div>
   );
 };

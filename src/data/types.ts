@@ -38,4 +38,17 @@ export interface UserTool {
     description: string;
     url: string;
   };
+  monthly_cost?: number;
+  billing_cycle?: string;
+  next_billing_date?: string;
+  usage_stats?: Record<string, any>;
+}
+
+export interface SpendForecast {
+  id: string;
+  user_id: string;
+  forecast_date: string;
+  forecasted_amount: number;
+  forecast_details?: Record<string, any>;
+  created_at?: string;
 }
