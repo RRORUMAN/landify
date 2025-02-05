@@ -117,8 +117,8 @@ const Analytics = () => {
   return (
     <div className="p-6 max-w-7xl mx-auto">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">Financial Analytics Dashboard</h1>
-        <p className="text-gray-600">Track and optimize your AI tools spending</p>
+        <h1 className="text-2xl font-bold text-gray-900 mb-2">AI-Powered Analytics Dashboard</h1>
+        <p className="text-gray-600">Track, analyze, and optimize your AI tools investment</p>
       </div>
 
       <Tabs defaultValue="overview" className="space-y-6">
@@ -144,7 +144,7 @@ const Analytics = () => {
 
         <TabsContent value="tools" className="space-y-6">
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-semibold">Your Tools</h2>
+            <h2 className="text-xl font-semibold">Your AI Tools Portfolio</h2>
             <AddToolDialog availableTools={availableTools} />
           </div>
           <ToolsList
@@ -163,7 +163,7 @@ const Analytics = () => {
         <TabsContent value="reports" className="space-y-6">
           <div className="p-4 bg-gray-50 rounded-lg">
             <h3 className="font-medium mb-2">
-              Generate Monthly Spending Report
+              Generate AI-Powered Analytics Report
             </h3>
             <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
               Generate Report <ArrowRight className="ml-2 h-4 w-4" />

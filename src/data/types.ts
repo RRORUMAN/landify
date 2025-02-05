@@ -29,6 +29,8 @@ export interface Category {
   icon: LucideIcon;
 }
 
+export type SubscriptionTier = 'free' | 'pro' | 'business' | 'business_plus';
+
 export interface UserTool {
   id: string;
   user_id: string;
@@ -36,7 +38,7 @@ export interface UserTool {
   purchase_date: string | null;
   subscription_status: string | null;
   notes: string | null;
-  subscription_tier: 'free' | 'pro' | 'business' | 'business_plus' | null;
+  subscription_tier: SubscriptionTier | null;
   subscription_details: Record<string, any> | null;
   monthly_cost: number | null;
   billing_cycle: string | null;
@@ -52,5 +54,27 @@ export interface SpendForecast {
   forecasted_amount: number;
   forecast_details: Record<string, any> | null;
   created_at?: string | null;
+}
+
+export interface ComparisonFeature {
+  id: string;
+  tool_id: string | null;
+  feature_category: string;
+  feature_name: string;
+  feature_value: string | null;
+  feature_details: Record<string, any> | null;
+  is_premium: boolean;
+  help_text: string | null;
+  sort_order: number;
+  importance: 'high' | 'medium' | 'low';
+  feature_group: string | null;
+  created_at?: string | null;
+}
+
+export interface SubscriptionLimit {
+  tier: SubscriptionTier;
+  tools_per_category: number;
+  price_monthly: number;
+  features: Record<string, any>;
 }
 
