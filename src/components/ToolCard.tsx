@@ -1,3 +1,4 @@
+
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Star, Bookmark } from "lucide-react";
@@ -16,14 +17,19 @@ const ToolCard = ({ tool }: ToolCardProps) => {
   const { toast } = useToast();
   const [isOwned, setIsOwned] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [bookmarkCount, setBookmarkCount] = useState(tool.bookmarks);
 
   useEffect(() => {
     const checkToolOwnership = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
       try {
         const { data: userTool } = await supabase
           .from('user_tools')
           .select('*')
           .eq('tool_id', tool.id)
+          .eq('user_id', user.id)
           .maybeSingle();
         
         setIsOwned(!!userTool);
@@ -44,37 +50,34 @@ const ToolCard = ({ tool }: ToolCardProps) => {
   };
 
   const handleBookmark = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      toast({
+        title: "Authentication required",
+        description: "Please sign in to bookmark tools.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     try {
       trackToolInteraction(tool.id, 'bookmark');
-      const { data: existingBookmark, error: selectError } = await supabase
-        .from('bookmarks')
-        .select('*')
-        .eq('tool_id', tool.id)
+      
+      const { data: toolData } = await supabase
+        .from('tools')
+        .select('bookmarks')
+        .eq('id', tool.id)
         .single();
 
-      if (selectError && selectError.code !== 'PGRST116') {
-        throw selectError;
-      }
+      if (toolData) {
+        const newCount = toolData.bookmarks + 1;
+        await supabase
+          .from('tools')
+          .update({ bookmarks: newCount })
+          .eq('id', tool.id);
 
-      if (existingBookmark) {
-        const { error: deleteError } = await supabase
-          .from('bookmarks')
-          .delete()
-          .eq('tool_id', tool.id);
-
-        if (deleteError) throw deleteError;
-
-        toast({
-          title: "Bookmark removed",
-          description: "This tool has been removed from your bookmarks.",
-        });
-      } else {
-        const { error: insertError } = await supabase
-          .from('bookmarks')
-          .insert([{ tool_id: tool.id }]);
-
-        if (insertError) throw insertError;
-
+        setBookmarkCount(newCount);
+        
         toast({
           title: "Tool bookmarked",
           description: "This tool has been added to your bookmarks.",
@@ -82,6 +85,11 @@ const ToolCard = ({ tool }: ToolCardProps) => {
       }
     } catch (error) {
       console.error('Error bookmarking tool:', error);
+      toast({
+        title: "Error",
+        description: "Failed to bookmark tool. Please try again.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -130,13 +138,13 @@ const ToolCard = ({ tool }: ToolCardProps) => {
                 </div>
               </motion.div>
               <motion.span 
-                className="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-1"
+                className="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-1 cursor-pointer"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={handleBookmark}
               >
                 <Bookmark className="h-4 w-4" />
-                {tool.bookmarks}
+                {bookmarkCount}
               </motion.span>
             </div>
 

@@ -11,7 +11,9 @@ export const trackToolInteraction = async (toolId: string, interactionType: 'vie
         usage_details: {
           source: 'web',
           timestamp: new Date().toISOString()
-        }
+        },
+        // Allow anonymous analytics tracking
+        user_id: (await supabase.auth.getUser()).data.user?.id || null
       });
 
     if (error) throw error;
