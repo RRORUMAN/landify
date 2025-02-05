@@ -173,3 +173,4 @@ const CompareFeatureGrid = ({ tools }: CompareFeatureGridProps) => {
 };
 
 export default CompareFeatureGrid;
+
