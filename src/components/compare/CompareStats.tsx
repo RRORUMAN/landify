@@ -2,31 +2,14 @@
 import { Tool } from "@/data/types";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { 
-  Star, 
-  Clock, 
-  ThumbsUp, 
-  DollarSign, 
-  Users, 
-  Zap, 
-  Award, 
-  TrendingUp,
-  Building2,
-  Calendar,
-  BarChart,
-  Puzzle,
-  Heart,
-  Headphones,
-  Check,
-  X,
-  Globe,
-  Link
-} from "lucide-react";
+import { Star, DollarSign, Link } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/components/ui/use-toast";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
+import CompanyInfo from "./stats/CompanyInfo";
+import PerformanceMetrics from "./stats/PerformanceMetrics";
+import SentimentAnalysis from "./stats/SentimentAnalysis";
 
 interface CompareStatsProps {
   tools: Tool[];
@@ -97,13 +80,6 @@ const CompareStats = ({ tools }: CompareStatsProps) => {
     }
   });
 
-  const getMetricValue = (toolId: string, metricName: string) => {
-    const metric = performanceMetrics.find(
-      m => m.tool_id === toolId && m.metric_name === metricName
-    );
-    return metric?.metric_value || 0;
-  };
-
   const getSentimentData = (toolId: string) => {
     return sentimentData.find(s => s.tool_id === toolId);
   };
@@ -140,36 +116,7 @@ const CompareStats = ({ tools }: CompareStatsProps) => {
                 </div>
               </div>
 
-              <div className="flex flex-col gap-2">
-                <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <Building2 className="h-4 w-4" />
-                  <span>{tool.company_name ?? 'N/A'}</span>
-                </div>
-                
-                {tool.company_website && (
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <Globe className="h-4 w-4" />
-                    <a 
-                      href={tool.company_website}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-500 hover:underline"
-                    >
-                      Visit Website
-                    </a>
-                  </div>
-                )}
-
-                <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <Calendar className="h-4 w-4" />
-                  <span>Founded: {tool.founding_year ?? 'N/A'}</span>
-                </div>
-
-                <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <Puzzle className="h-4 w-4" />
-                  <span>{tool.integration_count ?? 0} Integrations</span>
-                </div>
-              </div>
+              <CompanyInfo tool={tool} />
 
               {tool.pricing_range && (
                 <div className="flex items-center gap-2 mt-2">
@@ -179,92 +126,8 @@ const CompareStats = ({ tools }: CompareStatsProps) => {
               )}
             </div>
             
-            <div className="space-y-4">
-              <TooltipProvider>
-                <div className="flex items-center justify-between">
-                  <Tooltip>
-                    <TooltipTrigger className="flex items-center gap-2">
-                      <Heart className="h-5 w-5 text-red-500" />
-                      <span className="text-sm font-medium">Ease of Use</span>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>How easy the tool is to use and learn</p>
-                    </TooltipContent>
-                  </Tooltip>
-                  <span className="text-sm">{metrics?.ease_of_use_score?.toFixed(1) ?? 'N/A'}/10</span>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <Tooltip>
-                    <TooltipTrigger className="flex items-center gap-2">
-                      <Clock className="h-5 w-5 text-blue-500" />
-                      <span className="text-sm font-medium">Time Saved</span>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Average time saved per task using this tool</p>
-                    </TooltipContent>
-                  </Tooltip>
-                  <span className="text-sm">
-                    {metrics?.time_saved_per_task ?? 'N/A'} min/task
-                  </span>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <Tooltip>
-                    <TooltipTrigger className="flex items-center gap-2">
-                      <BarChart className="h-5 w-5 text-purple-500" />
-                      <span className="text-sm font-medium">ROI Score</span>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Return on Investment score based on user feedback</p>
-                    </TooltipContent>
-                  </Tooltip>
-                  <span className="text-sm">
-                    {metrics?.roi_score?.toFixed(1) ?? 'N/A'}/10
-                  </span>
-                </div>
-              </TooltipProvider>
-
-              {sentiment && (
-                <>
-                  <div className="pt-4 border-t">
-                    <h4 className="font-medium mb-3 text-sm">Key Strengths</h4>
-                    <div className="space-y-2">
-                      {sentiment.pros?.slice(0, 3).map((pro, index) => (
-                        <div key={index} className="text-sm text-gray-600 flex items-start gap-2">
-                          <Check className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
-                          <span className="line-clamp-2">{pro}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="pt-2">
-                    <h4 className="font-medium mb-3 text-sm">Limitations</h4>
-                    <div className="space-y-2">
-                      {sentiment.cons?.slice(0, 3).map((con, index) => (
-                        <div key={index} className="text-sm text-gray-600 flex items-start gap-2">
-                          <X className="h-4 w-4 text-red-500 mt-0.5 flex-shrink-0" />
-                          <span className="line-clamp-2">{con}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="pt-2">
-                    <h4 className="font-medium mb-3 text-sm">Key Insights</h4>
-                    <div className="space-y-2">
-                      {sentiment.key_insights?.slice(0, 2).map((insight, index) => (
-                        <div key={index} className="text-sm text-gray-600 flex items-start gap-2">
-                          <Award className="h-4 w-4 text-blue-500 mt-0.5 flex-shrink-0" />
-                          <span className="line-clamp-2">{insight}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </>
-              )}
-            </div>
+            <PerformanceMetrics metrics={metrics} />
+            <SentimentAnalysis sentiment={sentiment} />
             
             <div className="mt-6">
               <h4 className="font-medium mb-2">Best For</h4>

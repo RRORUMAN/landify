@@ -21,6 +21,9 @@ export interface Tool {
   monthly_active_users?: number | null;
   created_at?: string | null;
   special_pricing?: boolean;
+  company_website?: string | null;
+  integration_count?: number | null;
+  pricing_range?: string | null;
 }
 
 export interface Category {
