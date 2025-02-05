@@ -11,7 +11,6 @@ import AIRecommendations from "./pages/tools/AIRecommendations";
 import Analytics from "./pages/tools/Analytics";
 import Sidebar from "./components/dashboard/Sidebar";
 
-// Create a wrapper component that uses the useLocation hook
 const AppContent = () => {
   const location = useLocation();
   
@@ -19,11 +18,10 @@ const AppContent = () => {
     return pathname.startsWith('/tools') || pathname === '/my-tools';
   };
 
-  // Show navbar on landing and pricing pages
   const showNavbar = ['/', '/pricing'].includes(location.pathname);
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-black text-white">
       {showNavbar && <Navbar />}
       <div className="flex">
         {isDashboardRoute(location.pathname) && <Sidebar />}
@@ -48,7 +46,6 @@ const AppContent = () => {
   );
 };
 
-// Main App component that provides the Router context
 function App() {
   return (
     <Router>

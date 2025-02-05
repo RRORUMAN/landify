@@ -25,15 +25,15 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "#222222",
+          DEFAULT: "#000000",
           hover: "#1a1a1a",
           foreground: "#ffffff",
         },
         card: {
-          DEFAULT: "white",
-          hover: "#f8fafc",
-          dark: "#1f2937",
-          "dark-hover": "#374151",
+          DEFAULT: "#0D0D0D",
+          hover: "#1A1A1A",
+          dark: "#000000",
+          "dark-hover": "#1A1A1A",
         },
         brand: {
           blue: {
@@ -41,12 +41,12 @@ export default {
             DEFAULT: "#2196F3",
             dark: "#1976D2",
           },
-          dark: "#222222",
-          gray: "#403E43",
+          dark: "#000000",
+          gray: "#8A898C",
         },
         heading: {
-          DEFAULT: "#222222", // Black for section headings
-          gradient: "linear-gradient(to right, #2196F3, #1976D2)", // Blue gradient for special headings
+          DEFAULT: "#FFFFFF",
+          gradient: "linear-gradient(to right, #FFFFFF, #E0E0E0)",
         },
       },
       animation: {
@@ -56,7 +56,6 @@ export default {
         "text": "text 5s ease infinite",
         "pulse": "pulse 2s infinite",
         "float": "float 3s ease-in-out infinite",
-        "bounce-slow": "bounce 3s infinite",
       },
       keyframes: {
         "card-hover": {
@@ -87,8 +86,8 @@ export default {
         },
       },
       fontFamily: {
-        mono: ["JetBrains Mono", "monospace"],
-        sans: ["Inter", "sans-serif"],
+        sans: ["Inter", "system-ui", "sans-serif"],
+        display: ["Inter", "system-ui", "sans-serif"],
       },
     },
   },
