@@ -9,36 +9,36 @@ const DashboardTreeSection = () => {
       title: "AI Tool Discovery",
       description: "Find and compare the perfect AI tools for your workflow",
       metrics: [
-        { value: "Instant", label: "Tool Recommendations" },
-        { value: "Smart", label: "Category Filtering" }
+        { value: "Smart", label: "Search & Filter" },
+        { value: "Real-time", label: "Updates" }
       ],
-      benefits: ["Personalized AI suggestions", "Real-time tool updates", "Smart categorization"],
+      benefits: ["AI-powered recommendations", "Category optimization", "Tool comparisons"],
       delay: 0.2,
-      gradient: "from-blue-500/20 to-indigo-500/20"
+      gradient: "from-blue-500/5 to-indigo-500/5"
     },
     {
       icon: Sprout,
       title: "Budget Management",
       description: "Track and optimize your AI investments effortlessly",
       metrics: [
-        { value: "Real-time", label: "Spend Tracking" },
-        { value: "Smart", label: "Budget Alerts" }
+        { value: "Live", label: "Cost Tracking" },
+        { value: "Smart", label: "Alerts" }
       ],
-      benefits: ["Automated cost tracking", "Spend optimization", "Budget forecasting"],
+      benefits: ["Spend analytics", "Budget forecasting", "Cost optimization"],
       delay: 0.4,
-      gradient: "from-indigo-500/20 to-purple-500/20"
+      gradient: "from-indigo-500/5 to-violet-500/5"
     },
     {
       icon: LeafyGreen,
       title: "Usage Analytics",
       description: "Get deep insights into your AI tool utilization",
       metrics: [
-        { value: "Live", label: "Usage Metrics" },
-        { value: "Clear", label: "ROI Insights" }
+        { value: "Real-time", label: "Metrics" },
+        { value: "Clear", label: "Insights" }
       ],
-      benefits: ["Tool usage patterns", "Team adoption metrics", "Performance tracking"],
+      benefits: ["Usage patterns", "ROI analysis", "Performance tracking"],
       delay: 0.6,
-      gradient: "from-purple-500/20 to-pink-500/20"
+      gradient: "from-violet-500/5 to-purple-500/5"
     },
     {
       icon: GitBranch,
@@ -46,11 +46,11 @@ const DashboardTreeSection = () => {
       description: "Organize your AI tools with smart categorization",
       metrics: [
         { value: "Flexible", label: "Organization" },
-        { value: "Simple", label: "Management" }
+        { value: "Easy", label: "Management" }
       ],
-      benefits: ["Custom categories", "Quick tool access", "Team sharing"],
+      benefits: ["Custom categories", "Tool grouping", "Quick access"],
       delay: 0.8,
-      gradient: "from-pink-500/20 to-rose-500/20"
+      gradient: "from-purple-500/5 to-blue-500/5"
     }
   ];
 
@@ -77,7 +77,7 @@ const DashboardTreeSection = () => {
   };
 
   return (
-    <section className="py-24 bg-gradient-to-b from-white to-gray-50/50 dark:from-gray-900 dark:to-gray-900/50">
+    <section className="py-24 bg-white dark:bg-gray-900">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -99,20 +99,20 @@ const DashboardTreeSection = () => {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="grid grid-cols-1 md:grid-cols-2 gap-8"
+          className="grid grid-cols-1 md:grid-cols-2 gap-6"
         >
           {features.map((feature) => (
             <motion.div
               key={feature.title}
               variants={itemVariants}
               whileHover={{ y: -5 }}
-              className={`bg-gradient-to-br ${feature.gradient} backdrop-blur-xl border border-gray-200/20 dark:border-gray-700/20 rounded-xl p-8 shadow-lg hover:shadow-xl transition-all duration-300`}
+              className={`bg-gradient-to-br ${feature.gradient} backdrop-blur-xl border border-gray-200/20 dark:border-gray-700/20 rounded-xl p-8 neo-blur transition-all duration-300`}
             >
               <div className="flex items-center gap-4 mb-6">
                 <motion.div
                   whileHover={{ rotate: 360 }}
                   transition={{ duration: 0.5 }}
-                  className="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center"
+                  className="w-12 h-12 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center"
                 >
                   <feature.icon className="w-6 h-6 text-blue-600 dark:text-blue-400" />
                 </motion.div>
@@ -123,7 +123,7 @@ const DashboardTreeSection = () => {
 
               <div className="grid grid-cols-2 gap-4 mb-6">
                 {feature.metrics.map((metric, i) => (
-                  <div key={i} className="bg-white/80 dark:bg-gray-800/50 rounded-lg p-4">
+                  <div key={i} className="bg-white/50 dark:bg-gray-800/50 rounded-lg p-4">
                     <div className="text-xl font-bold text-blue-600 dark:text-blue-400 mb-1">
                       {metric.value}
                     </div>
