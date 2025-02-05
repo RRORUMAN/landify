@@ -24,11 +24,15 @@ const Analytics = () => {
         .from('user_tools')
         .select(`
           *,
-          tool:tools (*)
+          tool:tools(*)
         `)
         .eq('user_id', user.id);
 
-      if (error) throw error;
+      if (error) {
+        console.error("Error fetching user tools:", error);
+        throw error;
+      }
+      
       return data as UserTool[];
     }
   });
@@ -45,7 +49,11 @@ const Analytics = () => {
         .eq('user_id', user.id)
         .in('tool_id', userTools.map(t => t.tool_id));
 
-      if (error) throw error;
+      if (error) {
+        console.error("Error fetching tool analytics:", error);
+        throw error;
+      }
+      
       return data;
     },
     enabled: userTools.length > 0
@@ -59,7 +67,11 @@ const Analytics = () => {
         .select('*')
         .in('tool_id', userTools.map(t => t.tool_id));
 
-      if (error) throw error;
+      if (error) {
+        console.error("Error fetching performance metrics:", error);
+        throw error;
+      }
+      
       return data;
     },
     enabled: userTools.length > 0
@@ -77,7 +89,11 @@ const Analytics = () => {
         .eq('user_id', user.id)
         .order('forecast_date', { ascending: true });
 
-      if (error) throw error;
+      if (error) {
+        console.error("Error fetching spend forecasts:", error);
+        throw error;
+      }
+      
       return data as SpendForecast[];
     }
   });
@@ -90,7 +106,11 @@ const Analytics = () => {
         .select('*')
         .order('name');
       
-      if (error) throw error;
+      if (error) {
+        console.error("Error fetching available tools:", error);
+        throw error;
+      }
+      
       return data;
     }
   });
