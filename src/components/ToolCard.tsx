@@ -91,11 +91,12 @@ const ToolCard = ({ tool }: ToolCardProps) => {
             >
               Visit
             </Button>
-            {tool.dealUrl && (
+            {/* Only show Get Deal button if the tool has special pricing */}
+            {tool.special_pricing && (
               <Button
                 variant="outline"
                 className="flex-1"
-                onClick={() => window.open(tool.dealUrl, "_blank")}
+                onClick={() => window.open(tool.visit_url, "_blank")}
               >
                 Get Deal
               </Button>
@@ -108,3 +109,4 @@ const ToolCard = ({ tool }: ToolCardProps) => {
 };
 
 export default ToolCard;
+

@@ -94,6 +94,8 @@ const ToolCategories = () => {
   return (
     <div className="min-h-screen bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <h1 className="text-3xl font-bold text-gray-900 mb-8">AI Tools Directory</h1>
+        
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Sidebar */}
           <div className="lg:col-span-1">
@@ -160,10 +162,13 @@ const ToolCategories = () => {
             )}
 
             {/* Regular Tools */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {regularTools.map((tool) => (
-                <ToolCard key={tool.id} tool={tool} />
-              ))}
+            <div>
+              <h2 className="text-2xl font-semibold text-gray-900 mb-6">All Tools</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {regularTools.map((tool) => (
+                  <ToolCard key={tool.id} tool={tool} />
+                ))}
+              </div>
             </div>
 
             {filteredTools.length === 0 && (
