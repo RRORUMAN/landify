@@ -502,10 +502,10 @@ export type Database = {
           logo: string
           monthly_active_users?: number | null
           name: string
-          pricing: string
-          rating: number
-          reviews: number
-          tags: string[]
+          pricing?: string
+          rating?: number
+          reviews?: number
+          tags?: string[]
           visit_url: string
         }
         Update: {

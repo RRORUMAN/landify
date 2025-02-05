@@ -31,6 +31,7 @@ export const AddToolDialog = ({ availableTools }: AddToolDialogProps) => {
   const [selectedToolId, setSelectedToolId] = useState("");
   const [newToolCost, setNewToolCost] = useState("");
   const [newToolBillingCycle, setNewToolBillingCycle] = useState("monthly");
+  const [isOpen, setIsOpen] = useState(false);
   const { toast } = useToast();
 
   const handleAddTool = async () => {
@@ -55,20 +56,44 @@ export const AddToolDialog = ({ availableTools }: AddToolDialogProps) => {
         return;
       }
 
-      const { data, error } = await supabase
+      const selectedTool = availableTools.find(tool => tool.id === selectedToolId);
+      if (!selectedTool) {
+        toast({
+          title: "Invalid tool",
+          description: "Please select a valid tool",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      // First, ensure the tool exists in the tools table
+      const { error: toolError } = await supabase
+        .from('tools')
+        .upsert({
+          id: selectedTool.id,
+          name: selectedTool.name,
+          logo: selectedTool.logo,
+          description: selectedTool.description,
+          category: selectedTool.category,
+          visit_url: selectedTool.visit_url,
+          tags: selectedTool.tags || [],
+        });
+
+      if (toolError) throw toolError;
+
+      // Then, create the user_tools entry
+      const { error: userToolError } = await supabase
         .from('user_tools')
-        .insert([{
+        .insert({
           user_id: user.id,
           tool_id: selectedToolId,
           monthly_cost: monthlyCost,
           billing_cycle: newToolBillingCycle,
           next_billing_date: format(addMonths(new Date(), 1), 'yyyy-MM-dd'),
           subscription_status: 'active'
-        }])
-        .select()
-        .single();
+        });
 
-      if (error) throw error;
+      if (userToolError) throw userToolError;
 
       toast({
         title: "Tool added",
@@ -77,6 +102,8 @@ export const AddToolDialog = ({ availableTools }: AddToolDialogProps) => {
 
       setSelectedToolId("");
       setNewToolCost("");
+      setNewToolBillingCycle("monthly");
+      setIsOpen(false);
     } catch (error) {
       console.error('Error adding tool:', error);
       toast({
@@ -88,7 +115,7 @@ export const AddToolDialog = ({ availableTools }: AddToolDialogProps) => {
   };
 
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button className="bg-blue-600 hover:bg-blue-700 text-white">
           <Plus className="h-4 w-4 mr-2" /> Add Tool
