@@ -70,7 +70,7 @@ const QuickCompare = ({ tools }: QuickCompareProps) => {
                           <Zap className="h-4 w-4 text-blue-400" />
                           <span className="text-sm">Performance</span>
                         </div>
-                        <span className="font-medium">{metric?.performance_score || 'N/A'}</span>
+                        <span className="font-medium">{metric?.metric_value || 'N/A'}</span>
                       </div>
                     </TooltipTrigger>
                     <TooltipContent>

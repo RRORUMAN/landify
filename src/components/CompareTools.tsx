@@ -67,8 +67,9 @@ const CompareTools = () => {
         name: `Comparison ${new Date().toLocaleDateString()}`,
         tool_ids: selectedTools.map(t => t.id),
         comparison_data: {
-          tools: selectedTools,
-          timestamp: new Date().toISOString()
+          toolIds: selectedTools.map(t => t.id),
+          timestamp: new Date().toISOString(),
+          toolNames: selectedTools.map(t => t.name)
         }
       });
 
