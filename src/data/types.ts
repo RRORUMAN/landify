@@ -13,6 +13,7 @@ export interface Tool {
   featured: boolean;
   visit_url: string;
   bookmarks: number;
+  special_pricing?: boolean;
   created_at?: string | null;
 }
 
