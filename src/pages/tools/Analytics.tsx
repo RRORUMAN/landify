@@ -28,9 +28,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { 
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer 
+  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+  PieChart, Pie, Cell, Legend
 } from 'recharts';
 import { format } from "date-fns";
+
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
 const Analytics = () => {
   const [userTools, setUserTools] = useState<UserTool[]>([]);
@@ -74,7 +77,6 @@ const Analytics = () => {
         return;
       }
 
-      // Fetch user tools
       const { data: toolsData, error: toolsError } = await supabase
         .from('user_tools')
         .select('*')
@@ -82,7 +84,6 @@ const Analytics = () => {
 
       if (toolsError) throw toolsError;
 
-      // Fetch forecasts
       const { data: forecastsData, error: forecastsError } = await supabase
         .from('spend_forecasts')
         .select('*')
@@ -91,10 +92,9 @@ const Analytics = () => {
 
       if (forecastsError) throw forecastsError;
 
-      setUserTools(toolsData || []);
-      setForecasts(forecastsData || []);
+      setUserTools(toolsData as UserTool[] || []);
+      setForecasts(forecastsData as SpendForecast[] || []);
       
-      // Calculate total monthly spend
       const totalSpend = (toolsData || []).reduce((sum, tool) => 
         sum + (tool.monthly_cost || 0), 0);
       setMonthlySpend(totalSpend);
@@ -136,6 +136,7 @@ const Analytics = () => {
           next_billing_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
           subscription_status: 'active',
           usage_stats: {},
+          subscription_details: {},
         }])
         .select()
         .single();
@@ -162,8 +163,8 @@ const Analytics = () => {
 
   const getSpendingChartData = () => {
     const monthlyData = userTools.map(tool => ({
-      name: availableTools.find(t => t.id === tool.tool_id)?.name || tool.tool_id,
-      cost: tool.monthly_cost || 0
+      name: availableTools.find(t => t.id === tool.tool_id)?.name || 'Unknown Tool',
+      value: tool.monthly_cost || 0
     }));
 
     return monthlyData;
@@ -248,20 +249,57 @@ const Analytics = () => {
             </Card>
           </div>
 
-          <Card className="p-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
-            <h2 className="text-xl font-semibold mb-6 text-gray-900 dark:text-white">Monthly Spending by Tool</h2>
-            <div className="h-[400px] w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={getSpendingChartData()}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip />
-                  <Bar dataKey="cost" fill="#3b82f6" />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          </Card>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Card className="p-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+              <h2 className="text-xl font-semibold mb-6 text-gray-900 dark:text-white">Monthly Spending Trend</h2>
+              <div className="h-[400px] w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={forecasts.map(f => ({
+                    date: format(new Date(f.forecast_date), 'MMM dd'),
+                    amount: f.forecasted_amount
+                  }))}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="date" />
+                    <YAxis />
+                    <Tooltip />
+                    <Line 
+                      type="monotone" 
+                      dataKey="amount" 
+                      stroke="#8884d8" 
+                      strokeWidth={2}
+                      dot={{ fill: '#8884d8' }}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+            </Card>
+
+            <Card className="p-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+              <h2 className="text-xl font-semibold mb-6 text-gray-900 dark:text-white">Tool Cost Distribution</h2>
+              <div className="h-[400px] w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={getSpendingChartData()}
+                      cx="50%"
+                      cy="50%"
+                      labelLine={false}
+                      label={({ name, value }) => `${name}: $${value}`}
+                      outerRadius={160}
+                      fill="#8884d8"
+                      dataKey="value"
+                    >
+                      {getSpendingChartData().map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                    <Legend />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+            </Card>
+          </div>
         </TabsContent>
 
         <TabsContent value="tools" className="space-y-6">
@@ -273,7 +311,7 @@ const Analytics = () => {
                   <Plus className="h-4 w-4 mr-2" /> Add Tool
                 </Button>
               </DialogTrigger>
-              <DialogContent>
+              <DialogContent className="sm:max-w-[425px] bg-white dark:bg-gray-800">
                 <DialogHeader>
                   <DialogTitle>Add New Tool</DialogTitle>
                   <DialogDescription>
@@ -282,10 +320,10 @@ const Analytics = () => {
                 </DialogHeader>
                 <div className="space-y-4 mt-4">
                   <Select value={selectedToolId} onValueChange={setSelectedToolId}>
-                    <SelectTrigger>
+                    <SelectTrigger className="w-full bg-white dark:bg-gray-800">
                       <SelectValue placeholder="Select a tool" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="bg-white dark:bg-gray-800">
                       {availableTools.map((tool) => (
                         <SelectItem key={tool.id} value={tool.id}>
                           {tool.name}
@@ -298,12 +336,13 @@ const Analytics = () => {
                     placeholder="Monthly cost"
                     value={newToolCost}
                     onChange={(e) => setNewToolCost(e.target.value)}
+                    className="bg-white dark:bg-gray-800"
                   />
                   <Select value={newToolBillingCycle} onValueChange={setNewToolBillingCycle}>
-                    <SelectTrigger>
+                    <SelectTrigger className="w-full bg-white dark:bg-gray-800">
                       <SelectValue placeholder="Billing cycle" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="bg-white dark:bg-gray-800">
                       <SelectItem value="monthly">Monthly</SelectItem>
                       <SelectItem value="yearly">Yearly</SelectItem>
                     </SelectContent>
