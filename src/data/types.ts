@@ -1,3 +1,4 @@
+
 import { LucideIcon } from "lucide-react";
 
 export interface Tool {
@@ -26,7 +27,7 @@ export interface Tool {
   pricing_range?: string | null;
   trending_tools?: {
     trend_score: number;
-    trend_data: {
+    trend_data?: {
       views: number;
       bookmarks: number;
       clicks: number;

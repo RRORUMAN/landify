@@ -22,12 +22,9 @@ export const trackToolInteraction = async (toolId: string, interactionType: 'vie
 
     // Update tool bookmarks count if it's a bookmark interaction
     if (interactionType === 'bookmark') {
-      const { error: updateError } = await supabase
-        .from('tools')
-        .update({
-          bookmarks: supabase.raw('bookmarks + 1')
-        })
-        .eq('id', toolId);
+      const { error: updateError } = await supabase.rpc('increment_tool_bookmarks', {
+        p_tool_id: toolId
+      });
 
       if (updateError) throw updateError;
     }

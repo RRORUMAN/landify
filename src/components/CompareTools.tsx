@@ -9,14 +9,6 @@ import { useQuery } from "@tanstack/react-query";
 import ToolSelectionCard from "./compare/ToolSelectionCard";
 import SelectedToolsGrid from "./compare/SelectedToolsGrid";
 import { useToast } from "@/components/ui/use-toast";
-import { categories } from "@/data/categories";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 const CompareTools = () => {
   const [selectedTools, setSelectedTools] = useState<Tool[]>([]);
@@ -30,7 +22,13 @@ const CompareTools = () => {
     queryFn: async () => {
       let query = supabase
         .from('tools')
-        .select('*, trending_tools(*)')
+        .select(`
+          *,
+          trending_tools (
+            trend_score,
+            trend_data
+          )
+        `)
         .order('featured', { ascending: false });
       
       if (selectedCategory) {
@@ -40,7 +38,12 @@ const CompareTools = () => {
       const { data, error } = await query;
       
       if (error) throw error;
-      return data as Tool[];
+      
+      // Convert the response to match the Tool type
+      return (data || []).map(tool => ({
+        ...tool,
+        trending_tools: tool.trending_tools || []
+      })) as Tool[];
     }
   });
 

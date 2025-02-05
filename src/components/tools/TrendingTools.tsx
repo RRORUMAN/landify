@@ -17,24 +17,27 @@ const TrendingTools = () => {
   useEffect(() => {
     const fetchTrendingTools = async () => {
       try {
-        const { data: trendingData, error: trendingError } = await supabase
-          .from('trending_tools')
+        const { data: tools, error } = await supabase
+          .from('tools')
           .select(`
-            tool_id,
-            trend_score,
-            tools (*)
+            *,
+            trending_tools (
+              trend_score,
+              trend_data
+            )
           `)
-          .is('trend_end_date', null)
-          .order('trend_score', { ascending: false })
+          .order('bookmarks', { ascending: false })
           .limit(6);
 
-        if (trendingError) throw trendingError;
+        if (error) throw error;
 
-        const tools = trendingData
-          ?.map(item => item.tools as Tool)
-          .filter(Boolean);
+        // Convert the response to match the Tool type
+        const formattedTools = tools.map(tool => ({
+          ...tool,
+          trending_tools: tool.trending_tools || []
+        })) as Tool[];
 
-        setTrendingTools(tools || []);
+        setTrendingTools(formattedTools);
       } catch (error) {
         console.error('Error fetching trending tools:', error);
         toast({
