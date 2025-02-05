@@ -20,7 +20,8 @@ const AppContent = () => {
     return pathname.startsWith('/tools') || pathname === '/my-tools';
   };
 
-  const showNavbar = !isDashboardRoute(location.pathname);
+  // Show navbar on landing, features, pricing pages
+  const showNavbar = ['/', '/features', '/pricing'].includes(location.pathname);
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
