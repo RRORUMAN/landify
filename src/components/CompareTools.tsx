@@ -131,7 +131,7 @@ const CompareTools = () => {
 
   return (
     <div>
-      {selectedTools.length > 0 ? (
+      {!isSelecting && selectedTools.length > 0 ? (
         <div className="space-y-6">
           <div className="flex items-center justify-between">
             <Button
