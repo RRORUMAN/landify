@@ -44,7 +44,7 @@ const HeroSection = () => {
                 repeat: Infinity,
                 delay: i * 0.1,
               }}
-              className="aspect-square bg-blue-500/20 rounded-lg"
+              className="aspect-square bg-accent/20 rounded-lg"
             />
           ))}
         </div>
@@ -59,8 +59,8 @@ const HeroSection = () => {
             variants={itemVariants}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium neo-blur"
           >
-            <Sparkles className="w-4 h-4 text-blue-500 animate-pulse" />
-            <span className="bg-gradient-to-r from-blue-500 to-violet-500 bg-clip-text text-transparent">
+            <Sparkles className="w-4 h-4 text-accent animate-pulse" />
+            <span className="bg-gradient-to-r from-accent to-accent/80 bg-clip-text text-transparent">
               Your AI Tool Discovery Platform
             </span>
           </motion.div>
@@ -70,7 +70,7 @@ const HeroSection = () => {
             className="text-5xl md:text-7xl font-bold tracking-tight text-black dark:text-white"
           >
             Find the Perfect AI Tools for Your{" "}
-            <span className="bg-gradient-to-r from-blue-600 to-violet-600 bg-clip-text text-transparent animate-gradient">
+            <span className="bg-gradient-to-r from-accent to-accent/80 bg-clip-text text-transparent animate-gradient">
               Business
             </span>
           </motion.h1>
@@ -93,7 +93,7 @@ const HeroSection = () => {
             >
               <Button
                 size="lg"
-                className="relative overflow-hidden bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 text-white px-8 py-6 text-lg rounded-xl w-full sm:w-auto transition-all duration-500 ease-out transform hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)]"
+                className="relative overflow-hidden bg-accent hover:bg-accent/90 text-white font-semibold px-8 py-6 text-lg rounded-xl w-full sm:w-auto transition-all duration-500 ease-out transform hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)]"
                 onClick={() => navigate("/auth")}
               >
                 <span className="relative z-10 flex items-center">
@@ -101,7 +101,7 @@ const HeroSection = () => {
                   <ArrowRight className="ml-2 transition-transform duration-300 group-hover:translate-x-1" />
                 </span>
                 <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-blue-400 to-violet-400"
+                  className="absolute inset-0 bg-gradient-to-r from-accent/40 to-accent/60"
                   initial={{ x: "100%" }}
                   animate={{ x: "-100%" }}
                   transition={{
@@ -114,7 +114,7 @@ const HeroSection = () => {
                   }}
                 />
               </Button>
-              <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-violet-500 rounded-xl blur opacity-30 group-hover:opacity-50 transition duration-500" />
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-accent to-accent/80 rounded-xl blur opacity-30 group-hover:opacity-50 transition duration-500" />
             </motion.div>
             <motion.span 
               variants={itemVariants}

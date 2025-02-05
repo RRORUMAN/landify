@@ -13,8 +13,7 @@ const DashboardTreeSection = () => {
         { value: "Real-time", label: "Updates" }
       ],
       benefits: ["AI-powered recommendations", "Category optimization", "Tool comparisons"],
-      delay: 0.2,
-      gradient: "from-blue-500 to-violet-500"
+      delay: 0.2
     },
     {
       icon: Sprout,
@@ -25,8 +24,7 @@ const DashboardTreeSection = () => {
         { value: "Smart", label: "Alerts" }
       ],
       benefits: ["Spend analytics", "Budget forecasting", "Cost optimization"],
-      delay: 0.4,
-      gradient: "from-violet-500 to-purple-500"
+      delay: 0.4
     },
     {
       icon: LeafyGreen,
@@ -37,8 +35,7 @@ const DashboardTreeSection = () => {
         { value: "Clear", label: "Insights" }
       ],
       benefits: ["Usage patterns", "ROI analysis", "Performance tracking"],
-      delay: 0.6,
-      gradient: "from-purple-500 to-blue-500"
+      delay: 0.6
     },
     {
       icon: GitBranch,
@@ -49,8 +46,7 @@ const DashboardTreeSection = () => {
         { value: "Easy", label: "Management" }
       ],
       benefits: ["Custom categories", "Tool grouping", "Quick access"],
-      delay: 0.8,
-      gradient: "from-blue-400 to-violet-400"
+      delay: 0.8
     }
   ];
 
@@ -86,7 +82,7 @@ const DashboardTreeSection = () => {
           transition={{ duration: 0.5 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+          <h2 className="text-4xl font-bold text-black dark:text-white mb-4">
             Your AI Command Center
           </h2>
           <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
@@ -108,17 +104,17 @@ const DashboardTreeSection = () => {
               whileHover={{ y: -5 }}
               className="relative group"
             >
-              <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-violet-500 rounded-xl blur opacity-30 group-hover:opacity-50 transition duration-500" />
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-accent to-accent/80 rounded-xl blur opacity-30 group-hover:opacity-50 transition duration-500" />
               <div className="relative bg-white dark:bg-gray-900 rounded-xl p-8 neo-blur border border-gray-100 dark:border-gray-800 transition-all duration-300">
                 <div className="flex items-center gap-4 mb-6">
                   <motion.div
                     whileHover={{ rotate: 360 }}
                     transition={{ duration: 0.5 }}
-                    className={`w-12 h-12 rounded-xl bg-gradient-to-r ${feature.gradient} flex items-center justify-center`}
+                    className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center"
                   >
-                    <feature.icon className="w-6 h-6 text-white" />
+                    <feature.icon className="w-6 h-6 text-accent" />
                   </motion.div>
-                  <h3 className="text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
+                  <h3 className="text-2xl font-bold text-black dark:text-white">
                     {feature.title}
                   </h3>
                 </div>
@@ -130,9 +126,9 @@ const DashboardTreeSection = () => {
                     <motion.div
                       key={i}
                       whileHover={{ scale: 1.02 }}
-                      className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700 rounded-lg p-4"
+                      className="bg-accent/5 dark:bg-accent/10 rounded-lg p-4"
                     >
-                      <div className="text-xl font-bold bg-gradient-to-r from-blue-600 to-violet-600 bg-clip-text text-transparent mb-1">
+                      <div className="text-xl font-bold text-accent mb-1">
                         {metric.value}
                       </div>
                       <div className="text-sm text-gray-600 dark:text-gray-400">
@@ -151,7 +147,7 @@ const DashboardTreeSection = () => {
                       transition={{ delay: feature.delay + (i * 0.1) }}
                       className="flex items-center text-gray-600 dark:text-gray-300"
                     >
-                      <span className="w-2 h-2 bg-gradient-to-r from-blue-500 to-violet-500 rounded-full mr-2" />
+                      <span className="w-2 h-2 bg-accent rounded-full mr-2" />
                       {benefit}
                     </motion.li>
                   ))}
@@ -159,7 +155,7 @@ const DashboardTreeSection = () => {
 
                 <Button
                   variant="ghost"
-                  className="w-full bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-300"
+                  className="w-full bg-accent/5 hover:bg-accent/10 text-accent font-medium transition-all duration-300"
                 >
                   Learn More →
                 </Button>
