@@ -199,7 +199,8 @@ const CompareStats = ({ tools }: CompareStatsProps) => {
               </div>
             </div>
           </Card>
-        ))}
+        );
+      })}
     </div>
   );
 };
