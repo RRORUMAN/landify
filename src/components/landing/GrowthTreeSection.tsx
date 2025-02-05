@@ -30,13 +30,13 @@ const GrowthTreeSection = () => {
   ];
 
   return (
-    <div className="py-24 bg-gradient-to-b from-blue-50/50 to-transparent dark:from-gray-900/50 dark:to-transparent">
+    <div className="py-24 bg-gradient-to-b from-blue-50 to-white">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-black dark:text-white mb-4">
+          <h2 className="text-4xl font-bold text-black mb-4">
             Your AI Journey
           </h2>
-          <p className="text-gray-600 dark:text-gray-300 mt-4 max-w-xl mx-auto">
+          <p className="text-gray-600 mt-4 max-w-xl mx-auto">
             Start small and grow your AI capabilities with confidence
           </p>
         </div>
@@ -49,17 +49,17 @@ const GrowthTreeSection = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: benefit.delay }}
-                className="bg-white dark:bg-gray-800/50 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-blue-100 dark:border-blue-900/20 backdrop-blur-sm"
+                className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-blue-100 group hover:-translate-y-1"
               >
                 <div className="flex items-start gap-4">
-                  <div className="p-3 rounded-lg bg-brand-blue-light/10 dark:bg-blue-900/30">
-                    <benefit.icon className="w-6 h-6 text-brand-blue dark:text-blue-400" />
+                  <div className="p-3 rounded-lg bg-blue-50 group-hover:bg-blue-100 transition-colors">
+                    <benefit.icon className="w-6 h-6 text-blue-600" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-semibold text-black dark:text-white mb-2">
+                    <h3 className="text-xl font-semibold text-black mb-2">
                       {benefit.title}
                     </h3>
-                    <p className="text-gray-600 dark:text-gray-300">
+                    <p className="text-gray-600">
                       {benefit.description}
                     </p>
                   </div>
