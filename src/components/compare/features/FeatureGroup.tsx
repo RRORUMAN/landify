@@ -43,7 +43,7 @@ const FeatureGroup = ({ category, group, features, tools, getFeatureValue }: Fea
 
   return (
     <div className="mb-8">
-      <div className="sticky top-0 bg-white py-2">
+      <div className="sticky top-0 bg-white py-2 z-10">
         <div className="flex items-center gap-2 mb-2">
           {getCategoryIcon(category)}
           <h3 className="text-lg font-semibold">{category}</h3>

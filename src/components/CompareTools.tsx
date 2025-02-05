@@ -9,6 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 import ToolSelectionCard from "./compare/ToolSelectionCard";
 import SelectedToolsGrid from "./compare/SelectedToolsGrid";
 import { useToast } from "@/components/ui/use-toast";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const CompareTools = () => {
   const [selectedTools, setSelectedTools] = useState<Tool[]>([]);
@@ -37,9 +38,15 @@ const CompareTools = () => {
       
       const { data, error } = await query;
       
-      if (error) throw error;
+      if (error) {
+        toast({
+          title: "Error loading tools",
+          description: "Failed to load tools. Please try again.",
+          variant: "destructive",
+        });
+        throw error;
+      }
       
-      // Convert the response to match the Tool type
       return (data || []).map(tool => ({
         ...tool,
         trending_tools: tool.trending_tools || []
@@ -108,8 +115,12 @@ const CompareTools = () => {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <p className="text-gray-500">Loading tools...</p>
+      <div className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {[1, 2, 3, 4].map((i) => (
+            <Skeleton key={i} className="h-[200px] rounded-lg" />
+          ))}
+        </div>
       </div>
     );
   }
