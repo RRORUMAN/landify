@@ -1,3 +1,4 @@
+
 import CompareToolsComponent from "@/components/CompareTools";
 
 const CompareTools = () => {

@@ -17,6 +17,7 @@ const CompareTools = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isSelecting, setIsSelecting] = useState(false);
 
+  // Use react-query to fetch all tools
   const { data: tools = [], isLoading } = useQuery({
     queryKey: ['tools'],
     queryFn: async () => {
