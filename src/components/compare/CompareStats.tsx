@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { toast } from "@/components/ui/use-toast";
 
 interface CompareStatsProps {
   tools: Tool[];
@@ -52,7 +53,7 @@ interface SentimentData {
 }
 
 const CompareStats = ({ tools }: CompareStatsProps) => {
-  const { data: performanceMetrics = [] } = useQuery({
+  const { data: performanceMetrics = [], isError: isMetricsError } = useQuery({
     queryKey: ['performance_metrics', tools.map(t => t.id)],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -60,12 +61,19 @@ const CompareStats = ({ tools }: CompareStatsProps) => {
         .select('*')
         .in('tool_id', tools.map(t => t.id));
       
-      if (error) throw error;
+      if (error) {
+        toast({
+          title: "Error loading metrics",
+          description: "Could not load performance metrics",
+          variant: "destructive",
+        });
+        throw error;
+      }
       return data as PerformanceMetric[];
     }
   });
 
-  const { data: sentimentData = [] } = useQuery({
+  const { data: sentimentData = [], isError: isSentimentError } = useQuery({
     queryKey: ['tool_reviews_sentiment', tools.map(t => t.id)],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -73,7 +81,14 @@ const CompareStats = ({ tools }: CompareStatsProps) => {
         .select('*')
         .in('tool_id', tools.map(t => t.id));
       
-      if (error) throw error;
+      if (error) {
+        toast({
+          title: "Error loading sentiment data",
+          description: "Could not load sentiment analysis",
+          variant: "destructive",
+        });
+        throw error;
+      }
       return data as SentimentData[];
     }
   });
@@ -89,6 +104,14 @@ const CompareStats = ({ tools }: CompareStatsProps) => {
     return sentimentData.find(s => s.tool_id === toolId);
   };
 
+  if (isMetricsError || isSentimentError) {
+    return (
+      <div className="text-center py-8 text-gray-500">
+        Error loading comparison data. Please try again.
+      </div>
+    );
+  }
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       {tools.map((tool) => {
@@ -98,7 +121,7 @@ const CompareStats = ({ tools }: CompareStatsProps) => {
         return (
           <Card key={tool.id} className="p-6">
             <div className="flex items-center gap-4 mb-6">
-              <img src={tool.logo} alt={tool.name} className="w-16 h-16 rounded-lg" />
+              <img src={tool.logo} alt={tool.name} className="w-16 h-16 rounded-lg object-cover" />
               <div>
                 <h3 className="font-semibold text-lg">{tool.name}</h3>
                 <div className="flex items-center gap-2 text-sm text-gray-500">
@@ -126,7 +149,7 @@ const CompareStats = ({ tools }: CompareStatsProps) => {
                   <Heart className="h-5 w-5 text-red-500" />
                   <span className="text-sm font-medium">Ease of Use</span>
                 </div>
-                <span className="text-sm">{metrics?.ease_of_use_score.toFixed(1)}/10</span>
+                <span className="text-sm">{metrics?.ease_of_use_score?.toFixed(1) ?? 'N/A'}/10</span>
               </div>
 
               <div className="flex items-center justify-between">
@@ -135,7 +158,7 @@ const CompareStats = ({ tools }: CompareStatsProps) => {
                   <span className="text-sm font-medium">Time Saved</span>
                 </div>
                 <span className="text-sm">
-                  {metrics?.time_saved_per_task || 0} min/task
+                  {metrics?.time_saved_per_task ?? 'N/A'} min/task
                 </span>
               </div>
 
@@ -145,7 +168,7 @@ const CompareStats = ({ tools }: CompareStatsProps) => {
                   <span className="text-sm font-medium">ROI Score</span>
                 </div>
                 <span className="text-sm">
-                  {metrics?.roi_score.toFixed(1)}/10
+                  {metrics?.roi_score?.toFixed(1) ?? 'N/A'}/10
                 </span>
               </div>
 
@@ -154,10 +177,10 @@ const CompareStats = ({ tools }: CompareStatsProps) => {
                   <div className="pt-4 border-t">
                     <h4 className="font-medium mb-3 text-sm">Pros</h4>
                     <div className="space-y-2">
-                      {sentiment.pros.map((pro, index) => (
+                      {sentiment.pros?.slice(0, 3).map((pro, index) => (
                         <div key={index} className="text-sm text-gray-600 flex items-start gap-2">
-                          <Check className="h-4 w-4 text-green-500 mt-0.5" />
-                          {pro}
+                          <Check className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
+                          <span className="line-clamp-2">{pro}</span>
                         </div>
                       ))}
                     </div>
@@ -166,10 +189,10 @@ const CompareStats = ({ tools }: CompareStatsProps) => {
                   <div className="pt-2">
                     <h4 className="font-medium mb-3 text-sm">Cons</h4>
                     <div className="space-y-2">
-                      {sentiment.cons.map((con, index) => (
+                      {sentiment.cons?.slice(0, 3).map((con, index) => (
                         <div key={index} className="text-sm text-gray-600 flex items-start gap-2">
-                          <X className="h-4 w-4 text-red-500 mt-0.5" />
-                          {con}
+                          <X className="h-4 w-4 text-red-500 mt-0.5 flex-shrink-0" />
+                          <span className="line-clamp-2">{con}</span>
                         </div>
                       ))}
                     </div>
@@ -178,10 +201,10 @@ const CompareStats = ({ tools }: CompareStatsProps) => {
                   <div className="pt-2">
                     <h4 className="font-medium mb-3 text-sm">Key Insights</h4>
                     <div className="space-y-2">
-                      {sentiment.key_insights?.map((insight, index) => (
+                      {sentiment.key_insights?.slice(0, 2).map((insight, index) => (
                         <div key={index} className="text-sm text-gray-600 flex items-start gap-2">
-                          <Award className="h-4 w-4 text-blue-500 mt-0.5" />
-                          {insight}
+                          <Award className="h-4 w-4 text-blue-500 mt-0.5 flex-shrink-0" />
+                          <span className="line-clamp-2">{insight}</span>
                         </div>
                       ))}
                     </div>
@@ -193,7 +216,7 @@ const CompareStats = ({ tools }: CompareStatsProps) => {
             <div className="mt-6">
               <h4 className="font-medium mb-2">Best For</h4>
               <div className="flex flex-wrap gap-2">
-                {tool.best_for?.map((tag) => (
+                {tool.best_for?.slice(0, 3).map((tag) => (
                   <Badge key={tag} variant="secondary" className="text-xs">
                     {tag}
                   </Badge>
