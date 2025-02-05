@@ -1,4 +1,3 @@
-```typescript
 import { motion } from "framer-motion";
 import { TreeDeciduous, Sprout, LeafyGreen, GitBranch, TreePine } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -163,4 +162,3 @@ const DashboardTreeSection = () => {
 };
 
 export default DashboardTreeSection;
-```
