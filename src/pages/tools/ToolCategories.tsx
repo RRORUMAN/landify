@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useMemo } from "react";
 import SearchBar from "@/components/SearchBar";
 import ToolCard from "@/components/ToolCard";
@@ -6,15 +5,15 @@ import { Button } from "@/components/ui/button";
 import {
   Search,
   Star,
-  Briefcase,
-  Building2,
-  BarChart3,
+  Code,
   PenTool,
   MonitorSmartphone,
   Paintbrush,
-  Workflow,
+  Brain,
+  BarChart3,
+  Database,
+  ClipboardList,
   MessageSquare,
-  Code,
   VideoIcon,
   Filter,
 } from "lucide-react";
@@ -36,17 +35,17 @@ interface CategoryType {
 }
 
 const categories: CategoryType[] = [
-  { name: "Sales", icon: Briefcase },
-  { name: "Back Office", icon: Building2 },
-  { name: "Operations", icon: BarChart3 },
-  { name: "Growth & Marketing", icon: Star },
-  { name: "Writing & Editing", icon: PenTool },
-  { name: "Technology & IT", icon: MonitorSmartphone },
-  { name: "Design & Creative", icon: Paintbrush },
-  { name: "Workflow Automation", icon: Workflow },
-  { name: "Communication", icon: MessageSquare },
+  { name: "Content Creation", icon: PenTool },
   { name: "Development", icon: Code },
+  { name: "Design", icon: Paintbrush },
+  { name: "Business Intelligence", icon: Brain },
+  { name: "Sales & Marketing", icon: Star },
+  { name: "Data Management", icon: Database },
+  { name: "Project Management", icon: ClipboardList },
+  { name: "Technology & IT", icon: MonitorSmartphone },
+  { name: "Communication", icon: MessageSquare },
   { name: "Media Production", icon: VideoIcon },
+  { name: "Analytics", icon: BarChart3 },
 ];
 
 const ToolCategories = () => {
