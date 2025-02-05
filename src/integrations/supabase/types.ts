@@ -52,39 +52,63 @@ export type Database = {
       }
       performance_metrics: {
         Row: {
+          adoption_rate: number | null
+          automation_score: number | null
           confidence_score: number | null
           created_at: string | null
+          ease_of_use_score: number | null
+          feature_depth_score: number | null
           id: string
+          integration_score: number | null
           last_updated: string | null
           metric_details: Json | null
           metric_name: string
           metric_unit: string | null
           metric_value: number | null
+          roi_score: number | null
           sample_size: number | null
+          support_score: number | null
+          time_saved_per_task: number | null
           tool_id: string | null
         }
         Insert: {
+          adoption_rate?: number | null
+          automation_score?: number | null
           confidence_score?: number | null
           created_at?: string | null
+          ease_of_use_score?: number | null
+          feature_depth_score?: number | null
           id?: string
+          integration_score?: number | null
           last_updated?: string | null
           metric_details?: Json | null
           metric_name: string
           metric_unit?: string | null
           metric_value?: number | null
+          roi_score?: number | null
           sample_size?: number | null
+          support_score?: number | null
+          time_saved_per_task?: number | null
           tool_id?: string | null
         }
         Update: {
+          adoption_rate?: number | null
+          automation_score?: number | null
           confidence_score?: number | null
           created_at?: string | null
+          ease_of_use_score?: number | null
+          feature_depth_score?: number | null
           id?: string
+          integration_score?: number | null
           last_updated?: string | null
           metric_details?: Json | null
           metric_name?: string
           metric_unit?: string | null
           metric_value?: number | null
+          roi_score?: number | null
           sample_size?: number | null
+          support_score?: number | null
+          time_saved_per_task?: number | null
           tool_id?: string | null
         }
         Relationships: [
@@ -186,15 +210,97 @@ export type Database = {
           },
         ]
       }
+      tool_integrations: {
+        Row: {
+          created_at: string | null
+          id: string
+          integration_details: Json | null
+          integration_name: string
+          integration_type: string
+          is_active: boolean | null
+          tool_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          integration_details?: Json | null
+          integration_name: string
+          integration_type: string
+          is_active?: boolean | null
+          tool_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          integration_details?: Json | null
+          integration_name?: string
+          integration_type?: string
+          is_active?: boolean | null
+          tool_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tool_integrations_tool_id_fkey"
+            columns: ["tool_id"]
+            isOneToOne: false
+            referencedRelation: "tools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tool_reviews_sentiment: {
+        Row: {
+          analysis_date: string | null
+          cons: Json | null
+          id: string
+          key_insights: string[] | null
+          pros: Json | null
+          sentiment_score: number | null
+          tool_id: string | null
+        }
+        Insert: {
+          analysis_date?: string | null
+          cons?: Json | null
+          id?: string
+          key_insights?: string[] | null
+          pros?: Json | null
+          sentiment_score?: number | null
+          tool_id?: string | null
+        }
+        Update: {
+          analysis_date?: string | null
+          cons?: Json | null
+          id?: string
+          key_insights?: string[] | null
+          pros?: Json | null
+          sentiment_score?: number | null
+          tool_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tool_reviews_sentiment_tool_id_fkey"
+            columns: ["tool_id"]
+            isOneToOne: false
+            referencedRelation: "tools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tools: {
         Row: {
+          best_for: string[] | null
           bookmarks: number
           category: string
+          company_name: string | null
+          company_size: string | null
           created_at: string | null
           description: string
           featured: boolean
+          founding_year: number | null
           id: string
+          integrations_count: number | null
           logo: string
+          monthly_active_users: number | null
           name: string
           pricing: string
           rating: number
@@ -203,13 +309,19 @@ export type Database = {
           visit_url: string
         }
         Insert: {
+          best_for?: string[] | null
           bookmarks?: number
           category: string
+          company_name?: string | null
+          company_size?: string | null
           created_at?: string | null
           description: string
           featured?: boolean
+          founding_year?: number | null
           id: string
+          integrations_count?: number | null
           logo: string
+          monthly_active_users?: number | null
           name: string
           pricing: string
           rating: number
@@ -218,13 +330,19 @@ export type Database = {
           visit_url: string
         }
         Update: {
+          best_for?: string[] | null
           bookmarks?: number
           category?: string
+          company_name?: string | null
+          company_size?: string | null
           created_at?: string | null
           description?: string
           featured?: boolean
+          founding_year?: number | null
           id?: string
+          integrations_count?: number | null
           logo?: string
+          monthly_active_users?: number | null
           name?: string
           pricing?: string
           rating?: number
