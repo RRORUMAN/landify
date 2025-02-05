@@ -30,6 +30,7 @@ interface Feature {
 }
 
 const CompareFeatureGrid = ({ tools }: CompareFeatureGridProps) => {
+  // Fetch features for the selected tools
   const { data: features = [], isLoading } = useQuery({
     queryKey: ['comparison_features', tools.map(t => t.id)],
     queryFn: async () => {
@@ -46,11 +47,11 @@ const CompareFeatureGrid = ({ tools }: CompareFeatureGridProps) => {
 
   // Group features by category and group
   const featuresByGroup = features.reduce((acc, feature) => {
-    const groupKey = `${feature.feature_category}/${feature.feature_group || 'General'}`;
+    const groupKey = `${feature.feature_category}/${feature.feature_group}`;
     if (!acc[groupKey]) {
       acc[groupKey] = {
         category: feature.feature_category,
-        group: feature.feature_group || 'General',
+        group: feature.feature_group,
         features: new Set<string>()
       };
     }
@@ -80,13 +81,13 @@ const CompareFeatureGrid = ({ tools }: CompareFeatureGridProps) => {
 
   const renderFeatureValue = (value: string | undefined, feature: Feature | undefined) => {
     if (!feature) return <X className="h-5 w-5 text-red-500" />;
-    if (value === "true") return <Check className="h-5 w-5 text-green-500" />;
-    if (value === "false") return <Minus className="h-5 w-5 text-gray-400" />;
+    if (value === "true" || value === "Yes") return <Check className="h-5 w-5 text-green-500" />;
+    if (value === "false" || value === "No") return <Minus className="h-5 w-5 text-gray-400" />;
     return (
       <div className="flex items-center gap-2">
         <span className="text-sm">{value}</span>
         {feature.is_premium && (
-          <Badge variant="secondary" className="text-xs">
+          <Badge variant="secondary" className="text-xs bg-purple-50 text-purple-700">
             Premium
           </Badge>
         )}
@@ -106,7 +107,11 @@ const CompareFeatureGrid = ({ tools }: CompareFeatureGridProps) => {
             <div className="font-semibold text-gray-500">Feature</div>
             {tools.map((tool) => (
               <div key={tool.id} className="flex flex-col items-center gap-2 p-2 rounded-lg bg-gray-50">
-                <img src={tool.logo} alt={tool.name} className="w-10 h-10 rounded-lg" />
+                <img 
+                  src={tool.logo} 
+                  alt={tool.name} 
+                  className="w-10 h-10 rounded-lg object-cover"
+                />
                 <span className="font-semibold text-sm text-center">{tool.name}</span>
                 <div className="flex items-center gap-1 text-xs text-gray-500">
                   <Star className="h-3 w-3 text-yellow-400" />
@@ -121,7 +126,7 @@ const CompareFeatureGrid = ({ tools }: CompareFeatureGridProps) => {
           {Object.entries(featuresByGroup).map(([groupKey, { category, group, features: featureSet }]) => (
             <div key={groupKey} className="mb-8">
               <div className="sticky top-0 bg-white py-2">
-                <h3 className="text-lg font-semibold mb-2">{category}</h3>
+                <h3 className="text-lg font-semibold mb-1">{category}</h3>
                 <p className="text-sm text-gray-500 mb-4">{group}</p>
               </div>
               <div className="space-y-4">
@@ -135,14 +140,14 @@ const CompareFeatureGrid = ({ tools }: CompareFeatureGridProps) => {
                       <div className="flex items-center gap-2">
                         <div className="flex flex-col gap-1">
                           <div className="flex items-center gap-2">
-                            <span className="text-sm text-gray-600">{featureName}</span>
+                            <span className="text-sm font-medium text-gray-700">{featureName}</span>
                             {feature?.help_text && (
                               <Tooltip>
                                 <TooltipTrigger>
                                   <Info className="h-4 w-4 text-gray-400" />
                                 </TooltipTrigger>
                                 <TooltipContent>
-                                  <p className="max-w-xs">{feature.help_text}</p>
+                                  <p className="max-w-xs text-sm">{feature.help_text}</p>
                                 </TooltipContent>
                               </Tooltip>
                             )}
@@ -173,4 +178,3 @@ const CompareFeatureGrid = ({ tools }: CompareFeatureGridProps) => {
 };
 
 export default CompareFeatureGrid;
-
