@@ -3,8 +3,9 @@ import { Tool } from "@/data/types";
 import { Card } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Star, Clock, Shield, HeartHandshake, Brain, Zap, Timer, BarChart3, Check, X } from "lucide-react";
+import { Star, Clock, Shield, HeartHandshake, Brain, Zap, Timer, BarChart3, Check, X, TrendingUp, TrendingDown, Link, ArrowUpRight, Lock } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
+import { cn } from "@/lib/utils";
 
 interface CompareStatsProps {
   tools: Tool[];
@@ -43,6 +44,13 @@ const CompareStats = ({ tools }: CompareStatsProps) => {
   const getSentimentForTool = (toolId: string) => 
     sentimentData.find(s => s.tool_id === toolId);
 
+  const getTrendIndicator = (value: number, threshold: number = 7.5) => {
+    if (value >= threshold) {
+      return <TrendingUp className="h-4 w-4 text-green-500" />;
+    }
+    return <TrendingDown className="h-4 w-4 text-red-500" />;
+  };
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {tools.map((tool) => {
@@ -67,7 +75,7 @@ const CompareStats = ({ tools }: CompareStatsProps) => {
               <p className="mt-3 text-sm text-gray-600">{tool.description}</p>
             </div>
 
-            {/* Key Metrics */}
+            {/* Key Metrics Grid */}
             <div className="space-y-4">
               <h4 className="font-medium text-sm text-gray-900">Performance Metrics</h4>
               <div className="grid grid-cols-2 gap-4">
@@ -76,6 +84,7 @@ const CompareStats = ({ tools }: CompareStatsProps) => {
                   title="User Satisfaction"
                   value={metrics?.customer_satisfaction_score}
                   max={5}
+                  trend={getTrendIndicator(metrics?.customer_satisfaction_score || 0)}
                   unit="/5"
                   color="text-purple-500"
                 />
@@ -84,6 +93,7 @@ const CompareStats = ({ tools }: CompareStatsProps) => {
                   title="Learning Curve"
                   value={metrics?.learning_curve_score}
                   max={5}
+                  trend={getTrendIndicator(metrics?.learning_curve_score || 0)}
                   unit="/5"
                   color="text-blue-500"
                 />
@@ -92,6 +102,7 @@ const CompareStats = ({ tools }: CompareStatsProps) => {
                   title="API Reliability"
                   value={metrics?.api_reliability_score}
                   max={5}
+                  trend={getTrendIndicator(metrics?.api_reliability_score || 0)}
                   unit="/5"
                   color="text-green-500"
                 />
@@ -99,6 +110,7 @@ const CompareStats = ({ tools }: CompareStatsProps) => {
                   icon={Clock}
                   title="Support Response"
                   value={metrics?.support_response_time}
+                  trend={getTrendIndicator(24 - (metrics?.support_response_time || 0))}
                   unit="hrs"
                   color="text-orange-500"
                   inverse
@@ -106,7 +118,7 @@ const CompareStats = ({ tools }: CompareStatsProps) => {
               </div>
             </div>
 
-            {/* Performance Bars */}
+            {/* Performance Indicators */}
             <div className="space-y-4 border-t pt-4">
               <h4 className="font-medium text-sm text-gray-900">Performance Indicators</h4>
               <MetricBar
@@ -115,6 +127,7 @@ const CompareStats = ({ tools }: CompareStatsProps) => {
                 value={metrics?.ease_of_use_score}
                 max={10}
                 color="bg-blue-500"
+                trend={getTrendIndicator(metrics?.ease_of_use_score || 0)}
               />
               <MetricBar
                 icon={Timer}
@@ -123,6 +136,7 @@ const CompareStats = ({ tools }: CompareStatsProps) => {
                 max={30}
                 unit="min"
                 color="bg-green-500"
+                trend={getTrendIndicator(metrics?.time_saved_per_task || 0, 15)}
               />
               <MetricBar
                 icon={BarChart3}
@@ -130,6 +144,7 @@ const CompareStats = ({ tools }: CompareStatsProps) => {
                 value={metrics?.roi_score}
                 max={10}
                 color="bg-purple-500"
+                trend={getTrendIndicator(metrics?.roi_score || 0)}
               />
             </div>
 
@@ -162,7 +177,7 @@ const CompareStats = ({ tools }: CompareStatsProps) => {
               </div>
             </div>
 
-            {/* Key Insights */}
+            {/* Expert Insights */}
             <div className="border-t pt-4">
               <h4 className="font-medium text-sm text-gray-900 mb-3">Expert Insights</h4>
               <div className="space-y-2">
@@ -202,25 +217,25 @@ interface MetricCardProps {
   max?: number;
   unit?: string;
   color: string;
+  trend?: React.ReactNode;
   inverse?: boolean;
 }
 
-const MetricCard = ({ icon: Icon, title, value, max, unit, color, inverse }: MetricCardProps) => {
+const MetricCard = ({ icon: Icon, title, value, max, unit, color, trend, inverse }: MetricCardProps) => {
   if (!value) return null;
 
   const displayValue = inverse ? 
     `${value}${unit}` :
     `${value}${unit ?? ` / ${max}`}`;
 
-  const score = inverse ? 
-    ((max ?? value) - value) / (max ?? value) * 100 :
-    (value / (max ?? value)) * 100;
-
   return (
     <div className="p-3 rounded-lg border bg-gray-50">
-      <div className="flex items-center gap-2 mb-2">
-        <Icon className={`h-4 w-4 ${color}`} />
-        <span className="text-sm font-medium text-gray-700">{title}</span>
+      <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center gap-2">
+          <Icon className={`h-4 w-4 ${color}`} />
+          <span className="text-sm font-medium text-gray-700">{title}</span>
+        </div>
+        {trend}
       </div>
       <div className="flex items-baseline gap-1">
         <span className="text-lg font-semibold">{displayValue}</span>
@@ -236,9 +251,10 @@ interface MetricBarProps {
   max: number;
   unit?: string;
   color: string;
+  trend?: React.ReactNode;
 }
 
-const MetricBar = ({ icon: Icon, title, value, max, unit, color }: MetricBarProps) => {
+const MetricBar = ({ icon: Icon, title, value, max, unit, color, trend }: MetricBarProps) => {
   if (!value) return null;
 
   const percentage = (value / max) * 100;
@@ -250,9 +266,12 @@ const MetricBar = ({ icon: Icon, title, value, max, unit, color }: MetricBarProp
           <Icon className="h-4 w-4 text-gray-500" />
           <span className="text-sm font-medium text-gray-700">{title}</span>
         </div>
-        <span className="text-sm font-semibold">
-          {value}{unit}
-        </span>
+        <div className="flex items-center gap-2">
+          <span className="text-sm font-semibold">
+            {value}{unit}
+          </span>
+          {trend}
+        </div>
       </div>
       <Progress value={percentage} className={`h-2 ${color}`} />
     </div>
