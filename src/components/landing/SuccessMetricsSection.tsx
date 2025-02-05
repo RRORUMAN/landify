@@ -72,7 +72,7 @@ const SuccessMetricsSection = () => {
               <p className="text-gray-600">
                 {metric.description}
               </p>
-              <div className="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-blue-500 to-indigo-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-b-2xl" />
+              <div className="absolute inset-x-0 bottom-0 h-1 bg-blue-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-b-2xl" />
             </motion.div>
           ))}
         </div>
