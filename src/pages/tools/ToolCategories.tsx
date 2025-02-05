@@ -16,9 +16,19 @@ import {
   MessageSquare,
   Code,
   VideoIcon,
+  Filter,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import type { Tool } from "@/data/types";
+import { toast } from "@/hooks/use-toast";
+import { motion, AnimatePresence } from "framer-motion";
+import { Skeleton } from "@/components/ui/skeleton";
+import {
+  TooltipProvider,
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from "@/components/ui/tooltip";
 
 interface CategoryType {
   name: string;
@@ -48,12 +58,15 @@ const ToolCategories = () => {
   useEffect(() => {
     const fetchTools = async () => {
       try {
-        const { data, error } = await supabase
-          .from('tools')
-          .select('*');
+        const { data, error } = await supabase.from('tools').select('*');
         
         if (error) {
           console.error('Error fetching tools:', error);
+          toast({
+            title: "Error",
+            description: "Failed to load tools. Please try again.",
+            variant: "destructive",
+          });
           return;
         }
 
@@ -62,6 +75,11 @@ const ToolCategories = () => {
         }
       } catch (error) {
         console.error('Error:', error);
+        toast({
+          title: "Error",
+          description: "An unexpected error occurred.",
+          variant: "destructive",
+        });
       } finally {
         setIsLoading(false);
       }
@@ -92,104 +110,181 @@ const ToolCategories = () => {
   }, [filteredTools]);
 
   return (
-    <div className="min-h-screen bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">AI Tools Directory</h1>
-        
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Sidebar */}
-          <div className="lg:col-span-1">
-            <h2 className="text-xl font-semibold text-gray-900 mb-6">Categories</h2>
-            <div className="space-y-1">
-              <Button
-                variant={selectedCategory === null ? "default" : "ghost"}
-                className={`w-full justify-start text-sm ${
-                  selectedCategory === null 
-                    ? "bg-blue-50 text-blue-600 hover:bg-blue-100"
-                    : "text-gray-600 hover:bg-gray-50"
-                }`}
-                onClick={() => setSelectedCategory(null)}
-              >
-                All Tools
-              </Button>
-              
-              {categories.map((category) => {
-                const Icon = category.icon;
-                return (
+    <TooltipProvider>
+      <div className="min-h-screen bg-gradient-to-br from-white via-gray-50 to-blue-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <motion.h1 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-3xl font-bold text-gray-900 mb-8"
+          >
+            AI Tools Directory
+          </motion.h1>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            {/* Sidebar */}
+            <motion.div 
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="lg:col-span-1"
+            >
+              <div className="backdrop-blur-md bg-white/70 rounded-xl p-6 shadow-lg border border-white/20">
+                <h2 className="text-xl font-semibold text-gray-900 mb-6">Categories</h2>
+                <div className="space-y-1">
                   <Button
-                    key={category.name}
-                    variant={selectedCategory === category.name ? "default" : "ghost"}
-                    className={`w-full justify-start text-sm ${
-                      selectedCategory === category.name
+                    variant={selectedCategory === null ? "default" : "ghost"}
+                    className={`w-full justify-start text-sm transition-all duration-200 ${
+                      selectedCategory === null 
                         ? "bg-blue-50 text-blue-600 hover:bg-blue-100"
                         : "text-gray-600 hover:bg-gray-50"
                     }`}
-                    onClick={() => setSelectedCategory(category.name)}
+                    onClick={() => setSelectedCategory(null)}
                   >
-                    <Icon className="mr-2 h-4 w-4" />
-                    {category.name}
+                    All Tools
                   </Button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Main Content */}
-          <div className="lg:col-span-3">
-            <div className="mb-8">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-                <input
-                  type="text"
-                  placeholder="Search AI tools..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-              </div>
-            </div>
-
-            {/* Featured Tools */}
-            {featuredTools.length > 0 && (
-              <div className="mb-12">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-6">Featured Tools</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {featuredTools.map((tool) => (
-                    <ToolCard key={tool.id} tool={tool} />
-                  ))}
+                  
+                  {categories.map((category) => {
+                    const Icon = category.icon;
+                    return (
+                      <Tooltip key={category.name}>
+                        <TooltipTrigger asChild>
+                          <Button
+                            variant={selectedCategory === category.name ? "default" : "ghost"}
+                            className={`w-full justify-start text-sm transition-all duration-200 ${
+                              selectedCategory === category.name
+                                ? "bg-blue-50 text-blue-600 hover:bg-blue-100"
+                                : "text-gray-600 hover:bg-gray-50"
+                            }`}
+                            onClick={() => setSelectedCategory(category.name)}
+                          >
+                            <Icon className="mr-2 h-4 w-4" />
+                            {category.name}
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>View {category.name} tools</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    );
+                  })}
                 </div>
               </div>
-            )}
+            </motion.div>
 
-            {/* Regular Tools */}
-            <div>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-6">All Tools</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {regularTools.map((tool) => (
-                  <ToolCard key={tool.id} tool={tool} />
-                ))}
-              </div>
+            {/* Main Content */}
+            <div className="lg:col-span-3 space-y-8">
+              <motion.div 
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="backdrop-blur-md bg-white/70 rounded-xl p-6 shadow-lg border border-white/20"
+              >
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                  <input
+                    type="text"
+                    placeholder="Search AI tools..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full pl-10 pr-4 py-3 bg-white/50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  />
+                </div>
+              </motion.div>
+
+              {isLoading ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {[1, 2, 3, 4].map((i) => (
+                    <div key={i} className="backdrop-blur-md bg-white/70 rounded-xl p-6 shadow-lg border border-white/20">
+                      <Skeleton className="h-12 w-12 rounded-lg mb-4" />
+                      <Skeleton className="h-6 w-3/4 mb-2" />
+                      <Skeleton className="h-4 w-1/2 mb-4" />
+                      <Skeleton className="h-20 w-full" />
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <>
+                  {/* Featured Tools */}
+                  {featuredTools.length > 0 && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="space-y-6"
+                    >
+                      <h2 className="text-2xl font-semibold text-gray-900 mb-6">Featured Tools</h2>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <AnimatePresence>
+                          {featuredTools.map((tool) => (
+                            <motion.div
+                              key={tool.id}
+                              layout
+                              initial={{ opacity: 0, scale: 0.9 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              exit={{ opacity: 0, scale: 0.9 }}
+                              transition={{ duration: 0.2 }}
+                            >
+                              <ToolCard tool={tool} />
+                            </motion.div>
+                          ))}
+                        </AnimatePresence>
+                      </div>
+                    </motion.div>
+                  )}
+
+                  {/* Regular Tools */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="space-y-6"
+                  >
+                    <h2 className="text-2xl font-semibold text-gray-900 mb-6">All Tools</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <AnimatePresence>
+                        {regularTools.map((tool) => (
+                          <motion.div
+                            key={tool.id}
+                            layout
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.9 }}
+                            transition={{ duration: 0.2 }}
+                          >
+                            <ToolCard tool={tool} />
+                          </motion.div>
+                        ))}
+                      </AnimatePresence>
+                    </div>
+                  </motion.div>
+
+                  {filteredTools.length === 0 && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      className="text-center py-12"
+                    >
+                      <p className="text-gray-500">No tools found matching your criteria.</p>
+                      <Button
+                        variant="outline"
+                        className="mt-4"
+                        onClick={() => {
+                          setSearchQuery("");
+                          setSelectedCategory(null);
+                          toast({
+                            title: "Filters cleared",
+                            description: "Showing all tools",
+                          });
+                        }}
+                      >
+                        Clear filters
+                      </Button>
+                    </motion.div>
+                  )}
+                </>
+              )}
             </div>
-
-            {filteredTools.length === 0 && (
-              <div className="text-center py-12">
-                <p className="text-gray-500">No tools found matching your criteria.</p>
-                <Button
-                  variant="outline"
-                  className="mt-4"
-                  onClick={() => {
-                    setSearchQuery("");
-                    setSelectedCategory(null);
-                  }}
-                >
-                  Clear filters
-                </Button>
-              </div>
-            )}
           </div>
         </div>
       </div>
-    </div>
+    </TooltipProvider>
   );
 };
 

@@ -307,6 +307,47 @@ export type Database = {
           },
         ]
       }
+      tool_integration_status: {
+        Row: {
+          created_at: string | null
+          error_count: number | null
+          id: string
+          last_sync_at: string | null
+          status: string
+          tool_id: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          error_count?: number | null
+          id?: string
+          last_sync_at?: string | null
+          status: string
+          tool_id: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          error_count?: number | null
+          id?: string
+          last_sync_at?: string | null
+          status?: string
+          tool_id?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tool_integration_status_tool_id_fkey"
+            columns: ["tool_id"]
+            isOneToOne: false
+            referencedRelation: "tools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tool_integrations: {
         Row: {
           created_at: string | null
@@ -376,6 +417,47 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "tool_reviews_sentiment_tool_id_fkey"
+            columns: ["tool_id"]
+            isOneToOne: false
+            referencedRelation: "tools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tool_usage_stats: {
+        Row: {
+          created_at: string | null
+          id: string
+          last_used_at: string | null
+          tool_id: string
+          total_time_spent: number | null
+          updated_at: string | null
+          usage_count: number | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          last_used_at?: string | null
+          tool_id: string
+          total_time_spent?: number | null
+          updated_at?: string | null
+          usage_count?: number | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          last_used_at?: string | null
+          tool_id?: string
+          total_time_spent?: number | null
+          updated_at?: string | null
+          usage_count?: number | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tool_usage_stats_tool_id_fkey"
             columns: ["tool_id"]
             isOneToOne: false
             referencedRelation: "tools"
