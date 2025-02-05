@@ -27,21 +27,15 @@ export interface UserTool {
   id: string;
   user_id: string;
   tool_id: string;
-  purchase_date: string;
-  subscription_status: string;
-  notes: string;
-  subscription_tier: 'free' | 'pro' | 'business' | 'business_plus';
-  subscription_details: {
-    price: string;
-    renewal_date: string;
-    category: string;
-    description: string;
-    url: string;
-  };
-  monthly_cost?: number;
-  billing_cycle?: string;
-  next_billing_date?: string;
-  usage_stats?: Record<string, any>;
+  purchase_date: string | null;
+  subscription_status: string | null;
+  notes: string | null;
+  subscription_tier: 'free' | 'pro' | 'business' | 'business_plus' | null;
+  subscription_details: Record<string, any> | null;
+  monthly_cost: number | null;
+  billing_cycle: string | null;
+  next_billing_date: string | null;
+  usage_stats: Record<string, any> | null;
 }
 
 export interface SpendForecast {
@@ -49,6 +43,6 @@ export interface SpendForecast {
   user_id: string;
   forecast_date: string;
   forecasted_amount: number;
-  forecast_details?: Record<string, any>;
-  created_at?: string;
+  forecast_details: Record<string, any> | null;
+  created_at?: string | null;
 }
