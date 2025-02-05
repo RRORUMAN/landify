@@ -1,4 +1,3 @@
-
 import { LucideIcon } from "lucide-react";
 
 export interface Tool {
@@ -14,7 +13,12 @@ export interface Tool {
   featured: boolean;
   visit_url: string;
   bookmarks: number;
-  special_pricing?: boolean;
+  founding_year?: number | null;
+  company_name?: string | null;
+  company_size?: string | null;
+  best_for?: string[] | null;
+  integrations_count?: number | null;
+  monthly_active_users?: number | null;
   created_at?: string | null;
 }
 

@@ -91,11 +91,11 @@ const CompareStats = ({ tools }: CompareStatsProps) => {
                 <h3 className="font-semibold text-lg">{tool.name}</h3>
                 <div className="flex items-center gap-2 text-sm text-gray-500">
                   <Building className="h-4 w-4" />
-                  {tool.company_name || 'N/A'}
+                  {tool.company_name ?? 'N/A'}
                 </div>
                 <div className="flex items-center gap-2 text-sm text-gray-500">
                   <Calendar className="h-4 w-4" />
-                  Founded: {tool.founding_year || 'N/A'}
+                  Founded: {tool.founding_year ?? 'N/A'}
                 </div>
               </div>
             </div>
@@ -132,7 +132,7 @@ const CompareStats = ({ tools }: CompareStatsProps) => {
                   <Users className="h-5 w-5 text-purple-500" />
                   <span className="text-sm font-medium">Active Users</span>
                 </div>
-                <span className="text-sm">{tool.monthly_active_users?.toLocaleString() || 'N/A'}</span>
+                <span className="text-sm">{tool.monthly_active_users?.toLocaleString() ?? 'N/A'}</span>
               </div>
 
               <div className="flex items-center justify-between">
@@ -140,7 +140,7 @@ const CompareStats = ({ tools }: CompareStatsProps) => {
                   <Puzzle className="h-5 w-5 text-indigo-500" />
                   <span className="text-sm font-medium">Integrations</span>
                 </div>
-                <span className="text-sm">{tool.integrations_count || 0}+</span>
+                <span className="text-sm">{tool.integrations_count ?? 0}+</span>
               </div>
 
               <div className="flex items-center justify-between">
