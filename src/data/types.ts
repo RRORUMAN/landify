@@ -42,6 +42,7 @@ export interface UserTool {
   billing_cycle: string | null;
   next_billing_date: string | null;
   usage_stats: Record<string, any> | null;
+  tool?: Tool;
 }
 
 export interface SpendForecast {
@@ -52,3 +53,4 @@ export interface SpendForecast {
   forecast_details: Record<string, any> | null;
   created_at?: string | null;
 }
+
