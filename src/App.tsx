@@ -22,11 +22,11 @@ const AppContent = () => {
   const showNavbar = ['/', '/pricing'].includes(location.pathname);
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300">
       {showNavbar && <Navbar />}
       <div className="flex">
         {isDashboardRoute(location.pathname) && <Sidebar />}
-        <main className={`flex-1 ${isDashboardRoute(location.pathname) ? 'pl-4 pr-6 pt-6' : ''} bg-white`}>
+        <main className={`flex-1 ${isDashboardRoute(location.pathname) ? 'pl-4 pr-6 pt-6' : ''} bg-white dark:bg-gray-900`}>
           <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/pricing" element={<Pricing />} />

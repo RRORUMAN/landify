@@ -18,6 +18,8 @@ const Sidebar = () => {
     setIsDarkMode(isDark);
     if (isDark) {
       document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
     }
   }, []);
 
@@ -83,14 +85,14 @@ const Sidebar = () => {
   };
 
   return (
-    <aside className="min-h-screen w-80 bg-white border-r border-gray-100 p-6 relative transition-colors duration-300 flex flex-col">
+    <aside className="min-h-screen w-80 bg-white dark:bg-gray-900 border-r border-gray-100 dark:border-gray-800 p-6 relative transition-colors duration-300 flex flex-col">
       <div className="flex-1 space-y-8">
         <div className="flex items-center justify-between px-2">
           <div>
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
               Dashboard
             </h2>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-gray-500 dark:text-gray-400">
               Manage tools
             </p>
           </div>
@@ -104,29 +106,29 @@ const Sidebar = () => {
               className={cn(
                 "group flex items-start gap-4 px-4 py-4 rounded-lg transition-all duration-300 relative overflow-hidden hover:shadow-sm",
                 location.pathname === item.path
-                  ? "bg-blue-50 text-blue-700"
-                  : "text-gray-600 hover:bg-gray-50"
+                  ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300"
+                  : "text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800/50"
               )}
             >
               {item.isNew && (
                 <span className="absolute top-2 right-2 flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 dark:bg-blue-500 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500 dark:bg-blue-400"></span>
                 </span>
               )}
               <item.icon className={cn(
                 "h-5 w-5 mt-0.5 transition-transform duration-300 group-hover:scale-110",
                 location.pathname === item.path
-                  ? "text-blue-600"
-                  : "text-gray-400 group-hover:text-gray-600"
+                  ? "text-blue-600 dark:text-blue-400"
+                  : "text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-300"
               )} />
               <div className="flex flex-col">
                 <span className="text-sm font-medium leading-none mb-1">{item.title}</span>
                 <span className={cn(
                   "text-xs transition-colors duration-300",
                   location.pathname === item.path
-                    ? "text-blue-600"
-                    : "text-gray-400 group-hover:text-gray-500"
+                    ? "text-blue-600 dark:text-blue-400"
+                    : "text-gray-400 dark:text-gray-500 group-hover:text-gray-500 dark:group-hover:text-gray-400"
                 )}>{item.description}</span>
               </div>
             </Link>
@@ -139,7 +141,7 @@ const Sidebar = () => {
           variant="ghost"
           size="lg"
           onClick={toggleDarkMode}
-          className="w-full justify-start gap-3 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+          className="w-full justify-start gap-3 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800"
         >
           {isDarkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
           <span>{isDarkMode ? "Light Mode" : "Dark Mode"}</span>
@@ -149,7 +151,7 @@ const Sidebar = () => {
           variant="ghost"
           size="lg"
           onClick={handleSignOut}
-          className="w-full justify-start gap-3 text-sm text-red-600 hover:text-red-700 hover:bg-red-50"
+          className="w-full justify-start gap-3 text-sm text-red-600 hover:text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:text-red-300 dark:hover:bg-red-900/20"
         >
           <LogOut className="h-5 w-5" />
           <span>Sign Out</span>
@@ -160,4 +162,3 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
-
