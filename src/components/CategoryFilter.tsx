@@ -29,7 +29,7 @@ const CategoryFilter = ({ selectedCategory, onSelectCategory }: CategoryFilterPr
   return (
     <div className="bg-white rounded-lg border border-gray-100 p-6">
       <h2 className="text-lg font-semibold text-gray-900 mb-4">Categories</h2>
-      <div className="space-y-2">
+      <div className="space-y-1.5">
         <Button
           variant={selectedCategory === null ? "default" : "ghost"}
           className={`w-full justify-start text-sm ${

@@ -45,6 +45,23 @@ type SortOption = "rating" | "reviews" | "bookmarks" | "newest" | "price";
 type PricingFilter = "all" | "Free Trial" | "Freemium" | "Paid";
 type RatingFilter = "all" | "4+" | "4.5+" | "4.8+";
 
+interface Tool {
+  id: string;
+  name: string;
+  description: string;
+  category: string;
+  pricing: "Free Trial" | "Freemium" | "Paid";
+  rating: number;
+  reviews: number;
+  bookmarks: number;
+  tags: string[];
+  logo: string;
+  featured?: boolean;
+  visit_url: string;
+  dealUrl?: string;
+  created_at?: string;
+}
+
 const ToolCategories = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
