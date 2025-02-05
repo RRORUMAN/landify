@@ -13,6 +13,7 @@ export interface Tool {
   featured: boolean;
   visit_url: string;
   bookmarks: number;
+  created_at?: string | null;
 }
 
 export interface Category {

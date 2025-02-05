@@ -12,8 +12,9 @@ export type Tool = {
   category: string;
   featured: boolean;
   dealUrl?: string;
-  visitUrl: string;
+  visit_url: string;
   bookmarks: number;
+  created_at?: string | null;
 };
 
 export const categories = [
@@ -45,8 +46,9 @@ export const tools: Tool[] = [
     tags: ["marketing", "social media", "e-commerce"],
     category: "Growth & Marketing",
     featured: true,
-    visitUrl: "https://example.com",
+    visit_url: "https://example.com",
     bookmarks: 37,
+    created_at: new Date().toISOString()
   },
   {
     id: "2",
@@ -60,8 +62,9 @@ export const tools: Tool[] = [
     category: "Technology & IT",
     featured: true,
     dealUrl: "https://example.com/deal",
-    visitUrl: "https://example.com",
+    visit_url: "https://example.com",
     bookmarks: 74,
+    created_at: new Date().toISOString()
   },
   {
     id: "3",
@@ -74,8 +77,9 @@ export const tools: Tool[] = [
     tags: ["sales", "crm", "automation"],
     category: "Sales",
     featured: true,
-    visitUrl: "https://example.com",
+    visit_url: "https://example.com",
     bookmarks: 128,
+    created_at: new Date().toISOString()
   },
   {
     id: "4",
@@ -88,8 +92,9 @@ export const tools: Tool[] = [
     tags: ["accounting", "finance", "automation"],
     category: "Back Office",
     featured: false,
-    visitUrl: "https://example.com",
+    visit_url: "https://example.com",
     bookmarks: 56,
+    created_at: new Date().toISOString()
   },
   {
     id: "5",
@@ -102,8 +107,9 @@ export const tools: Tool[] = [
     tags: ["operations", "workflow", "automation"],
     category: "Operations",
     featured: false,
-    visitUrl: "https://example.com",
+    visit_url: "https://example.com",
     bookmarks: 92,
+    created_at: new Date().toISOString()
   },
   {
     id: "6",
@@ -116,8 +122,9 @@ export const tools: Tool[] = [
     tags: ["writing", "content", "editing"],
     category: "Writing & Editing",
     featured: true,
-    visitUrl: "https://example.com",
+    visit_url: "https://example.com",
     bookmarks: 145,
+    created_at: new Date().toISOString()
   },
   {
     id: "7",
@@ -130,8 +137,9 @@ export const tools: Tool[] = [
     tags: ["design", "graphics", "creative"],
     category: "Design & Creative",
     featured: false,
-    visitUrl: "https://example.com",
+    visit_url: "https://example.com",
     bookmarks: 83,
+    created_at: new Date().toISOString()
   },
   {
     id: "8",
@@ -144,8 +152,9 @@ export const tools: Tool[] = [
     tags: ["automation", "workflow", "productivity"],
     category: "Workflow Automation",
     featured: false,
-    visitUrl: "https://example.com",
+    visit_url: "https://example.com",
     bookmarks: 64,
+    created_at: new Date().toISOString()
   },
   {
     id: "9",
@@ -158,8 +167,9 @@ export const tools: Tool[] = [
     tags: ["marketing", "analytics", "prediction"],
     category: "Growth & Marketing",
     featured: false,
-    visitUrl: "https://example.com",
+    visit_url: "https://example.com",
     bookmarks: 112,
+    created_at: new Date().toISOString()
   },
   {
     id: "10",
@@ -172,8 +182,9 @@ export const tools: Tool[] = [
     tags: ["it", "support", "management"],
     category: "Technology & IT",
     featured: false,
-    visitUrl: "https://example.com",
+    visit_url: "https://example.com",
     bookmarks: 97,
+    created_at: new Date().toISOString()
   },
   {
     id: "11",
@@ -186,8 +197,9 @@ export const tools: Tool[] = [
     tags: ["sales", "forecasting", "optimization"],
     category: "Sales",
     featured: false,
-    visitUrl: "https://example.com",
+    visit_url: "https://example.com",
     bookmarks: 108,
+    created_at: new Date().toISOString()
   },
   {
     id: "12",
@@ -200,8 +212,9 @@ export const tools: Tool[] = [
     tags: ["finance", "planning", "analysis"],
     category: "Back Office",
     featured: true,
-    visitUrl: "https://example.com",
+    visit_url: "https://example.com",
     bookmarks: 134,
+    created_at: new Date().toISOString()
   },
   {
     id: "13",
@@ -214,8 +227,9 @@ export const tools: Tool[] = [
     tags: ["sales", "intelligence", "leads"],
     category: "Sales",
     featured: false,
-    visitUrl: "https://example.com",
+    visit_url: "https://example.com",
     bookmarks: 156,
+    created_at: new Date().toISOString()
   },
   {
     id: "14",
@@ -228,8 +242,9 @@ export const tools: Tool[] = [
     tags: ["sales", "pipeline", "forecasting"],
     category: "Sales",
     featured: false,
-    visitUrl: "https://example.com",
+    visit_url: "https://example.com",
     bookmarks: 142,
+    created_at: new Date().toISOString()
   },
   {
     id: "15",
@@ -242,8 +257,9 @@ export const tools: Tool[] = [
     tags: ["sales", "automation", "engagement"],
     category: "Sales",
     featured: false,
-    visitUrl: "https://example.com",
+    visit_url: "https://example.com",
     bookmarks: 167,
+    created_at: new Date().toISOString()
   },
   {
     id: "16",
@@ -256,8 +272,9 @@ export const tools: Tool[] = [
     tags: ["finance", "reporting", "analysis"],
     category: "Back Office",
     featured: false,
-    visitUrl: "https://example.com",
+    visit_url: "https://example.com",
     bookmarks: 189,
+    created_at: new Date().toISOString()
   },
   {
     id: "17",
@@ -270,8 +287,9 @@ export const tools: Tool[] = [
     tags: ["accounting", "expenses", "finance"],
     category: "Back Office",
     featured: false,
-    visitUrl: "https://example.com",
+    visit_url: "https://example.com",
     bookmarks: 201,
+    created_at: new Date().toISOString()
   },
   {
     id: "18",
@@ -284,8 +302,9 @@ export const tools: Tool[] = [
     tags: ["operations", "documents", "automation"],
     category: "Back Office",
     featured: false,
-    visitUrl: "https://example.com",
+    visit_url: "https://example.com",
     bookmarks: 178,
+    created_at: new Date().toISOString()
   },
   {
     id: "19",
@@ -298,8 +317,9 @@ export const tools: Tool[] = [
     tags: ["operations", "management", "optimization"],
     category: "Operations",
     featured: false,
-    visitUrl: "https://example.com",
+    visit_url: "https://example.com",
     bookmarks: 167,
+    created_at: new Date().toISOString()
   },
   {
     id: "20",
@@ -312,8 +332,9 @@ export const tools: Tool[] = [
     tags: ["operations", "analytics", "insights"],
     category: "Operations",
     featured: false,
-    visitUrl: "https://example.com",
+    visit_url: "https://example.com",
     bookmarks: 198,
+    created_at: new Date().toISOString()
   },
   {
     id: "21",
@@ -326,8 +347,9 @@ export const tools: Tool[] = [
     tags: ["operations", "scheduling", "resources"],
     category: "Operations",
     featured: false,
-    visitUrl: "https://example.com",
+    visit_url: "https://example.com",
     bookmarks: 156,
+    created_at: new Date().toISOString()
   },
   {
     id: "22",
@@ -340,8 +362,9 @@ export const tools: Tool[] = [
     tags: ["marketing", "automation", "campaigns"],
     category: "Growth & Marketing",
     featured: false,
-    visitUrl: "https://example.com",
+    visit_url: "https://example.com",
     bookmarks: 234,
+    created_at: new Date().toISOString()
   },
   {
     id: "23",
@@ -354,8 +377,9 @@ export const tools: Tool[] = [
     tags: ["marketing", "growth", "optimization"],
     category: "Growth & Marketing",
     featured: false,
-    visitUrl: "https://example.com",
+    visit_url: "https://example.com",
     bookmarks: 212,
+    created_at: new Date().toISOString()
   },
   {
     id: "24",
@@ -368,8 +392,9 @@ export const tools: Tool[] = [
     tags: ["marketing", "analytics", "performance"],
     category: "Growth & Marketing",
     featured: false,
-    visitUrl: "https://example.com",
+    visit_url: "https://example.com",
     bookmarks: 189,
+    created_at: new Date().toISOString()
   },
   {
     id: "25",
@@ -382,8 +407,9 @@ export const tools: Tool[] = [
     tags: ["writing", "content", "professional"],
     category: "Writing & Editing",
     featured: false,
-    visitUrl: "https://example.com",
+    visit_url: "https://example.com",
     bookmarks: 256,
+    created_at: new Date().toISOString()
   },
   {
     id: "26",
@@ -396,8 +422,9 @@ export const tools: Tool[] = [
     tags: ["editing", "proofreading", "content"],
     category: "Writing & Editing",
     featured: false,
-    visitUrl: "https://example.com",
+    visit_url: "https://example.com",
     bookmarks: 223,
+    created_at: new Date().toISOString()
   },
   {
     id: "27",
@@ -410,8 +437,9 @@ export const tools: Tool[] = [
     tags: ["content", "optimization", "writing"],
     category: "Writing & Editing",
     featured: false,
-    visitUrl: "https://example.com",
+    visit_url: "https://example.com",
     bookmarks: 198,
+    created_at: new Date().toISOString()
   },
   {
     id: "28",
@@ -424,8 +452,9 @@ export const tools: Tool[] = [
     tags: ["it", "infrastructure", "monitoring"],
     category: "Technology & IT",
     featured: false,
-    visitUrl: "https://example.com",
+    visit_url: "https://example.com",
     bookmarks: 267,
+    created_at: new Date().toISOString()
   },
   {
     id: "29",
@@ -438,8 +467,9 @@ export const tools: Tool[] = [
     tags: ["it", "support", "automation"],
     category: "Technology & IT",
     featured: false,
-    visitUrl: "https://example.com",
+    visit_url: "https://example.com",
     bookmarks: 234,
+    created_at: new Date().toISOString()
   },
   {
     id: "30",
@@ -452,8 +482,9 @@ export const tools: Tool[] = [
     tags: ["it", "operations", "security"],
     category: "Technology & IT",
     featured: false,
-    visitUrl: "https://example.com",
+    visit_url: "https://example.com",
     bookmarks: 212,
+    created_at: new Date().toISOString()
   },
   {
     id: "31",
@@ -466,8 +497,9 @@ export const tools: Tool[] = [
     tags: ["design", "automation", "creative"],
     category: "Design & Creative",
     featured: false,
-    visitUrl: "https://example.com",
+    visit_url: "https://example.com",
     bookmarks: 278,
+    created_at: new Date().toISOString()
   },
   {
     id: "32",
@@ -480,8 +512,9 @@ export const tools: Tool[] = [
     tags: ["design", "creative", "assets"],
     category: "Design & Creative",
     featured: false,
-    visitUrl: "https://example.com",
+    visit_url: "https://example.com",
     bookmarks: 245,
+    created_at: new Date().toISOString()
   },
   {
     id: "33",
@@ -494,8 +527,9 @@ export const tools: Tool[] = [
     tags: ["design", "collaboration", "feedback"],
     category: "Design & Creative",
     featured: false,
-    visitUrl: "https://example.com",
+    visit_url: "https://example.com",
     bookmarks: 223,
+    created_at: new Date().toISOString()
   },
   {
     id: "34",
@@ -508,8 +542,9 @@ export const tools: Tool[] = [
     tags: ["workflow", "automation", "optimization"],
     category: "Workflow Automation",
     featured: false,
-    visitUrl: "https://example.com",
+    visit_url: "https://example.com",
     bookmarks: 289,
+    created_at: new Date().toISOString()
   },
   {
     id: "35",
@@ -522,8 +557,9 @@ export const tools: Tool[] = [
     tags: ["automation", "process", "integration"],
     category: "Workflow Automation",
     featured: false,
-    visitUrl: "https://example.com",
+    visit_url: "https://example.com",
     bookmarks: 256,
+    created_at: new Date().toISOString()
   },
   {
     id: "36",
@@ -536,8 +572,9 @@ export const tools: Tool[] = [
     tags: ["workflow", "management", "optimization"],
     category: "Workflow Automation",
     featured: false,
-    visitUrl: "https://example.com",
+    visit_url: "https://example.com",
     bookmarks: 234,
+    created_at: new Date().toISOString()
   },
   {
     id: "37",
@@ -550,8 +587,9 @@ export const tools: Tool[] = [
     tags: ["hr", "recruitment", "employee management"],
     category: "Human Resources",
     featured: true,
-    visitUrl: "https://example.com",
+    visit_url: "https://example.com",
     bookmarks: 245,
+    created_at: new Date().toISOString()
   },
   {
     id: "38",
@@ -564,8 +602,9 @@ export const tools: Tool[] = [
     tags: ["recruitment", "talent", "assessment"],
     category: "Human Resources",
     featured: false,
-    visitUrl: "https://example.com",
+    visit_url: "https://example.com",
     bookmarks: 198,
+    created_at: new Date().toISOString()
   },
   {
     id: "39",
@@ -578,8 +617,9 @@ export const tools: Tool[] = [
     tags: ["finance", "forecasting", "analysis"],
     category: "Finance",
     featured: true,
-    visitUrl: "https://example.com",
+    visit_url: "https://example.com",
     bookmarks: 312,
+    created_at: new Date().toISOString()
   },
   {
     id: "40",
@@ -592,8 +632,9 @@ export const tools: Tool[] = [
     tags: ["legal", "compliance", "risk"],
     category: "Legal & Compliance",
     featured: true,
-    visitUrl: "https://example.com",
+    visit_url: "https://example.com",
     bookmarks: 178,
+    created_at: new Date().toISOString()
   },
   {
     id: "41",
@@ -606,8 +647,9 @@ export const tools: Tool[] = [
     tags: ["analytics", "bi", "insights"],
     category: "Business Intelligence",
     featured: true,
-    visitUrl: "https://example.com",
+    visit_url: "https://example.com",
     bookmarks: 267,
+    created_at: new Date().toISOString()
   },
   {
     id: "42",
@@ -620,8 +662,9 @@ export const tools: Tool[] = [
     tags: ["project management", "resources", "planning"],
     category: "Project Management",
     featured: false,
-    visitUrl: "https://example.com",
+    visit_url: "https://example.com",
     bookmarks: 223,
+    created_at: new Date().toISOString()
   },
   {
     id: "43",
@@ -634,7 +677,8 @@ export const tools: Tool[] = [
     tags: ["data", "governance", "management"],
     category: "Data Management",
     featured: true,
-    visitUrl: "https://example.com",
+    visit_url: "https://example.com",
     bookmarks: 256,
+    created_at: new Date().toISOString()
   }
 ];

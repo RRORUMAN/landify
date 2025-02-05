@@ -56,11 +56,16 @@ const AddTool = () => {
 
       if (error) throw error;
 
-      setUserTools(tools);
+      const typedTools: UserTool[] = tools.map(tool => ({
+        ...tool,
+        subscription_details: tool.subscription_details as UserTool['subscription_details']
+      }));
+
+      setUserTools(typedTools);
       
       // Calculate total monthly spend
-      const monthlyTotal = tools.reduce((acc, tool) => {
-        const price = parseFloat(tool.subscription_details?.price || "0");
+      const monthlyTotal = typedTools.reduce((acc, tool) => {
+        const price = parseFloat(tool.subscription_details.price || "0");
         return acc + price;
       }, 0);
       
