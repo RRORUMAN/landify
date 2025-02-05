@@ -35,7 +35,7 @@ const ToolCard = ({ tool }: ToolCardProps) => {
   }, [tool.id]);
 
   return (
-    <Card className="overflow-hidden border border-gray-100 rounded-lg hover:shadow-md transition-all duration-300">
+    <Card className="bg-white border border-gray-100 rounded-lg hover:shadow-lg transition-all duration-300">
       <div className="p-6">
         <div className="flex flex-col gap-4">
           <div className="flex justify-between items-start">
@@ -43,7 +43,7 @@ const ToolCard = ({ tool }: ToolCardProps) => {
               <img 
                 src={tool.logo} 
                 alt={tool.name} 
-                className="w-[60px] h-[60px] rounded-lg object-cover bg-gray-100"
+                className="w-[60px] h-[60px] rounded-lg object-cover bg-gray-50"
               />
               <div>
                 <h3 className="font-semibold text-gray-900">
@@ -86,16 +86,15 @@ const ToolCard = ({ tool }: ToolCardProps) => {
           <div className="flex gap-3">
             <Button
               variant="default"
-              className="flex-1 bg-black hover:bg-gray-800 text-white"
+              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
               onClick={() => window.open(tool.visit_url, "_blank")}
             >
               Visit
             </Button>
-            {/* Only show Get Deal button if the tool has special pricing */}
             {tool.special_pricing && (
               <Button
                 variant="outline"
-                className="flex-1"
+                className="flex-1 text-blue-600 border-blue-200 hover:bg-blue-50"
                 onClick={() => window.open(tool.visit_url, "_blank")}
               >
                 Get Deal
@@ -109,4 +108,3 @@ const ToolCard = ({ tool }: ToolCardProps) => {
 };
 
 export default ToolCard;
-
