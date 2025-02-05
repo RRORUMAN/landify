@@ -26,7 +26,7 @@ const TrendingTools = () => {
               trend_data
             )
           `)
-          .order('bookmarks', { ascending: false })
+          .order('created_at', { ascending: false })
           .limit(6);
 
         if (error) throw error;
@@ -36,6 +36,13 @@ const TrendingTools = () => {
           ...tool,
           trending_tools: tool.trending_tools || []
         })) as Tool[];
+
+        // Sort by trend_score if available
+        formattedTools.sort((a, b) => {
+          const scoreA = a.trending_tools?.[0]?.trend_score || 0;
+          const scoreB = b.trending_tools?.[0]?.trend_score || 0;
+          return scoreB - scoreA;
+        });
 
         setTrendingTools(formattedTools);
       } catch (error) {
@@ -103,3 +110,4 @@ const TrendingTools = () => {
 };
 
 export default TrendingTools;
+

@@ -621,6 +621,41 @@ export type Database = {
         }
         Relationships: []
       }
+      trending_tools: {
+        Row: {
+          created_at: string | null
+          id: string
+          tool_id: string | null
+          trend_data: Json | null
+          trend_score: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          tool_id?: string | null
+          trend_data?: Json | null
+          trend_score?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          tool_id?: string | null
+          trend_data?: Json | null
+          trend_score?: number | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "trending_tools_tool_id_fkey"
+            columns: ["tool_id"]
+            isOneToOne: false
+            referencedRelation: "tools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       usage_reports: {
         Row: {
           created_at: string | null
