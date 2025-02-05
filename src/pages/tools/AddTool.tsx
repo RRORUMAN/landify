@@ -5,10 +5,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { categories } from "@/data/tools";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { Calendar, Link, Trash2, Info } from "lucide-react";
+import { Calendar, Link, Trash2, Info, DollarSign, Tag, Clock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { motion } from "framer-motion";
 
 interface UserTool {
   id: string;
@@ -18,6 +19,8 @@ interface UserTool {
     category: string;
     description: string;
     url: string;
+    price?: number;
+    billing_cycle?: string;
   };
   notes: string;
 }
@@ -33,6 +36,8 @@ const AddTool = () => {
     subscriptionType: "",
     visitUrl: "",
     notes: "",
+    price: "",
+    billingCycle: "monthly",
   });
 
   useEffect(() => {
@@ -51,12 +56,10 @@ const AddTool = () => {
 
       if (error) throw error;
 
-      const typedTools: UserTool[] = tools.map(tool => ({
+      setUserTools(tools.map(tool => ({
         ...tool,
         subscription_details: tool.subscription_details as UserTool['subscription_details']
-      }));
-
-      setUserTools(typedTools);
+      })));
     } catch (error) {
       console.error("Error fetching tools:", error);
       toast({
@@ -90,6 +93,8 @@ const AddTool = () => {
           category: formData.category,
           description: formData.description,
           url: formData.visitUrl,
+          price: parseFloat(formData.price) || 0,
+          billing_cycle: formData.billingCycle,
         },
       });
 
@@ -107,6 +112,8 @@ const AddTool = () => {
         subscriptionType: "",
         visitUrl: "",
         notes: "",
+        price: "",
+        billingCycle: "monthly",
       });
       
       fetchUserTools();
@@ -145,15 +152,24 @@ const AddTool = () => {
     }
   };
 
+  const getTotalMonthlySpend = () => {
+    return userTools.reduce((total, tool) => {
+      const price = tool.subscription_details.price || 0;
+      const multiplier = tool.subscription_details.billing_cycle === 'annual' ? 1/12 : 1;
+      return total + (price * multiplier);
+    }, 0);
+  };
+
   return (
     <div className="p-6 max-w-7xl mx-auto">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Add Your Tool</h1>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">My Tools</h1>
         <p className="text-gray-600 dark:text-gray-300">Track and manage your AI tool collection</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <Card className="p-6 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-sm">
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">Add New Tool</h2>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
@@ -190,23 +206,37 @@ const AddTool = () => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
-                  Subscription Type
+                  Price
                 </label>
-                <select
-                  value={formData.subscriptionType}
-                  onChange={(e) => setFormData({ ...formData, subscriptionType: e.target.value })}
-                  className="w-full rounded-md border border-gray-200 dark:border-gray-600 dark:bg-gray-700 px-3 py-2 text-gray-900 dark:text-white"
-                  required
-                >
-                  <option value="">Select subscription type</option>
-                  <option value="monthly">Monthly</option>
-                  <option value="annual">Annual</option>
-                  <option value="lifetime">Lifetime</option>
-                  <option value="free">Free</option>
-                </select>
+                <div className="relative">
+                  <DollarSign className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+                  <Input
+                    type="number"
+                    step="0.01"
+                    value={formData.price}
+                    onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                    placeholder="0.00"
+                    className="pl-10 border-gray-200 dark:border-gray-600 dark:bg-gray-700"
+                  />
+                </div>
               </div>
 
               <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+                  Billing Cycle
+                </label>
+                <select
+                  value={formData.billingCycle}
+                  onChange={(e) => setFormData({ ...formData, billingCycle: e.target.value })}
+                  className="w-full rounded-md border border-gray-200 dark:border-gray-600 dark:bg-gray-700 px-3 py-2 text-gray-900 dark:text-white"
+                >
+                  <option value="monthly">Monthly</option>
+                  <option value="annual">Annual</option>
+                  <option value="lifetime">Lifetime</option>
+                </select>
+              </div>
+
+              <div className="col-span-2">
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                   Tool Website
                 </label>
@@ -258,39 +288,67 @@ const AddTool = () => {
 
         <div className="space-y-6">
           <Card className="p-6 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-sm">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Your Tools</h2>
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Your Tools</h2>
+              <div className="bg-blue-50 dark:bg-blue-900/20 px-4 py-2 rounded-lg">
+                <p className="text-sm text-blue-600 dark:text-blue-400">
+                  Monthly Spend: ${getTotalMonthlySpend().toFixed(2)}
+                </p>
+              </div>
+            </div>
             
             <ScrollArea className="h-[600px] pr-4">
               <div className="space-y-4">
                 {userTools.map((tool) => (
-                  <Card key={tool.id} className="p-4 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 hover:shadow-sm transition-shadow">
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
-                          {tool.tool_id}
-                        </h3>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                          {tool.subscription_details.category}
-                        </p>
-                        <div className="mt-2 space-y-1">
-                          <p className="text-sm">
-                            <span className="text-gray-600 dark:text-gray-400">Status:</span>{" "}
-                            <span className="font-medium text-gray-900 dark:text-white">
-                              {tool.subscription_status}
+                  <motion.div
+                    key={tool.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <Card className="p-4 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all duration-200">
+                      <div className="flex justify-between items-start">
+                        <div className="space-y-2">
+                          <h3 className="font-semibold text-gray-900 dark:text-white">
+                            {tool.tool_id}
+                          </h3>
+                          <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+                            <Tag className="h-4 w-4" />
+                            <span>{tool.subscription_details.category}</span>
+                          </div>
+                          <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+                            <DollarSign className="h-4 w-4" />
+                            <span>
+                              ${tool.subscription_details.price || 0} / {tool.subscription_details.billing_cycle}
                             </span>
-                          </p>
+                          </div>
+                          <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+                            <Clock className="h-4 w-4" />
+                            <span>{tool.subscription_status}</span>
+                          </div>
+                        </div>
+                        <div className="flex gap-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => window.open(tool.subscription_details.url, '_blank')}
+                            className="text-blue-600 border-blue-200 hover:bg-blue-50 dark:text-blue-400 dark:border-blue-800 dark:hover:bg-blue-900/20"
+                          >
+                            Visit
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleDelete(tool.id)}
+                            className="text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
+                          >
+                            <Trash2 className="h-5 w-5" />
+                          </Button>
                         </div>
                       </div>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => handleDelete(tool.id)}
-                        className="text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
-                      >
-                        <Trash2 className="h-5 w-5" />
-                      </Button>
-                    </div>
-                  </Card>
+                    </Card>
+                  </motion.div>
                 ))}
               </div>
             </ScrollArea>
@@ -302,7 +360,7 @@ const AddTool = () => {
               <div>
                 <h3 className="text-sm font-medium text-blue-900 dark:text-blue-100">Pro Tip</h3>
                 <p className="text-sm text-blue-600 dark:text-blue-300 mt-1">
-                  Organize your tools by categories to better track your AI tool usage. Visit the Analytics page to view detailed insights about your tool collection.
+                  Track your tool costs by adding pricing information. Visit the Analytics page to view detailed spending insights.
                 </p>
               </div>
             </div>
