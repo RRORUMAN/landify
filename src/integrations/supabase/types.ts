@@ -521,6 +521,33 @@ export type Database = {
         }
         Relationships: []
       }
+      user_tool_interactions: {
+        Row: {
+          id: string
+          interaction_count: number | null
+          is_favorite: boolean | null
+          last_viewed_at: string | null
+          tool_id: string
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          interaction_count?: number | null
+          is_favorite?: boolean | null
+          last_viewed_at?: string | null
+          tool_id: string
+          user_id: string
+        }
+        Update: {
+          id?: string
+          interaction_count?: number | null
+          is_favorite?: boolean | null
+          last_viewed_at?: string | null
+          tool_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_tools: {
         Row: {
           billing_cycle: string | null
