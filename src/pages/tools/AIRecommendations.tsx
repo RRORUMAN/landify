@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -39,7 +40,7 @@ const AIRecommendations = () => {
 
         <Button
           onClick={handleGetRecommendations}
-          className="w-full bg-gradient-to-r from-gray-900 to-gray-800 hover:from-gray-800 hover:to-gray-700"
+          className="w-full bg-blue-600 text-white hover:bg-blue-700 transition-colors"
         >
           Get Recommendations
         </Button>
