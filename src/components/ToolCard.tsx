@@ -6,6 +6,7 @@ import type { Tool } from "@/data/types";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
+import { trackToolInteraction } from "@/utils/toolAnalytics";
 
 interface ToolCardProps {
   tool: Tool;
@@ -33,7 +34,56 @@ const ToolCard = ({ tool }: ToolCardProps) => {
     };
 
     checkToolOwnership();
+    // Track view when component mounts
+    trackToolInteraction(tool.id, 'view');
   }, [tool.id]);
+
+  const handleVisit = () => {
+    trackToolInteraction(tool.id, 'click');
+    window.open(tool.visit_url, "_blank");
+  };
+
+  const handleBookmark = async () => {
+    try {
+      trackToolInteraction(tool.id, 'bookmark');
+      const { data: existingBookmark, error: selectError } = await supabase
+        .from('bookmarks')
+        .select('*')
+        .eq('tool_id', tool.id)
+        .single();
+
+      if (selectError && selectError.code !== 'PGRST116') {
+        throw selectError;
+      }
+
+      if (existingBookmark) {
+        const { error: deleteError } = await supabase
+          .from('bookmarks')
+          .delete()
+          .eq('tool_id', tool.id);
+
+        if (deleteError) throw deleteError;
+
+        toast({
+          title: "Bookmark removed",
+          description: "This tool has been removed from your bookmarks.",
+        });
+      } else {
+        const { error: insertError } = await supabase
+          .from('bookmarks')
+          .insert([{ tool_id: tool.id }]);
+
+        if (insertError) throw insertError;
+
+        toast({
+          title: "Tool bookmarked",
+          description: "This tool has been added to your bookmarks.",
+        });
+      }
+    } catch (error) {
+      console.error('Error bookmarking tool:', error);
+    }
+  };
 
   return (
     <motion.div
@@ -83,6 +133,7 @@ const ToolCard = ({ tool }: ToolCardProps) => {
                 className="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-1"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
+                onClick={handleBookmark}
               >
                 <Bookmark className="h-4 w-4" />
                 {tool.bookmarks}
@@ -110,7 +161,7 @@ const ToolCard = ({ tool }: ToolCardProps) => {
               <Button
                 variant="default"
                 className="flex-1 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 transition-all duration-300"
-                onClick={() => window.open(tool.visit_url, "_blank")}
+                onClick={handleVisit}
               >
                 Visit
               </Button>
