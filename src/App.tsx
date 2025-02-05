@@ -1,7 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Landing from "./pages/Landing";
-import Features from "./pages/Features";
 import Pricing from "./pages/Pricing";
 import Auth from "./pages/Auth";
 import MyTools from "./pages/MyTools";
@@ -20,8 +19,8 @@ const AppContent = () => {
     return pathname.startsWith('/tools') || pathname === '/my-tools';
   };
 
-  // Show navbar on landing, features, pricing pages
-  const showNavbar = ['/', '/features', '/pricing'].includes(location.pathname);
+  // Show navbar on landing and pricing pages
+  const showNavbar = ['/', '/pricing'].includes(location.pathname);
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -31,7 +30,6 @@ const AppContent = () => {
         <main className={`flex-1 ${isDashboardRoute(location.pathname) ? 'pl-4 pr-6 pt-6' : ''}`}>
           <Routes>
             <Route path="/" element={<Landing />} />
-            <Route path="/features" element={<Features />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/my-tools" element={<MyTools />} />

@@ -2,7 +2,7 @@ import { Search, Brain, Zap, CircuitBoard, Users, ChartBar } from "lucide-react"
 
 const FeaturesSection = () => {
   return (
-    <div className="py-32 bg-gradient-to-b from-white via-blue-50/10 to-white dark:from-gray-900 dark:via-gray-800/50 dark:to-gray-900">
+    <div id="features" className="py-32 bg-gradient-to-b from-white via-blue-50/10 to-white dark:from-gray-900 dark:via-gray-800/50 dark:to-gray-900">
       <div className="container mx-auto px-4">
         <div className="text-center mb-20">
           <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">
