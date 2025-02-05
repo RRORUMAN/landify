@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -12,6 +11,8 @@ import { AnalyticsCharts } from "@/components/analytics/AnalyticsCharts";
 import { ToolsList } from "@/components/analytics/ToolsList";
 import { AddToolDialog } from "@/components/analytics/AddToolDialog";
 import { PerformanceMetrics } from "@/components/analytics/PerformanceMetrics";
+import { RealTimeMetrics } from "@/components/analytics/RealTimeMetrics";
+import { ReportBuilder } from "@/components/analytics/ReportBuilder";
 
 const Analytics = () => {
   const { data: userTools = [], isLoading: isLoadingTools } = useQuery({
@@ -150,6 +151,7 @@ const Analytics = () => {
         </TabsList>
 
         <TabsContent value="overview" className="space-y-6">
+          <RealTimeMetrics />
           <AnalyticsSummaryCards
             userTools={userTools}
             monthlySpend={monthlySpend}
@@ -181,14 +183,7 @@ const Analytics = () => {
         </TabsContent>
 
         <TabsContent value="reports" className="space-y-6">
-          <div className="p-4 bg-gray-50 rounded-lg">
-            <h3 className="font-medium mb-2">
-              Generate AI-Powered Analytics Report
-            </h3>
-            <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
-              Generate Report <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
-          </div>
+          <ReportBuilder />
         </TabsContent>
       </Tabs>
     </div>

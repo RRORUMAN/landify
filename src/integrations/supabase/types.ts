@@ -9,6 +9,47 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      active_sessions: {
+        Row: {
+          created_at: string | null
+          id: string
+          session_data: Json | null
+          session_duration: number | null
+          session_end: string | null
+          session_start: string | null
+          tool_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          session_data?: Json | null
+          session_duration?: number | null
+          session_end?: string | null
+          session_start?: string | null
+          tool_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          session_data?: Json | null
+          session_duration?: number | null
+          session_end?: string | null
+          session_start?: string | null
+          tool_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "active_sessions_tool_id_fkey"
+            columns: ["tool_id"]
+            isOneToOne: false
+            referencedRelation: "tools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       comparison_features: {
         Row: {
           created_at: string | null
@@ -55,6 +96,50 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "comparison_features_tool_id_fkey"
+            columns: ["tool_id"]
+            isOneToOne: false
+            referencedRelation: "tools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      integration_health: {
+        Row: {
+          created_at: string | null
+          error_count: number | null
+          health_data: Json | null
+          id: string
+          last_check: string | null
+          response_time: number | null
+          status: string
+          tool_id: string | null
+          uptime_percentage: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          error_count?: number | null
+          health_data?: Json | null
+          id?: string
+          last_check?: string | null
+          response_time?: number | null
+          status?: string
+          tool_id?: string | null
+          uptime_percentage?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          error_count?: number | null
+          health_data?: Json | null
+          id?: string
+          last_check?: string | null
+          response_time?: number | null
+          status?: string
+          tool_id?: string | null
+          uptime_percentage?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "integration_health_tool_id_fkey"
             columns: ["tool_id"]
             isOneToOne: false
             referencedRelation: "tools"
@@ -361,6 +446,42 @@ export type Database = {
           reviews?: number
           tags?: string[]
           visit_url?: string
+        }
+        Relationships: []
+      }
+      usage_reports: {
+        Row: {
+          created_at: string | null
+          id: string
+          last_sent: string | null
+          next_send: string | null
+          recipients: string[] | null
+          report_data: Json | null
+          report_type: string
+          schedule: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          last_sent?: string | null
+          next_send?: string | null
+          recipients?: string[] | null
+          report_data?: Json | null
+          report_type: string
+          schedule?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          last_sent?: string | null
+          next_send?: string | null
+          recipients?: string[] | null
+          report_data?: Json | null
+          report_type?: string
+          schedule?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
