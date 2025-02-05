@@ -3,16 +3,11 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import type { Tool } from "@/data/types";
-import { Scale, ArrowLeft, Download, Save, Calculator } from "lucide-react";
-import CompareFeatureGrid from "./compare/CompareFeatureGrid";
+import { ArrowLeft, Download, Save } from "lucide-react";
 import CompareStats from "./compare/CompareStats";
-import ComparePricing from "./compare/ComparePricing";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useQuery } from "@tanstack/react-query";
 import ToolSelectionCard from "./compare/ToolSelectionCard";
 import SelectedToolsGrid from "./compare/SelectedToolsGrid";
-import QuickCompare from "./compare/QuickCompare";
-import CompareROI from "./compare/CompareROI";
 import { useToast } from "@/components/ui/use-toast";
 
 const CompareTools = () => {
@@ -21,7 +16,6 @@ const CompareTools = () => {
   const [isSelecting, setIsSelecting] = useState(false);
   const { toast } = useToast();
 
-  // Use react-query to fetch all tools
   const { data: tools = [], isLoading } = useQuery({
     queryKey: ['tools'],
     queryFn: async () => {
@@ -52,7 +46,6 @@ const CompareTools = () => {
   };
 
   const handleExport = async (format: 'pdf' | 'csv') => {
-    // This would be implemented with a proper export service
     toast({
       title: "Export Started",
       description: `Exporting comparison in ${format.toUpperCase()} format...`,
@@ -132,14 +125,6 @@ const CompareTools = () => {
                 Export CSV
               </Button>
               <Button
-                variant="outline"
-                onClick={() => handleExport('pdf')}
-                className="flex items-center gap-2"
-              >
-                <Download className="h-4 w-4" />
-                Export PDF
-              </Button>
-              <Button
                 onClick={handleSaveComparison}
                 className="flex items-center gap-2"
               >
@@ -155,28 +140,7 @@ const CompareTools = () => {
             setIsSelecting={setIsSelecting}
           />
 
-          <QuickCompare tools={selectedTools} />
-
-          <Tabs defaultValue="overview" className="w-full">
-            <TabsList className="grid w-full grid-cols-4">
-              <TabsTrigger value="overview">Overview</TabsTrigger>
-              <TabsTrigger value="features">Features</TabsTrigger>
-              <TabsTrigger value="pricing">Pricing</TabsTrigger>
-              <TabsTrigger value="roi">ROI Calculator</TabsTrigger>
-            </TabsList>
-            <TabsContent value="overview" className="mt-6">
-              <CompareStats tools={selectedTools} />
-            </TabsContent>
-            <TabsContent value="features" className="mt-6">
-              <CompareFeatureGrid tools={selectedTools} />
-            </TabsContent>
-            <TabsContent value="pricing" className="mt-6">
-              <ComparePricing tools={selectedTools} />
-            </TabsContent>
-            <TabsContent value="roi" className="mt-6">
-              <CompareROI tools={selectedTools} />
-            </TabsContent>
-          </Tabs>
+          <CompareStats tools={selectedTools} />
         </div>
       ) : (
         <ToolSelectionCard
