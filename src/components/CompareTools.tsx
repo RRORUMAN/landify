@@ -9,11 +9,8 @@ import ToolSelectionCard from "./compare/ToolSelectionCard";
 import SelectedToolsGrid from "./compare/SelectedToolsGrid";
 import { useToast } from "@/components/ui/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
-import CompareFeatureGrid from "./compare/CompareFeatureGrid";
 import CompareStats from "./compare/CompareStats";
 import QuickCompare from "./compare/QuickCompare";
-import CompareROI from "./compare/CompareROI";
-import ComparePricing from "./compare/ComparePricing";
 
 const CompareTools = () => {
   const [selectedTools, setSelectedTools] = useState<Tool[]>([]);
@@ -169,9 +166,6 @@ const CompareTools = () => {
 
           <QuickCompare tools={selectedTools} />
           <CompareStats tools={selectedTools} />
-          <CompareFeatureGrid tools={selectedTools} />
-          <CompareROI tools={selectedTools} />
-          <ComparePricing tools={selectedTools} />
         </div>
       ) : (
         <ToolSelectionCard
