@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -21,37 +22,38 @@ export default {
       colors: {
         // Three-color system
         primary: {
-          DEFAULT: "#000000", // Black
-          light: "#333333", // Lighter black for hover states
-          dark: "#000000", // Pure black
+          DEFAULT: "var(--primary)",
+          foreground: "var(--primary-foreground)",
         },
-        accent: {
-          DEFAULT: "#0066FF", // Icon blue
-          light: "#3385FF", // Lighter blue for hover states
-          dark: "#0052CC", // Darker blue for active states
-        },
-        // System colors mapped to our three-color system
-        border: "#E5E5E5", // Light gray border
-        input: "#000000",
-        ring: "#0066FF",
-        background: "#FFFFFF",
-        foreground: "#000000",
         secondary: {
-          DEFAULT: "#F5F5F5",
-          foreground: "#000000",
-        },
-        destructive: {
-          DEFAULT: "#000000",
-          foreground: "#FFFFFF",
+          DEFAULT: "var(--secondary)",
+          foreground: "var(--secondary-foreground)",
         },
         muted: {
-          DEFAULT: "#F5F5F5",
-          foreground: "#666666",
+          DEFAULT: "var(--muted)",
+          foreground: "var(--muted-foreground)",
+        },
+        accent: {
+          DEFAULT: "var(--accent)",
+          foreground: "var(--accent-foreground)",
+        },
+        destructive: {
+          DEFAULT: "var(--destructive)",
+          foreground: "var(--destructive-foreground)",
         },
         card: {
-          DEFAULT: "#FFFFFF",
-          foreground: "#000000",
+          DEFAULT: "var(--card)",
+          foreground: "var(--card-foreground)",
         },
+        popover: {
+          DEFAULT: "var(--popover)",
+          foreground: "var(--popover-foreground)",
+        },
+        border: "var(--border)",
+        input: "var(--input)",
+        ring: "var(--ring)",
+        background: "var(--background)",
+        foreground: "var(--foreground)",
       },
       fontSize: {
         // Consistent typography scale
@@ -64,27 +66,6 @@ export default {
         '3xl': ['1.875rem', { lineHeight: '2.25rem' }],
         '4xl': ['2.25rem', { lineHeight: '2.5rem' }],
         '5xl': ['3rem', { lineHeight: '1' }],
-      },
-      spacing: {
-        // Consistent spacing scale
-        '0': '0',
-        '1': '0.25rem',
-        '2': '0.5rem',
-        '3': '0.75rem',
-        '4': '1rem',
-        '5': '1.25rem',
-        '6': '1.5rem',
-        '8': '2rem',
-        '10': '2.5rem',
-        '12': '3rem',
-        '16': '4rem',
-        '20': '5rem',
-        '24': '6rem',
-        '32': '8rem',
-        '40': '10rem',
-        '48': '12rem',
-        '56': '14rem',
-        '64': '16rem',
       },
       borderRadius: {
         lg: "var(--radius)",
