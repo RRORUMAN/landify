@@ -1,4 +1,3 @@
-
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { 
@@ -20,6 +19,44 @@ interface UserPreferences {
   custom_shortcuts: { id: string; name: string; path: string; icon: string; }[];
 }
 
+const menuItems = [
+  {
+    title: "Browse Tools",
+    icon: Search,
+    path: "/tools/categories",
+    description: "Search and filter tools",
+    isNew: false,
+  },
+  {
+    title: "My Tools",
+    icon: Plus,
+    path: "/tools/add",
+    description: "Manage your tools",
+    isNew: false,
+  },
+  {
+    title: "Compare",
+    icon: Scale,
+    path: "/tools/compare",
+    description: "Compare tool features",
+    isNew: false,
+  },
+  {
+    title: "AI Suggestions",
+    icon: Brain,
+    path: "/tools/recommendations",
+    description: "Get personalized recommendations",
+    isNew: true,
+  },
+  {
+    title: "Analytics",
+    icon: BarChart3,
+    path: "/tools/analytics",
+    description: "Track spending and usage",
+    isNew: true,
+  },
+];
+
 const Sidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -34,7 +71,6 @@ const Sidebar = () => {
     custom_shortcuts: []
   });
 
-  // Fetch user preferences on mount
   useEffect(() => {
     const fetchUserPreferences = async () => {
       const { data: { user } } = await supabase.auth.getUser();
@@ -55,9 +91,21 @@ const Sidebar = () => {
         // Parse JSON fields and ensure they match the expected types
         const parsed: UserPreferences = {
           theme: data.theme || 'light',
-          favorites: data.favorites || [],
-          recent_items: Array.isArray(data.recent_items) ? data.recent_items : [],
-          custom_shortcuts: Array.isArray(data.custom_shortcuts) ? data.custom_shortcuts : []
+          favorites: Array.isArray(data.favorites) ? data.favorites : [],
+          recent_items: Array.isArray(data.recent_items) ? 
+            data.recent_items.map((item: any) => ({
+              id: String(item.id || ''),
+              name: String(item.name || ''),
+              path: String(item.path || ''),
+              timestamp: String(item.timestamp || new Date().toISOString())
+            })) : [],
+          custom_shortcuts: Array.isArray(data.custom_shortcuts) ? 
+            data.custom_shortcuts.map((shortcut: any) => ({
+              id: String(shortcut.id || ''),
+              name: String(shortcut.name || ''),
+              path: String(shortcut.path || ''),
+              icon: String(shortcut.icon || '')
+            })) : []
         };
         
         setUserPrefs(parsed);
