@@ -52,9 +52,17 @@ const Sidebar = () => {
       }
 
       if (data) {
-        setUserPrefs(data);
-        setIsDarkMode(data.theme === 'dark');
-        if (data.theme === 'dark') {
+        // Parse JSON fields and ensure they match the expected types
+        const parsed: UserPreferences = {
+          theme: data.theme || 'light',
+          favorites: data.favorites || [],
+          recent_items: Array.isArray(data.recent_items) ? data.recent_items : [],
+          custom_shortcuts: Array.isArray(data.custom_shortcuts) ? data.custom_shortcuts : []
+        };
+        
+        setUserPrefs(parsed);
+        setIsDarkMode(parsed.theme === 'dark');
+        if (parsed.theme === 'dark') {
           document.documentElement.classList.add('dark');
         }
       }
