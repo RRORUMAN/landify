@@ -521,20 +521,24 @@ export type Database = {
           best_for: string[] | null
           bookmarks: number
           category: string
+          company_logo: string | null
           company_name: string | null
           company_size: string | null
+          company_website: string | null
           created_at: string | null
           description: string
           feature_screenshots: Json | null
           featured: boolean
           founding_year: number | null
           id: string
+          integration_count: number | null
           integrations_count: number | null
           last_updated: string | null
           logo: string
           monthly_active_users: number | null
           name: string
           pricing: string
+          pricing_range: string | null
           rating: number
           reviews: number
           roi_metrics: Json | null
@@ -547,20 +551,24 @@ export type Database = {
           best_for?: string[] | null
           bookmarks?: number
           category: string
+          company_logo?: string | null
           company_name?: string | null
           company_size?: string | null
+          company_website?: string | null
           created_at?: string | null
           description: string
           feature_screenshots?: Json | null
           featured?: boolean
           founding_year?: number | null
           id: string
+          integration_count?: number | null
           integrations_count?: number | null
           last_updated?: string | null
           logo: string
           monthly_active_users?: number | null
           name: string
           pricing?: string
+          pricing_range?: string | null
           rating?: number
           reviews?: number
           roi_metrics?: Json | null
@@ -573,20 +581,24 @@ export type Database = {
           best_for?: string[] | null
           bookmarks?: number
           category?: string
+          company_logo?: string | null
           company_name?: string | null
           company_size?: string | null
+          company_website?: string | null
           created_at?: string | null
           description?: string
           feature_screenshots?: Json | null
           featured?: boolean
           founding_year?: number | null
           id?: string
+          integration_count?: number | null
           integrations_count?: number | null
           last_updated?: string | null
           logo?: string
           monthly_active_users?: number | null
           name?: string
           pricing?: string
+          pricing_range?: string | null
           rating?: number
           reviews?: number
           roi_metrics?: Json | null
