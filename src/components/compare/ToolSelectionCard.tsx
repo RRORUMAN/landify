@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Scale } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { categories } from "@/data/categories";
 
 interface ToolSelectionCardProps {
   tools: Tool[];
@@ -12,6 +14,8 @@ interface ToolSelectionCardProps {
   handleSelectTool: (tool: Tool) => void;
   selectedTools: Tool[];
   setIsSelecting: (isSelecting: boolean) => void;
+  selectedCategory: string | null;
+  setSelectedCategory: (category: string | null) => void;
 }
 
 const ToolSelectionCard = ({
@@ -21,11 +25,13 @@ const ToolSelectionCard = ({
   handleSelectTool,
   selectedTools,
   setIsSelecting,
+  selectedCategory,
+  setSelectedCategory,
 }: ToolSelectionCardProps) => {
   const filteredTools = tools.filter(tool => 
-    tool.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    (tool.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     tool.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    tool.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
+    tool.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase())))
   );
 
   return (
@@ -33,19 +39,36 @@ const ToolSelectionCard = ({
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-2">
           <Scale className="h-6 w-6 text-blue-600" />
-          <h2 className="text-xl font-semibold text-gray-900">Select a Tool to Compare</h2>
+          <h2 className="text-xl font-semibold text-gray-900">Select Tools to Compare</h2>
         </div>
         <Button variant="ghost" onClick={() => setIsSelecting(false)}>Cancel</Button>
       </div>
       
-      <div className="mb-6">
-        <Input
-          type="search"
-          placeholder="Search tools by name, category, or tags..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="max-w-md"
-        />
+      <div className="flex gap-4 mb-6">
+        <div className="flex-1">
+          <Input
+            type="search"
+            placeholder="Search tools by name, category, or tags..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
+        <Select
+          value={selectedCategory || ""}
+          onValueChange={(value) => setSelectedCategory(value || null)}
+        >
+          <SelectTrigger className="w-[200px]">
+            <SelectValue placeholder="All Categories" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="">All Categories</SelectItem>
+            {categories.map((category) => (
+              <SelectItem key={category.name} value={category.name}>
+                {category.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
       <ScrollArea className="h-[400px] pr-4">

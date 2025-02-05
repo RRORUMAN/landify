@@ -3,26 +3,41 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import type { Tool } from "@/data/types";
-import { ArrowLeft, Download, Save } from "lucide-react";
+import { ArrowLeft, Download, Save, Filter } from "lucide-react";
 import CompareStats from "./compare/CompareStats";
 import { useQuery } from "@tanstack/react-query";
 import ToolSelectionCard from "./compare/ToolSelectionCard";
 import SelectedToolsGrid from "./compare/SelectedToolsGrid";
 import { useToast } from "@/components/ui/use-toast";
+import { categories } from "@/data/categories";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const CompareTools = () => {
   const [selectedTools, setSelectedTools] = useState<Tool[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [isSelecting, setIsSelecting] = useState(false);
   const { toast } = useToast();
 
   const { data: tools = [], isLoading } = useQuery({
-    queryKey: ['tools'],
+    queryKey: ['tools', selectedCategory],
     queryFn: async () => {
-      const { data, error } = await supabase
+      let query = supabase
         .from('tools')
         .select('*')
         .order('name');
+      
+      if (selectedCategory) {
+        query = query.eq('category', selectedCategory);
+      }
+      
+      const { data, error } = await query;
       
       if (error) throw error;
       return data as Tool[];
@@ -43,6 +58,7 @@ const CompareTools = () => {
   const handleReset = () => {
     setSelectedTools([]);
     setIsSelecting(false);
+    setSelectedCategory(null);
   };
 
   const handleExport = async (format: 'pdf' | 'csv') => {
@@ -98,6 +114,8 @@ const CompareTools = () => {
         handleSelectTool={handleSelectTool}
         selectedTools={selectedTools}
         setIsSelecting={setIsSelecting}
+        selectedCategory={selectedCategory}
+        setSelectedCategory={setSelectedCategory}
       />
     );
   }
@@ -150,6 +168,8 @@ const CompareTools = () => {
           handleSelectTool={handleSelectTool}
           selectedTools={selectedTools}
           setIsSelecting={setIsSelecting}
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
         />
       )}
     </div>
