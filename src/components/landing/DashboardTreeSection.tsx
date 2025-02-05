@@ -72,7 +72,7 @@ const DashboardTreeSection = () => {
           transition={{ duration: 0.5 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl font-bold text-black mb-4">
+          <h2 className="text-4xl font-bold text-gray-900 mb-4">
             Your AI Command Center
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
@@ -99,7 +99,7 @@ const DashboardTreeSection = () => {
                 >
                   <feature.icon className="w-6 h-6 text-blue-600" />
                 </motion.div>
-                <h3 className="text-2xl font-bold text-black">{feature.title}</h3>
+                <h3 className="text-2xl font-bold text-gray-900">{feature.title}</h3>
               </div>
 
               <p className="text-gray-600 mb-6">{feature.description}</p>
