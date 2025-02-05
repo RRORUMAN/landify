@@ -650,7 +650,7 @@ export type Database = {
           {
             foreignKeyName: "trending_tools_tool_id_fkey"
             columns: ["tool_id"]
-            isOneToOne: false
+            isOneToOne: true
             referencedRelation: "tools"
             referencedColumns: ["id"]
           },
