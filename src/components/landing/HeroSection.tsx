@@ -32,7 +32,7 @@ const HeroSection = () => {
   return (
     <div className="min-h-screen flex items-center bg-gradient-to-b from-white to-blue-50/30 dark:from-gray-900 dark:to-gray-800/30 overflow-hidden">
       <div className="container mx-auto px-4 py-32 relative">
-        {/* Background Grid Animation */}
+        {/* Animated Background Grid */}
         <div className="absolute inset-0 grid grid-cols-8 gap-4 opacity-10 pointer-events-none">
           {[...Array(64)].map((_, i) => (
             <motion.div
