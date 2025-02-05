@@ -1,4 +1,3 @@
-
 import { LucideIcon } from "lucide-react";
 
 export interface Tool {
@@ -77,4 +76,3 @@ export interface SubscriptionLimit {
   price_monthly: number;
   features: Record<string, any>;
 }
-
