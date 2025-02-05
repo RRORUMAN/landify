@@ -1,12 +1,15 @@
-
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import FeaturesSection from "@/components/landing/FeaturesSection";
 
 const Features = () => {
   const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900">
+      <FeaturesSection />
+      
+      {/* CTA Section */}
       <div className="container mx-auto px-4 py-20">
         <div className="text-center max-w-3xl mx-auto">
           <h2 className="text-4xl font-bold mb-6 bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">

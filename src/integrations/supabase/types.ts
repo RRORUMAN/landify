@@ -485,42 +485,6 @@ export type Database = {
         }
         Relationships: []
       }
-      user_preferences: {
-        Row: {
-          created_at: string | null
-          custom_shortcuts: Json | null
-          dashboard_layout: Json | null
-          favorites: string[] | null
-          id: string
-          recent_items: Json | null
-          theme: string | null
-          updated_at: string | null
-          user_id: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          custom_shortcuts?: Json | null
-          dashboard_layout?: Json | null
-          favorites?: string[] | null
-          id?: string
-          recent_items?: Json | null
-          theme?: string | null
-          updated_at?: string | null
-          user_id?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          custom_shortcuts?: Json | null
-          dashboard_layout?: Json | null
-          favorites?: string[] | null
-          id?: string
-          recent_items?: Json | null
-          theme?: string | null
-          updated_at?: string | null
-          user_id?: string | null
-        }
-        Relationships: []
-      }
       user_tools: {
         Row: {
           billing_cycle: string | null
