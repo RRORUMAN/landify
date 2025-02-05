@@ -162,60 +162,72 @@ export type Database = {
       performance_metrics: {
         Row: {
           adoption_rate: number | null
+          api_reliability_score: number | null
           automation_score: number | null
           confidence_score: number | null
           created_at: string | null
+          customer_satisfaction_score: number | null
           ease_of_use_score: number | null
           feature_depth_score: number | null
           id: string
           integration_score: number | null
           last_updated: string | null
+          learning_curve_score: number | null
           metric_details: Json | null
           metric_name: string
           metric_unit: string | null
           metric_value: number | null
           roi_score: number | null
           sample_size: number | null
+          support_response_time: number | null
           support_score: number | null
           time_saved_per_task: number | null
           tool_id: string | null
         }
         Insert: {
           adoption_rate?: number | null
+          api_reliability_score?: number | null
           automation_score?: number | null
           confidence_score?: number | null
           created_at?: string | null
+          customer_satisfaction_score?: number | null
           ease_of_use_score?: number | null
           feature_depth_score?: number | null
           id?: string
           integration_score?: number | null
           last_updated?: string | null
+          learning_curve_score?: number | null
           metric_details?: Json | null
           metric_name: string
           metric_unit?: string | null
           metric_value?: number | null
           roi_score?: number | null
           sample_size?: number | null
+          support_response_time?: number | null
           support_score?: number | null
           time_saved_per_task?: number | null
           tool_id?: string | null
         }
         Update: {
           adoption_rate?: number | null
+          api_reliability_score?: number | null
           automation_score?: number | null
           confidence_score?: number | null
           created_at?: string | null
+          customer_satisfaction_score?: number | null
           ease_of_use_score?: number | null
           feature_depth_score?: number | null
           id?: string
           integration_score?: number | null
           last_updated?: string | null
+          learning_curve_score?: number | null
           metric_details?: Json | null
           metric_name?: string
           metric_unit?: string | null
           metric_value?: number | null
           roi_score?: number | null
           sample_size?: number | null
+          support_response_time?: number | null
           support_score?: number | null
           time_saved_per_task?: number | null
           tool_id?: string | null
