@@ -1,3 +1,4 @@
+
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Search, Plus, Scale, Brain, Sun, Moon, LogOut, BarChart3 } from "lucide-react";
@@ -105,7 +106,7 @@ const Sidebar = () => {
               className={cn(
                 "group flex items-start gap-4 px-4 py-4 rounded-lg transition-all duration-300 relative overflow-hidden hover:shadow-sm",
                 location.pathname === item.path
-                  ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300"
+                  ? "bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300"
                   : "text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800/50"
               )}
             >
@@ -126,7 +127,7 @@ const Sidebar = () => {
                 <span className={cn(
                   "text-xs transition-colors duration-300",
                   location.pathname === item.path
-                    ? "text-blue-600 dark:text-blue-400"
+                    ? "text-blue-600/80 dark:text-blue-400/80"
                     : "text-gray-400 dark:text-gray-500 group-hover:text-gray-500 dark:group-hover:text-gray-400"
                 )}>{item.description}</span>
               </div>
