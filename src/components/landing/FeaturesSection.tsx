@@ -2,12 +2,29 @@ import { Search, Brain, Zap, CircuitBoard, Users, ChartBar } from "lucide-react"
 
 const FeaturesSection = () => {
   return (
-    <div id="features" className="py-32 bg-white">
-      <div className="container mx-auto px-4">
+    <div id="features" className="py-32 bg-white relative overflow-hidden">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 opacity-[0.02]">
+        <div className="absolute inset-0">
+          {[...Array(10)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute h-96 w-96 border border-black/5 rounded-full"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                transform: `scale(${Math.random() * 2 + 1})`,
+              }}
+            />
+          ))}
+        </div>
+      </div>
+
+      <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-20">
-          <h1 className="text-5xl md:text-6xl font-bold mb-6 text-black">
+          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-black bg-clip-text">
             Powerful Features for AI Tool Discovery
-          </h1>
+          </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             Explore our comprehensive suite of features designed to help you find and manage AI tools effectively.
           </p>
@@ -53,18 +70,24 @@ const FeaturesSection = () => {
           ].map((feature, index) => (
             <div
               key={feature.title}
-              className="p-8 rounded-xl bg-white hover:bg-gray-50 transition-all hover:transform hover:scale-105 animate-fade-in shadow-lg"
+              className="p-8 rounded-xl bg-white hover:bg-gray-50 transition-all hover:transform hover:scale-105 animate-fade-in shadow-lg relative overflow-hidden group"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
-              <div className={`bg-gradient-to-r ${feature.color} p-3 rounded-lg w-fit mb-4`}>
-                <feature.icon className="w-6 h-6 text-white" />
+              <div className="relative z-10">
+                <div className={`bg-gradient-to-r ${feature.color} p-3 rounded-lg w-fit mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                  <feature.icon className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-xl font-semibold mb-3 text-black">
+                  {feature.title}
+                </h3>
+                <p className="text-gray-600">
+                  {feature.description}
+                </p>
               </div>
-              <h3 className="text-xl font-semibold mb-3 text-black">
-                {feature.title}
-              </h3>
-              <p className="text-gray-600">
-                {feature.description}
-              </p>
+              {/* Subtle card pattern */}
+              <div className="absolute inset-0 opacity-[0.02] pointer-events-none">
+                <div className="absolute inset-0 bg-gradient-to-br from-black/5 to-transparent" />
+              </div>
             </div>
           ))}
         </div>
