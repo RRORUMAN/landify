@@ -19,46 +19,38 @@ export default {
     },
     extend: {
       colors: {
-        // Primary color palette
+        // Three-color system
         primary: {
-          DEFAULT: "#9b87f5", // Primary Purple
-          light: "#d6bcfa", // Light Purple
-          dark: "#7E69AB", // Secondary Purple
-        },
-        // Neutral colors
-        neutral: {
-          DEFAULT: "#8E9196", // Neutral Gray
-          dark: "#1A1F2C", // Dark Purple
-        },
-        // System colors
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
-        secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
-        },
-        destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
-        },
-        muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
+          DEFAULT: "#000000", // Black
+          light: "#333333", // Lighter black for hover states
+          dark: "#000000", // Pure black
         },
         accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
+          DEFAULT: "#0066FF", // Icon blue
+          light: "#3385FF", // Lighter blue for hover states
+          dark: "#0052CC", // Darker blue for active states
         },
-        popover: {
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
+        // System colors mapped to our three-color system
+        border: "#E5E5E5", // Light gray border
+        input: "#000000",
+        ring: "#0066FF",
+        background: "#FFFFFF",
+        foreground: "#000000",
+        secondary: {
+          DEFAULT: "#F5F5F5",
+          foreground: "#000000",
+        },
+        destructive: {
+          DEFAULT: "#000000",
+          foreground: "#FFFFFF",
+        },
+        muted: {
+          DEFAULT: "#F5F5F5",
+          foreground: "#666666",
         },
         card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
+          DEFAULT: "#FFFFFF",
+          foreground: "#000000",
         },
       },
       fontSize: {
