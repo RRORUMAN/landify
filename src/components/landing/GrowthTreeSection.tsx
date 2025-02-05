@@ -30,7 +30,7 @@ const GrowthTreeSection = () => {
   ];
 
   return (
-    <div className="py-24 bg-gradient-to-b from-blue-50 to-white">
+    <div className="py-24 bg-white">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-black mb-4">
