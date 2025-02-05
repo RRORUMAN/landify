@@ -59,8 +59,8 @@ const SuccessMetricsSection = () => {
               className="relative p-6 rounded-2xl bg-white shadow-xl hover:shadow-2xl transition-all duration-300 group"
             >
               <div className="mb-4">
-                <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${metric.color} p-3 group-hover:scale-110 transition-transform duration-300`}>
-                  <metric.icon className="w-full h-full text-white" />
+                <div className="w-12 h-12 rounded-xl bg-blue-50 p-3 group-hover:scale-110 transition-transform duration-300">
+                  <metric.icon className="w-full h-full text-blue-600" />
                 </div>
               </div>
               <h3 className="text-2xl font-bold mb-2 text-black">
