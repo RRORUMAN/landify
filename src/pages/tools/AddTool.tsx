@@ -11,6 +11,8 @@ import { useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import type { UserTool } from "@/data/types";
 
+const PRICING_OPTIONS = ["Free", "Paid", "Custom", "Contact Sales", "Enterprise"] as const;
+
 const AddTool = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -23,6 +25,7 @@ const AddTool = () => {
     notes: "",
     price: "",
     billingCycle: "monthly",
+    pricing: PRICING_OPTIONS[0],
   });
 
   useEffect(() => {
@@ -81,7 +84,7 @@ const AddTool = () => {
           logo: "https://placeholder.co/100", // Default placeholder logo
           rating: 0,
           reviews: 0,
-          pricing: "free",
+          pricing: formData.pricing,
           tags: [],
           featured: false,
         })
@@ -105,6 +108,7 @@ const AddTool = () => {
             url: formData.visitUrl,
             price: parseFloat(formData.price) || 0,
             billing_cycle: formData.billingCycle,
+            pricing_type: formData.pricing,
           },
         });
 
@@ -123,6 +127,7 @@ const AddTool = () => {
         notes: "",
         price: "",
         billingCycle: "monthly",
+        pricing: PRICING_OPTIONS[0],
       });
       
       fetchUserTools();
@@ -180,7 +185,25 @@ const AddTool = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
-                Price
+                Pricing Type
+              </label>
+              <select
+                value={formData.pricing}
+                onChange={(e) => setFormData({ ...formData, pricing: e.target.value as typeof PRICING_OPTIONS[number] })}
+                className="w-full rounded-md border border-gray-200 dark:border-gray-600 dark:bg-gray-700 px-3 py-2 text-gray-900 dark:text-white"
+                required
+              >
+                {PRICING_OPTIONS.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+                Your Cost
               </label>
               <div className="relative">
                 <span className="absolute left-3 top-2.5 text-gray-500">$</span>
