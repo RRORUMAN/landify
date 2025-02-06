@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Plus, Users, FolderPlus, Copy, Check } from 'lucide-react';
@@ -18,6 +17,7 @@ const Teams = () => {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [newTeam, setNewTeam] = useState({ name: '', description: '' });
   const [copiedInviteCode, setCopiedInviteCode] = useState<string | null>(null);
+  const [isCreating, setIsCreating] = useState(false);
 
   const { data: teams, isLoading, refetch } = useQuery({
     queryKey: ['teams'],
@@ -26,16 +26,33 @@ const Teams = () => {
         .from('teams')
         .select('*, team_members(*)');
 
-      if (teamsError) throw teamsError;
+      if (teamsError) {
+        console.error('Error fetching teams:', teamsError);
+        throw teamsError;
+      }
       return teamsData as Team[];
     }
   });
 
   const handleCreateTeam = async () => {
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('Not authenticated');
+    if (!newTeam.name.trim()) {
+      toast({
+        title: 'Team name required',
+        description: 'Please enter a name for your team.',
+        variant: 'destructive',
+      });
+      return;
+    }
 
+    setIsCreating(true);
+    try {
+      console.log('Starting team creation...');
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        throw new Error('Not authenticated');
+      }
+
+      console.log('Creating team...');
       const { data: team, error: teamError } = await supabase
         .from('teams')
         .insert({
@@ -46,9 +63,12 @@ const Teams = () => {
         .select()
         .single();
 
-      if (teamError) throw teamError;
+      if (teamError) {
+        console.error('Error creating team:', teamError);
+        throw teamError;
+      }
 
-      // Create admin member record for team creator
+      console.log('Team created, creating admin member record...');
       const { error: memberError } = await supabase
         .from('team_members')
         .insert({
@@ -57,9 +77,12 @@ const Teams = () => {
           role: 'admin'
         });
 
-      if (memberError) throw memberError;
+      if (memberError) {
+        console.error('Error creating team member:', memberError);
+        throw memberError;
+      }
 
-      // Generate initial invite link
+      console.log('Creating initial invite...');
       const { data: invite, error: inviteError } = await supabase
         .from('team_invites')
         .insert({
@@ -71,7 +94,10 @@ const Teams = () => {
         .select()
         .single();
 
-      if (inviteError) throw inviteError;
+      if (inviteError) {
+        console.error('Error creating invite:', inviteError);
+        throw inviteError;
+      }
 
       toast({
         title: 'Team created successfully',
@@ -82,11 +108,14 @@ const Teams = () => {
       setNewTeam({ name: '', description: '' });
       refetch();
     } catch (error) {
+      console.error('Team creation error:', error);
       toast({
         title: 'Error creating team',
-        description: 'There was an error creating your team. Please try again.',
+        description: error instanceof Error ? error.message : 'There was an error creating your team. Please try again.',
         variant: 'destructive',
       });
+    } finally {
+      setIsCreating(false);
     }
   };
 
@@ -193,8 +222,12 @@ const Teams = () => {
                   placeholder="Describe your team's purpose"
                 />
               </div>
-              <Button onClick={handleCreateTeam} className="w-full">
-                Create Team
+              <Button 
+                onClick={handleCreateTeam} 
+                className="w-full"
+                disabled={isCreating}
+              >
+                {isCreating ? 'Creating...' : 'Create Team'}
               </Button>
             </div>
           </DialogContent>
