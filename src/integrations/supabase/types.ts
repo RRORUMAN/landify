@@ -50,6 +50,45 @@ export type Database = {
           },
         ]
       }
+      ai_savings_analysis: {
+        Row: {
+          ai_recommendations: Json | null
+          analysis_date: string | null
+          created_at: string | null
+          id: string
+          optimization_suggestions: Json | null
+          overlap_analysis: Json | null
+          potential_savings: number | null
+          total_spend: number | null
+          usage_patterns: Json | null
+          user_id: string
+        }
+        Insert: {
+          ai_recommendations?: Json | null
+          analysis_date?: string | null
+          created_at?: string | null
+          id?: string
+          optimization_suggestions?: Json | null
+          overlap_analysis?: Json | null
+          potential_savings?: number | null
+          total_spend?: number | null
+          usage_patterns?: Json | null
+          user_id: string
+        }
+        Update: {
+          ai_recommendations?: Json | null
+          analysis_date?: string | null
+          created_at?: string | null
+          id?: string
+          optimization_suggestions?: Json | null
+          overlap_analysis?: Json | null
+          potential_savings?: number | null
+          total_spend?: number | null
+          usage_patterns?: Json | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       comparison_features: {
         Row: {
           created_at: string | null
@@ -822,7 +861,16 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      calculate_tool_savings: {
+        Args: {
+          p_user_id: string
+        }
+        Returns: {
+          total_current_spend: number
+          potential_savings: number
+          recommendations: Json
+        }[]
+      }
     }
     Enums: {
       subscription_tier: "free" | "pro" | "business" | "business_plus"

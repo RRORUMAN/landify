@@ -5,12 +5,24 @@ import { Tool } from "@/data/tools";
 import ToolCard from "@/components/ToolCard";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { Plus, ArrowLeft, DollarSign, LayoutGrid, Users, TrendingUp, Calendar, Activity, Zap, PieChart } from "lucide-react";
+import { 
+  Plus, ArrowLeft, DollarSign, LayoutGrid, Activity, 
+  Calendar, Zap, PieChart, TrendingUp, AlertTriangle,
+  ChevronRight, Sparkles
+} from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Card } from "@/components/ui/card";
-import { format, addMonths } from "date-fns";
-import { motion } from "framer-motion";
+import { format } from "date-fns";
+import { motion, AnimatePresence } from "framer-motion";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { getAISavingsAnalysis, type AIAnalysis } from "@/utils/toolAnalytics";
+import { Badge } from "@/components/ui/badge";
 
 interface UserTool extends Tool {
   monthly_cost: number;
@@ -33,12 +45,17 @@ const MyTools = () => {
   const [nextBillingDate, setNextBillingDate] = useState<string | null>(null);
   const [totalSavings, setTotalSavings] = useState(0);
   const [mostUsedCategory, setMostUsedCategory] = useState("");
+  const [aiAnalysis, setAIAnalysis] = useState<AIAnalysis | null>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
 
   useEffect(() => {
-    const fetchUserTools = async () => {
+    const fetchData = async () => {
       try {
+        // Fetch AI analysis
+        const analysis = await getAISavingsAnalysis();
+        setAIAnalysis(analysis);
+
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) {
           navigate("/auth");
@@ -95,12 +112,8 @@ const MyTools = () => {
           setNextBillingTotal(upcomingBillings[0].monthly_cost || 0);
         }
 
-        // Calculate potential savings
-        const potentialSavings = processedTools.reduce((acc, tool) => {
-          if (tool.monthly_cost > 50) return acc + 10; // Example savings calculation
-          return acc;
-        }, 0);
-        setTotalSavings(potentialSavings);
+        // Use AI-suggested savings if available
+        setTotalSavings(analysis?.potential_savings || 0);
 
       } catch (error) {
         console.error("Error fetching tools:", error);
@@ -114,7 +127,7 @@ const MyTools = () => {
       }
     };
 
-    fetchUserTools();
+    fetchData();
   }, [navigate, toast]);
 
   const metrics = [
@@ -124,6 +137,13 @@ const MyTools = () => {
       icon: DollarSign,
       color: "bg-blue-100 text-blue-600 dark:bg-blue-900 dark:text-blue-300",
       tooltip: "Total monthly cost across all tools"
+    },
+    {
+      title: "AI-Suggested Savings",
+      value: `$${totalSavings.toFixed(2)}`,
+      icon: Sparkles,
+      color: "bg-purple-100 text-purple-600 dark:bg-purple-900 dark:text-purple-300",
+      tooltip: "AI-calculated potential monthly savings based on usage patterns"
     },
     {
       title: "Active Tools",
@@ -137,7 +157,7 @@ const MyTools = () => {
       value: nextBillingDate ? `$${nextBillingTotal.toFixed(2)}` : "N/A",
       subtext: nextBillingDate ? format(new Date(nextBillingDate), 'MMM dd, yyyy') : "",
       icon: Calendar,
-      color: "bg-purple-100 text-purple-600 dark:bg-purple-900 dark:text-purple-300",
+      color: "bg-orange-100 text-orange-600 dark:bg-orange-900 dark:text-orange-300",
       tooltip: "Amount due on next billing cycle"
     },
     {
@@ -148,18 +168,11 @@ const MyTools = () => {
       tooltip: "Category with the most tools"
     },
     {
-      title: "Tool Usage",
+      title: "Usage Efficiency",
       value: `${activeToolsCount > 0 ? Math.round((activeToolsCount / tools.length) * 100) : 0}%`,
       icon: Activity,
       color: "bg-yellow-100 text-yellow-600 dark:bg-yellow-900 dark:text-yellow-300",
       tooltip: "Percentage of tools actively used this month"
-    },
-    {
-      title: "Potential Savings",
-      value: `$${totalSavings.toFixed(2)}`,
-      icon: Zap,
-      color: "bg-pink-100 text-pink-600 dark:bg-pink-900 dark:text-pink-300",
-      tooltip: "Estimated monthly savings from optimizing tool usage"
     }
   ];
 
@@ -176,7 +189,7 @@ const MyTools = () => {
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-          {[1, 2, 3].map((i) => (
+          {[1, 2, 3, 4, 5, 6].map((i) => (
             <Skeleton key={i} className="h-32 w-full" />
           ))}
         </div>
@@ -206,6 +219,68 @@ const MyTools = () => {
           </Button>
         </div>
 
+        {aiAnalysis && (
+          <AnimatePresence>
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="mb-8"
+            >
+              <Card className="bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/50 dark:to-blue-900/50 p-6">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <Sparkles className="w-5 h-5 text-purple-600" />
+                      <h2 className="text-lg font-semibold">AI Insights</h2>
+                    </div>
+                    <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
+                      Based on your usage patterns, we've identified potential optimizations
+                    </p>
+                  </div>
+                  <Badge variant="outline" className="bg-purple-100 text-purple-600 border-purple-200">
+                    Updated {format(new Date(aiAnalysis.recommendations.analysis_date), 'MMM dd, yyyy')}
+                  </Badge>
+                </div>
+                <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <Card className="bg-white/50 dark:bg-gray-800/50 p-4">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-600 dark:text-gray-400">Potential Monthly Savings</span>
+                      <TrendingUp className="w-4 h-4 text-green-500" />
+                    </div>
+                    <p className="text-2xl font-bold text-green-600 mt-2">${aiAnalysis.potential_savings.toFixed(2)}</p>
+                  </Card>
+                  <Card className="bg-white/50 dark:bg-gray-800/50 p-4">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-600 dark:text-gray-400">Current Utilization</span>
+                      <Activity className="w-4 h-4 text-blue-500" />
+                    </div>
+                    <p className="text-2xl font-bold text-blue-600 mt-2">
+                      {Math.round((activeToolsCount / aiAnalysis.recommendations.total_tools) * 100)}%
+                    </p>
+                  </Card>
+                  <Card className="bg-white/50 dark:bg-gray-800/50 p-4">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-600 dark:text-gray-400">Optimization Score</span>
+                      <AlertTriangle className="w-4 h-4 text-yellow-500" />
+                    </div>
+                    <p className="text-2xl font-bold text-yellow-600 mt-2">
+                      {Math.round((aiAnalysis.potential_savings / aiAnalysis.total_spend) * 100)}%
+                    </p>
+                  </Card>
+                </div>
+                <Button
+                  variant="link"
+                  className="mt-4 text-purple-600 hover:text-purple-700 p-0"
+                  onClick={() => navigate("/tools/optimization")}
+                >
+                  View detailed analysis <ChevronRight className="w-4 h-4 ml-1" />
+                </Button>
+              </Card>
+            </motion.div>
+          </AnimatePresence>
+        )}
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
           {metrics.map((metric) => (
             <motion.div
@@ -214,20 +289,29 @@ const MyTools = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3 }}
             >
-              <Card className="p-6 shadow-sm hover:shadow-md transition-all duration-300">
-                <div className="flex items-start gap-4">
-                  <div className={`p-3 rounded-lg ${metric.color}`}>
-                    <metric.icon className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">{metric.title}</p>
-                    <p className="text-2xl font-semibold mt-1">{metric.value}</p>
-                    {metric.subtext && (
-                      <p className="text-sm text-gray-500 mt-1">{metric.subtext}</p>
-                    )}
-                  </div>
-                </div>
-              </Card>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Card className="p-6 shadow-sm hover:shadow-md transition-all duration-300">
+                      <div className="flex items-start gap-4">
+                        <div className={`p-3 rounded-lg ${metric.color}`}>
+                          <metric.icon className="w-6 h-6" />
+                        </div>
+                        <div>
+                          <p className="text-sm text-gray-500 dark:text-gray-400">{metric.title}</p>
+                          <p className="text-2xl font-semibold mt-1">{metric.value}</p>
+                          {metric.subtext && (
+                            <p className="text-sm text-gray-500 mt-1">{metric.subtext}</p>
+                          )}
+                        </div>
+                      </div>
+                    </Card>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{metric.tooltip}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </motion.div>
           ))}
         </div>
