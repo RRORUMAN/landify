@@ -89,6 +89,50 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_tool_recommendations: {
+        Row: {
+          created_at: string | null
+          id: string
+          priority_level: string | null
+          reasoning: string | null
+          recommendation_type: string
+          score: number | null
+          suggested_alternatives: Json | null
+          tool_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          priority_level?: string | null
+          reasoning?: string | null
+          recommendation_type: string
+          score?: number | null
+          suggested_alternatives?: Json | null
+          tool_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          priority_level?: string | null
+          reasoning?: string | null
+          recommendation_type?: string
+          score?: number | null
+          suggested_alternatives?: Json | null
+          tool_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_tool_recommendations_tool_id_fkey"
+            columns: ["tool_id"]
+            isOneToOne: false
+            referencedRelation: "tools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       comparison_features: {
         Row: {
           created_at: string | null
@@ -869,6 +913,20 @@ export type Database = {
           total_current_spend: number
           potential_savings: number
           recommendations: Json
+        }[]
+      }
+      generate_tool_recommendations: {
+        Args: {
+          p_user_id: string
+        }
+        Returns: {
+          recommendation_id: string
+          tool_id: string
+          recommendation_type: string
+          score: number
+          reasoning: string
+          suggested_alternatives: Json
+          priority_level: string
         }[]
       }
     }
