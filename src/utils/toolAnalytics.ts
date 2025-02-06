@@ -73,13 +73,12 @@ export const getAISavingsAnalysis = async (): Promise<AIAnalysis | null> => {
 
     // If analysis is less than 24 hours old, return it
     if (existingAnalysis && new Date(existingAnalysis.analysis_date).getTime() > Date.now() - 24 * 60 * 60 * 1000) {
-      const recommendations = existingAnalysis.ai_recommendations?.[0] || {};
       return {
         total_spend: existingAnalysis.total_spend,
         potential_savings: existingAnalysis.potential_savings,
         recommendations: {
-          total_tools: recommendations.total_tools || 0,
-          tools_data: recommendations.tools_data || [],
+          total_tools: existingAnalysis.ai_recommendations?.[0]?.total_tools || 0,
+          tools_data: existingAnalysis.ai_recommendations?.[0]?.tools_data || [],
           analysis_date: existingAnalysis.analysis_date
         }
       };
@@ -94,9 +93,11 @@ export const getAISavingsAnalysis = async (): Promise<AIAnalysis | null> => {
     if (error) throw error;
 
     if (newAnalysis?.[0]) {
-      const recommendations = typeof newAnalysis[0].recommendations === 'object' 
-        ? newAnalysis[0].recommendations 
-        : { total_tools: 0, tools_data: [], analysis_date: new Date().toISOString() };
+      const recommendations = {
+        total_tools: newAnalysis[0].recommendations?.total_tools || 0,
+        tools_data: newAnalysis[0].recommendations?.tools_data || [],
+        analysis_date: new Date().toISOString()
+      };
 
       // Store the new analysis
       await supabase

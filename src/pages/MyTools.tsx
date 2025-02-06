@@ -23,7 +23,7 @@ const MyTools = () => {
   const calculateMonthlySpend = (toolsList: UserTool[]) => {
     return toolsList.reduce((acc: number, tool: UserTool) => {
       if (tool.subscription_status === 'active') {
-        return acc + (tool.monthly_cost || 0);
+        return acc + (typeof tool.monthly_cost === 'number' ? tool.monthly_cost : 0);
       }
       return acc;
     }, 0);
