@@ -589,6 +589,85 @@ export type Database = {
         }
         Relationships: []
       }
+      team_activity_logs: {
+        Row: {
+          activity_data: Json
+          activity_type: string
+          created_at: string
+          id: string
+          team_id: string | null
+          user_id: string
+        }
+        Insert: {
+          activity_data?: Json
+          activity_type: string
+          created_at?: string
+          id?: string
+          team_id?: string | null
+          user_id: string
+        }
+        Update: {
+          activity_data?: Json
+          activity_type?: string
+          created_at?: string
+          id?: string
+          team_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "team_activity_logs_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      team_invites: {
+        Row: {
+          created_at: string
+          expires_at: string
+          id: string
+          invite_code: string
+          invited_by: string
+          role: string
+          team_id: string | null
+          used_at: string | null
+          uses_remaining: number | null
+        }
+        Insert: {
+          created_at?: string
+          expires_at?: string
+          id?: string
+          invite_code?: string
+          invited_by: string
+          role?: string
+          team_id?: string | null
+          used_at?: string | null
+          uses_remaining?: number | null
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string
+          id?: string
+          invite_code?: string
+          invited_by?: string
+          role?: string
+          team_id?: string | null
+          used_at?: string | null
+          uses_remaining?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "team_invites_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       team_members: {
         Row: {
           id: string
@@ -1007,6 +1086,47 @@ export type Database = {
             columns: ["tool_id"]
             isOneToOne: false
             referencedRelation: "tools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tool_notes: {
+        Row: {
+          content: string
+          created_at: string
+          folder_id: string | null
+          id: string
+          is_private: boolean | null
+          tool_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          folder_id?: string | null
+          id?: string
+          is_private?: boolean | null
+          tool_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          folder_id?: string | null
+          id?: string
+          is_private?: boolean | null
+          tool_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tool_notes_folder_id_fkey"
+            columns: ["folder_id"]
+            isOneToOne: false
+            referencedRelation: "tool_folders"
             referencedColumns: ["id"]
           },
         ]
@@ -1634,6 +1754,12 @@ export type Database = {
           suggested_alternatives: Json
           priority_level: string
         }[]
+      }
+      is_team_admin: {
+        Args: {
+          team_id: string
+        }
+        Returns: boolean
       }
     }
     Enums: {

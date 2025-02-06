@@ -141,3 +141,37 @@ export interface FolderTool {
   notes: string | null;
   tool?: Tool;
 }
+
+export type TeamRole = 'admin' | 'member' | 'viewer';
+
+export interface TeamInvite {
+  id: string;
+  team_id: string;
+  invited_by: string;
+  invite_code: string;
+  role: TeamRole;
+  expires_at: string;
+  created_at: string;
+  used_at: string | null;
+  uses_remaining: number;
+}
+
+export interface TeamActivityLog {
+  id: string;
+  team_id: string;
+  user_id: string;
+  activity_type: string;
+  activity_data: Record<string, any>;
+  created_at: string;
+}
+
+export interface ToolNote {
+  id: string;
+  tool_id: string;
+  folder_id: string;
+  user_id: string;
+  content: string;
+  is_private: boolean;
+  created_at: string;
+  updated_at: string;
+}

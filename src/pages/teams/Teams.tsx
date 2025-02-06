@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Plus, Users, FolderPlus } from 'lucide-react';
+import { Plus, Users, FolderPlus, Copy, Check } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -11,23 +11,23 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-import type { Team } from '@/data/types';
+import type { Team, TeamInvite } from '@/data/types';
 
 const Teams = () => {
   const { toast } = useToast();
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [newTeam, setNewTeam] = useState({ name: '', description: '' });
+  const [copiedInviteCode, setCopiedInviteCode] = useState<string | null>(null);
 
   const { data: teams, isLoading, refetch } = useQuery({
     queryKey: ['teams'],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data: teamsData, error: teamsError } = await supabase
         .from('teams')
-        .select('*')
-        .order('created_at', { ascending: false });
+        .select('*, team_members(*)');
 
-      if (error) throw error;
-      return data as Team[];
+      if (teamsError) throw teamsError;
+      return teamsData as Team[];
     }
   });
 
@@ -36,15 +36,42 @@ const Teams = () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Not authenticated');
 
-      const { error } = await supabase
+      const { data: team, error: teamError } = await supabase
         .from('teams')
         .insert({
           name: newTeam.name,
           description: newTeam.description,
           created_by: user.id
+        })
+        .select()
+        .single();
+
+      if (teamError) throw teamError;
+
+      // Create admin member record for team creator
+      const { error: memberError } = await supabase
+        .from('team_members')
+        .insert({
+          team_id: team.id,
+          user_id: user.id,
+          role: 'admin'
         });
 
-      if (error) throw error;
+      if (memberError) throw memberError;
+
+      // Generate initial invite link
+      const { data: invite, error: inviteError } = await supabase
+        .from('team_invites')
+        .insert({
+          team_id: team.id,
+          invited_by: user.id,
+          role: 'member',
+          uses_remaining: 5
+        })
+        .select()
+        .single();
+
+      if (inviteError) throw inviteError;
 
       toast({
         title: 'Team created successfully',
@@ -58,6 +85,62 @@ const Teams = () => {
       toast({
         title: 'Error creating team',
         description: 'There was an error creating your team. Please try again.',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  const copyInviteCode = async (teamId: string) => {
+    try {
+      const { data: invite, error } = await supabase
+        .from('team_invites')
+        .select('invite_code')
+        .eq('team_id', teamId)
+        .is('used_at', null)
+        .gt('expires_at', new Date().toISOString())
+        .gt('uses_remaining', 0)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .single();
+
+      if (error || !invite) {
+        // Create new invite if none exists
+        const { data: newInvite, error: createError } = await supabase
+          .from('team_invites')
+          .insert({
+            team_id: teamId,
+            invited_by: (await supabase.auth.getUser()).data.user?.id,
+            uses_remaining: 5
+          })
+          .select()
+          .single();
+
+        if (createError) throw createError;
+        
+        const inviteUrl = `${window.location.origin}/teams/join/${newInvite.invite_code}`;
+        await navigator.clipboard.writeText(inviteUrl);
+        setCopiedInviteCode(teamId);
+        setTimeout(() => setCopiedInviteCode(null), 2000);
+        
+        toast({
+          title: 'Invite link copied',
+          description: 'New invite link has been copied to clipboard.',
+        });
+      } else {
+        const inviteUrl = `${window.location.origin}/teams/join/${invite.invite_code}`;
+        await navigator.clipboard.writeText(inviteUrl);
+        setCopiedInviteCode(teamId);
+        setTimeout(() => setCopiedInviteCode(null), 2000);
+        
+        toast({
+          title: 'Invite link copied',
+          description: 'Invite link has been copied to clipboard.',
+        });
+      }
+    } catch (error) {
+      toast({
+        title: 'Error copying invite link',
+        description: 'There was an error generating the invite link.',
         variant: 'destructive',
       });
     }
@@ -120,29 +203,53 @@ const Teams = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {teams?.map((team) => (
-          <Link key={team.id} to={`/teams/${team.id}`}>
-            <Card className="p-6 hover:shadow-lg transition-shadow">
-              <div className="flex items-start justify-between">
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                    {team.name}
-                  </h3>
-                  {team.description && (
-                    <p className="text-gray-600 dark:text-gray-300 mt-1 text-sm">
-                      {team.description}
-                    </p>
-                  )}
-                </div>
-                <Users className="h-5 w-5 text-gray-400" />
+          <Card key={team.id} className="p-6 hover:shadow-lg transition-shadow">
+            <div className="flex items-start justify-between mb-4">
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                  {team.name}
+                </h3>
+                {team.description && (
+                  <p className="text-gray-600 dark:text-gray-300 mt-1 text-sm">
+                    {team.description}
+                  </p>
+                )}
               </div>
-              <div className="mt-4 flex items-center gap-4">
+              <Users className="h-5 w-5 text-gray-400" />
+            </div>
+            <div className="space-y-3">
+              <Button
+                variant="outline"
+                size="sm"
+                className="w-full"
+                onClick={() => copyInviteCode(team.id)}
+              >
+                {copiedInviteCode === team.id ? (
+                  <>
+                    <Check className="h-4 w-4 mr-2" />
+                    Copied!
+                  </>
+                ) : (
+                  <>
+                    <Copy className="h-4 w-4 mr-2" />
+                    Copy Invite Link
+                  </>
+                )}
+              </Button>
+              <Link to={`/teams/${team.id}`}>
+                <Button variant="secondary" size="sm" className="w-full">
+                  <Users className="h-4 w-4 mr-2" />
+                  View Team
+                </Button>
+              </Link>
+              <Link to={`/teams/${team.id}/folders`}>
                 <Button variant="secondary" size="sm" className="w-full">
                   <FolderPlus className="h-4 w-4 mr-2" />
                   View Folders
                 </Button>
-              </div>
-            </Card>
-          </Link>
+              </Link>
+            </div>
+          </Card>
         ))}
       </div>
 
