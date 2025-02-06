@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -17,6 +16,7 @@ import { CategoryTools } from "@/components/tools/CategoryTools";
 import { EmptyToolsState } from "@/components/tools/EmptyToolsState";
 import { Card } from "@/components/ui/card";
 import { TabsContent, Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { AIFeatures } from "@/components/tools/AIFeatures";
 
 const MyTools = () => {
   const [tools, setTools] = useState<UserTool[]>([]);
@@ -214,6 +214,11 @@ const MyTools = () => {
         )}
 
         <MetricsGrid metrics={metrics} />
+        
+        {/* Add AI Features section */}
+        <div className="my-8">
+          <AIFeatures />
+        </div>
 
         {tools.length === 0 ? (
           <EmptyToolsState />
