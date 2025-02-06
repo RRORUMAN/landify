@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
@@ -133,7 +134,7 @@ const CompareTools = () => {
             <Button
               variant="ghost"
               onClick={handleReset}
-              className="flex items-center gap-2"
+              className="flex items-center gap-2 text-black hover:text-black/80"
             >
               <ArrowLeft className="h-4 w-4" />
               Compare Different Tools
@@ -142,13 +143,13 @@ const CompareTools = () => {
               <Button
                 variant="outline"
                 onClick={() => handleExport('csv')}
-                className="flex items-center gap-2"
+                className="flex items-center gap-2 text-black border-[#2563EB] hover:bg-[#2563EB]/5"
               >
                 <Download className="h-4 w-4" />
                 Export CSV
               </Button>
               <Button
-                variant="secondary"
+                variant="default"
                 onClick={handleSaveComparison}
                 className="flex items-center gap-2 bg-[#2563EB] text-white hover:bg-[#2563EB]/90"
               >

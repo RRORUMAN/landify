@@ -57,7 +57,7 @@ const CompareToolsSection = ({
         <Button
           variant="ghost"
           onClick={handleReset}
-          className="flex items-center gap-2 text-gray-600"
+          className="flex items-center gap-2 text-black hover:text-black/80"
         >
           <ArrowLeft className="h-4 w-4" />
           Compare Different Tools
@@ -65,7 +65,7 @@ const CompareToolsSection = ({
         <Button
           variant="default"
           onClick={handleSaveComparison}
-          className="flex items-center gap-2 bg-[#2563EB] text-white hover:bg-[#2563EB]"
+          className="flex items-center gap-2 bg-[#2563EB] text-white hover:bg-[#2563EB]/90"
         >
           <Save className="h-4 w-4" />
           Save Comparison
