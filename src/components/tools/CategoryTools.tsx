@@ -77,7 +77,12 @@ export const CategoryTools = ({ category, tools, viewMode = 'grid', onRemoveTool
                       </span>
                     </div>
                   </div>
-                  <Badge variant={userTool.subscription_status === 'active' ? 'default' : 'secondary'}>
+                  <Badge 
+                    variant={userTool.subscription_status === 'active' ? 'default' : 'secondary'}
+                    className={userTool.subscription_status === 'active' ? 
+                      'bg-[#4361EE] hover:bg-[#3249d8] text-white border-none' : 
+                      'bg-gray-100 text-gray-600'}
+                  >
                     {userTool.subscription_status}
                   </Badge>
                 </div>
@@ -85,7 +90,7 @@ export const CategoryTools = ({ category, tools, viewMode = 'grid', onRemoveTool
                 <Button
                   variant="outline"
                   onClick={() => window.open(userTool.tool?.visit_url, '_blank')}
-                  className="w-full flex items-center justify-center gap-2 text-blue-600 hover:text-blue-700 bg-white hover:bg-gray-50"
+                  className="w-full flex items-center justify-center gap-2 text-[#4361EE] hover:text-[#3249d8] bg-white hover:bg-gray-50 border-[#4361EE] hover:border-[#3249d8]"
                 >
                   Visit Tool <ArrowUpRight className="w-4 h-4" />
                 </Button>
