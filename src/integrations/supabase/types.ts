@@ -133,6 +133,71 @@ export type Database = {
           },
         ]
       }
+      comparison_categories: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          name: string
+          sort_order: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name: string
+          sort_order?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name?: string
+          sort_order?: number | null
+        }
+        Relationships: []
+      }
+      comparison_feature_definitions: {
+        Row: {
+          category_id: string | null
+          created_at: string | null
+          description: string | null
+          evaluation_criteria: Json | null
+          id: string
+          importance: string | null
+          name: string
+          sort_order: number | null
+        }
+        Insert: {
+          category_id?: string | null
+          created_at?: string | null
+          description?: string | null
+          evaluation_criteria?: Json | null
+          id?: string
+          importance?: string | null
+          name: string
+          sort_order?: number | null
+        }
+        Update: {
+          category_id?: string | null
+          created_at?: string | null
+          description?: string | null
+          evaluation_criteria?: Json | null
+          id?: string
+          importance?: string | null
+          name?: string
+          sort_order?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "comparison_feature_definitions_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "comparison_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       comparison_features: {
         Row: {
           created_at: string | null
@@ -530,6 +595,57 @@ export type Database = {
           {
             foreignKeyName: "tool_compatibility_scores_tool_id_2_fkey"
             columns: ["tool_id_2"]
+            isOneToOne: false
+            referencedRelation: "tools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tool_feature_evaluations: {
+        Row: {
+          confidence_score: number | null
+          created_at: string | null
+          evaluation_source: string | null
+          feature_id: string | null
+          id: string
+          last_evaluated: string | null
+          notes: string | null
+          tool_id: string | null
+          value: Json
+        }
+        Insert: {
+          confidence_score?: number | null
+          created_at?: string | null
+          evaluation_source?: string | null
+          feature_id?: string | null
+          id?: string
+          last_evaluated?: string | null
+          notes?: string | null
+          tool_id?: string | null
+          value: Json
+        }
+        Update: {
+          confidence_score?: number | null
+          created_at?: string | null
+          evaluation_source?: string | null
+          feature_id?: string | null
+          id?: string
+          last_evaluated?: string | null
+          notes?: string | null
+          tool_id?: string | null
+          value?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tool_feature_evaluations_feature_id_fkey"
+            columns: ["feature_id"]
+            isOneToOne: false
+            referencedRelation: "comparison_feature_definitions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tool_feature_evaluations_tool_id_fkey"
+            columns: ["tool_id"]
             isOneToOne: false
             referencedRelation: "tools"
             referencedColumns: ["id"]

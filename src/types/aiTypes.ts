@@ -55,18 +55,6 @@ export interface ROIMetrics {
   last_updated: string;
 }
 
-export interface AIAnalysis {
-  total_spend: number;
-  total_tools: number;
-  tools_data: { [key: string]: any };
-  analysis_date: string;
-  potential_savings: number;
-  recommendations: {
-    total_tools: number;
-    analysis_date: string;
-  };
-}
-
 export interface ComparisonFeature {
   name: string;
   importance: 'critical' | 'high' | 'medium' | 'low';
@@ -74,7 +62,7 @@ export interface ComparisonFeature {
   description: string;
   values: {
     toolId: string;
-    value: string | boolean;
+    value: string | boolean | number;
     notes?: string;
     confidenceScore: number;
   }[];

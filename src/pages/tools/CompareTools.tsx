@@ -19,6 +19,7 @@ import { getROIAnalytics } from "@/utils/aiAnalytics";
 import { AICompatibilityScore } from "@/components/compare/AICompatibilityScore";
 import { SmartFeatureMatch } from "@/components/compare/SmartFeatureMatch";
 import CompareROI from "@/components/compare/CompareROI";
+import { ComparisonFeature, FeatureCategory } from "@/types/aiTypes";
 
 const CompareTools = () => {
   const [selectedTools, setSelectedTools] = useState<Tool[]>([]);
@@ -122,33 +123,61 @@ const CompareTools = () => {
     }
   };
 
-  const { data: compatibility = null, isLoading: isLoadingCompatibility } = useQuery({
-    queryKey: ['tool-compatibility', selectedTools.map(t => t.id)],
+  const { data: featureCategories = [], isLoading: isLoadingFeatures } = useQuery({
+    queryKey: ['feature-categories'],
     queryFn: async () => {
-      if (selectedTools.length !== 2) return null;
-      return getToolCompatibility(selectedTools[0].id, selectedTools[1].id);
-    },
-    enabled: selectedTools.length === 2
-  });
+      const { data: categories, error: categoriesError } = await supabase
+        .from('comparison_categories')
+        .select('*')
+        .order('sort_order');
 
-  const { data: insights = [], isLoading: isLoadingInsights } = useQuery({
-    queryKey: ['tool-insights', selectedTools.map(t => t.id)],
-    queryFn: async () => {
-      const allInsights = await Promise.all(
-        selectedTools.map(tool => getToolInsights(tool.id))
-      );
-      return allInsights.flat();
+      if (categoriesError) throw categoriesError;
+
+      const { data: features, error: featuresError } = await supabase
+        .from('comparison_feature_definitions')
+        .select('*')
+        .order('sort_order');
+
+      if (featuresError) throw featuresError;
+
+      return categories.map(category => ({
+        name: category.name,
+        description: category.description || '',
+        features: features
+          .filter(f => f.category_id === category.id)
+          .map(f => ({
+            name: f.name,
+            importance: f.importance || 'medium',
+            category: category.name,
+            description: f.description || '',
+            values: selectedTools.map(tool => ({
+              toolId: tool.id,
+              value: 'Pending evaluation',
+              confidenceScore: 0.5
+            }))
+          }))
+      }));
     },
     enabled: selectedTools.length > 0
   });
 
-  const { data: roiMetrics = [], isLoading: isLoadingROI } = useQuery({
-    queryKey: ['tool-roi', selectedTools.map(t => t.id)],
+  const { data: evaluations = [] } = useQuery({
+    queryKey: ['tool-evaluations', selectedTools.map(t => t.id)],
     queryFn: async () => {
-      const metrics = await Promise.all(
-        selectedTools.map(tool => getROIAnalytics(tool.id))
-      );
-      return metrics.filter(Boolean);
+      const { data, error } = await supabase
+        .from('tool_feature_evaluations')
+        .select(`
+          *,
+          feature:comparison_feature_definitions(
+            name,
+            importance,
+            category_id
+          )
+        `)
+        .in('tool_id', selectedTools.map(t => t.id));
+
+      if (error) throw error;
+      return data;
     },
     enabled: selectedTools.length > 0
   });
@@ -197,18 +226,10 @@ const CompareTools = () => {
             setIsSelecting={setIsSelecting}
           />
 
-          {insights.length > 0 && (
+          {featureCategories.length > 0 && (
             <SmartFeatureMatch
               tools={selectedTools}
-              features={insights.map(insight => ({
-                name: insight.insight_type,
-                importance: 'high',
-                values: selectedTools.map(tool => ({
-                  toolId: tool.id,
-                  value: insight.insight_data[tool.id] || false,
-                  notes: insight.recommendations.find(r => r.toolId === tool.id)?.text
-                }))
-              }))}
+              featureCategories={featureCategories}
             />
           )}
 

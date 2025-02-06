@@ -2,7 +2,7 @@
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tool } from "@/data/types";
-import { Check, AlertTriangle, Minus, Info, Star, Zap, Shield, Clock } from "lucide-react";
+import { Check, AlertTriangle, Minus, Info, Star, Zap, Shield, Clock, ArrowUpRight, Lock, LineChart, Box, Cloud } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Progress } from "@/components/ui/progress";
 import { ComparisonFeature, FeatureCategory } from "@/types/aiTypes";
@@ -37,28 +37,42 @@ export const SmartFeatureMatch = ({ tools, featureCategories }: SmartFeatureMatc
       case 'reliability':
         return <Star className="h-5 w-5 text-purple-500" />;
       case 'scalability':
-        return <Clock className="h-5 w-5 text-green-500" />;
+        return <Cloud className="h-5 w-5 text-green-500" />;
+      case 'integration':
+        return <Box className="h-5 w-5 text-orange-500" />;
+      case 'support':
+        return <ArrowUpRight className="h-5 w-5 text-cyan-500" />;
+      case 'cost efficiency':
+        return <LineChart className="h-5 w-5 text-indigo-500" />;
       default:
         return <Info className="h-5 w-5 text-gray-500" />;
     }
   };
 
-  const renderFeatureValue = (value: string | boolean, confidenceScore: number) => {
+  const renderFeatureValue = (value: string | boolean | number, confidenceScore: number) => {
     if (typeof value === 'boolean') {
-      return value ? (
+      return (
         <div className="flex items-center gap-2">
-          <Check className="h-5 w-5 text-green-500" />
+          {value ? (
+            <Check className="h-5 w-5 text-green-500" />
+          ) : (
+            <Minus className="h-5 w-5 text-gray-400" />
+          )}
           <Progress className="w-20 h-1.5" value={confidenceScore * 100} />
         </div>
-      ) : (
+      );
+    }
+
+    if (typeof value === 'number') {
+      return (
         <div className="flex items-center gap-2">
-          <Minus className="h-5 w-5 text-gray-400" />
+          <span className="text-sm font-medium">{value.toLocaleString()}</span>
           <Progress className="w-20 h-1.5" value={confidenceScore * 100} />
         </div>
       );
     }
     
-    if (value.toLowerCase().includes('limited')) {
+    if (typeof value === 'string' && value.toLowerCase().includes('limited')) {
       return (
         <div className="flex items-center gap-2">
           <AlertTriangle className="h-4 w-4 text-yellow-500" />
@@ -83,7 +97,7 @@ export const SmartFeatureMatch = ({ tools, featureCategories }: SmartFeatureMatc
           <div className="flex items-center gap-3 mb-6">
             {getCategoryIcon(category.name)}
             <div>
-              <h3 className="text-lg font-semibold">{category.name}</h3>
+              <h3 className="text-lg font-semibold text-gray-900">{category.name}</h3>
               <p className="text-sm text-gray-500">{category.description}</p>
             </div>
           </div>
@@ -92,7 +106,7 @@ export const SmartFeatureMatch = ({ tools, featureCategories }: SmartFeatureMatc
             {category.features.map((feature, featureIndex) => (
               <div key={featureIndex} className="border-t pt-4 first:border-t-0 first:pt-0">
                 <div className="flex items-center gap-2 mb-4">
-                  <span className="font-medium">{feature.name}</span>
+                  <span className="font-medium text-gray-900">{feature.name}</span>
                   <Badge 
                     variant="secondary" 
                     className={getImportanceColor(feature.importance)}
@@ -116,9 +130,9 @@ export const SmartFeatureMatch = ({ tools, featureCategories }: SmartFeatureMatc
                     const tool = tools.find(t => t.id === value.toolId);
                     if (!tool) return null;
                     return (
-                      <div key={vIndex} className="flex items-start gap-4 p-4 rounded-lg border bg-gray-50">
+                      <div key={vIndex} className="flex items-start gap-4 p-4 rounded-lg border bg-white hover:bg-gray-50 transition-colors">
                         <div className="flex-1">
-                          <div className="font-medium text-sm mb-2">{tool.name}</div>
+                          <div className="font-medium text-sm text-gray-900 mb-2">{tool.name}</div>
                           <div className="mt-1">
                             {renderFeatureValue(value.value, value.confidenceScore)}
                           </div>
