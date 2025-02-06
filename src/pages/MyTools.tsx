@@ -5,15 +5,18 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { Plus, ArrowLeft, DollarSign, LayoutGrid, Activity, Calendar, Sparkles, PieChart } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { format } from "date-fns";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getAISavingsAnalysis } from "@/utils/toolAnalytics";
 import type { UserTool } from "@/data/types";
+import type { AIAnalysis } from "@/types/aiTypes";
 import { AIInsightsCard } from "@/components/tools/AIInsightsCard";
 import { MetricsGrid } from "@/components/tools/MetricsGrid";
 import { CategoryTools } from "@/components/tools/CategoryTools";
 import { EmptyToolsState } from "@/components/tools/EmptyToolsState";
+import { Card } from "@/components/ui/card";
+import { TabsContent, Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const MyTools = () => {
   const [tools, setTools] = useState<UserTool[]>([]);
@@ -25,6 +28,7 @@ const MyTools = () => {
   const [totalSavings, setTotalSavings] = useState(0);
   const [mostUsedCategory, setMostUsedCategory] = useState("");
   const [aiAnalysis, setAIAnalysis] = useState<AIAnalysis | null>(null);
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -51,16 +55,8 @@ const MyTools = () => {
         if (error) throw error;
 
         const processedTools = userTools.map((userTool: any) => ({
-          ...userTool.tool,
-          monthly_cost: userTool.monthly_cost || 0,
-          billing_cycle: userTool.billing_cycle,
-          next_billing_date: userTool.next_billing_date,
-          subscription_status: userTool.subscription_status,
-          usage_stats: userTool.usage_stats || {
-            total_usage_time: 0,
-            last_used: new Date().toISOString(),
-            usage_frequency: 0
-          }
+          ...userTool,
+          tool: userTool.tool
         }));
 
         setTools(processedTools);
@@ -72,9 +68,11 @@ const MyTools = () => {
         
         // Calculate most used category
         const categoryCount = processedTools.reduce((acc: Record<string, number>, tool) => {
-          acc[tool.category] = (acc[tool.category] || 0) + 1;
+          const category = tool.tool?.category || 'Uncategorized';
+          acc[category] = (acc[category] || 0) + 1;
           return acc;
         }, {});
+        
         const mostUsed = Object.entries(categoryCount).reduce((a, b) => 
           categoryCount[a[0]] > categoryCount[b[0]] ? a : b
         )[0];
@@ -188,12 +186,20 @@ const MyTools = () => {
             </Button>
             <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">My Tools</h1>
           </div>
-          <Button
-            onClick={() => navigate("/tools/add")}
-            className="bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2"
-          >
-            <Plus className="w-4 h-4" /> Add Tools
-          </Button>
+          <div className="flex items-center gap-4">
+            <Tabs defaultValue="grid" className="w-[200px]">
+              <TabsList>
+                <TabsTrigger value="grid" onClick={() => setViewMode('grid')}>Grid</TabsTrigger>
+                <TabsTrigger value="list" onClick={() => setViewMode('list')}>List</TabsTrigger>
+              </TabsList>
+            </Tabs>
+            <Button
+              onClick={() => navigate("/tools/add")}
+              className="bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2"
+            >
+              <Plus className="w-4 h-4" /> Add Tools
+            </Button>
+          </div>
         </div>
 
         {aiAnalysis && (
@@ -213,9 +219,31 @@ const MyTools = () => {
           <EmptyToolsState />
         ) : (
           <div className="space-y-8">
-            {Object.entries(categories).map(([category, categoryTools]) => (
-              <CategoryTools key={category} category={category} tools={categoryTools} />
-            ))}
+            <AnimatePresence mode="wait">
+              {Object.entries(categories).map(([category, categoryTools]) => (
+                <motion.div
+                  key={category}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <Card className="p-6">
+                    <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                      {category}
+                      <span className="text-gray-500 text-lg ml-2">
+                        ({categoryTools.length} tools)
+                      </span>
+                    </h2>
+                    <CategoryTools 
+                      category={category} 
+                      tools={categoryTools}
+                      viewMode={viewMode}
+                    />
+                  </Card>
+                </motion.div>
+              ))}
+            </AnimatePresence>
           </div>
         )}
       </div>
