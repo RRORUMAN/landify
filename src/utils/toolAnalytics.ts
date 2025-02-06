@@ -1,7 +1,7 @@
 
 import { supabase } from "@/integrations/supabase/client";
 
-type InteractionType = 'view' | 'click' | 'bookmark' | 'share';
+export type InteractionType = 'view' | 'click' | 'bookmark' | 'share';
 
 export const trackToolInteraction = async (toolId: string, interactionType: InteractionType) => {
   try {
@@ -11,18 +11,17 @@ export const trackToolInteraction = async (toolId: string, interactionType: Inte
       .from('tool_analytics')
       .insert({
         tool_id: toolId,
+        user_id: user?.id || null,
         usage_type: interactionType,
         usage_details: {
           source: 'web',
           timestamp: new Date().toISOString(),
           page: window.location.pathname
-        },
-        user_id: user?.id || null
+        }
       });
 
     if (error) throw error;
 
-    // Update tool bookmarks count if it's a bookmark interaction
     if (interactionType === 'bookmark') {
       const { error: updateError } = await supabase.rpc('increment_tool_bookmarks', {
         p_tool_id: toolId

@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Tool } from "@/data/tools";
@@ -92,12 +91,14 @@ const MyTools = () => {
       value: `$${monthlySpend.toFixed(2)}`,
       icon: DollarSign,
       color: "bg-blue-100 text-blue-600",
+      tooltip: "Total monthly cost across all tools"
     },
     {
       title: "Active Tools",
       value: activeToolsCount.toString(),
       icon: LayoutGrid,
       color: "bg-green-100 text-green-600",
+      tooltip: "Number of tools currently in use"
     },
     {
       title: "Next Billing",
@@ -105,6 +106,7 @@ const MyTools = () => {
       subtext: nextBillingDate ? format(new Date(nextBillingDate), 'MMM dd, yyyy') : "",
       icon: Calendar,
       color: "bg-purple-100 text-purple-600",
+      tooltip: "Amount due on next billing cycle"
     },
     {
       title: "Monthly Savings",
@@ -112,8 +114,18 @@ const MyTools = () => {
       subtext: "Potential savings available",
       icon: TrendingUp,
       color: "bg-orange-100 text-orange-600",
+      tooltip: "Estimated savings from tool optimizations"
     },
   ];
+
+  const categories = tools.reduce((acc, tool) => {
+    const category = tool.category;
+    if (!acc[category]) {
+      acc[category] = [];
+    }
+    acc[category].push(tool);
+    return acc;
+  }, {} as Record<string, typeof tools>);
 
   return (
     <div className="bg-gray-50 dark:bg-gray-900 min-h-screen">
@@ -139,7 +151,7 @@ const MyTools = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           {metrics.map((metric) => (
-            <Card key={metric.title} className="p-6 shadow-sm">
+            <Card key={metric.title} className="p-6 shadow-sm hover:shadow-md transition-all duration-300">
               <div className="flex items-start gap-4">
                 <div className={`p-3 rounded-lg ${metric.color}`}>
                   <metric.icon className="w-6 h-6" />
@@ -177,18 +189,18 @@ const MyTools = () => {
             </Button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {tools.map((tool) => (
-              <ToolCard 
-                key={tool.id} 
-                tool={tool}
-                subscription={{
-                  cost: tool.monthly_cost,
-                  billing: tool.billing_cycle,
-                  status: tool.subscription_status,
-                  nextBilling: tool.next_billing_date,
-                }}
-              />
+          <div className="space-y-8">
+            {Object.entries(categories).map(([category, categoryTools]) => (
+              <div key={category} className="space-y-4">
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                  {category}
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {categoryTools.map((tool) => (
+                    <ToolCard key={tool.id} tool={tool} />
+                  ))}
+                </div>
+              </div>
             ))}
           </div>
         )}
