@@ -100,11 +100,11 @@ export const getAISavingsAnalysis = async (): Promise<AIAnalysis | null> => {
     if (error) throw error;
 
     if (newAnalysis?.[0]) {
-      const recommendations: AIRecommendation = {
+      const recommendations = {
         total_tools: (newAnalysis[0].recommendations as any)?.total_tools || 0,
         tools_data: (newAnalysis[0].recommendations as any)?.tools_data || [],
         analysis_date: new Date().toISOString()
-      };
+      } as const;
 
       // Store the new analysis
       await supabase
@@ -129,3 +129,4 @@ export const getAISavingsAnalysis = async (): Promise<AIAnalysis | null> => {
     return null;
   }
 };
+

@@ -23,7 +23,8 @@ const MyTools = () => {
   const calculateMonthlySpend = (toolsList: UserTool[]) => {
     return toolsList.reduce((acc: number, tool: UserTool) => {
       if (tool.subscription_status === 'active') {
-        return acc + (typeof tool.monthly_cost === 'number' ? tool.monthly_cost : 0);
+        const cost = typeof tool.monthly_cost === 'number' ? tool.monthly_cost : 0;
+        return acc + cost;
       }
       return acc;
     }, 0);
@@ -103,7 +104,7 @@ const MyTools = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
           {[1, 2, 3, 4, 5].map((i) => (
-            <Skeleton key={i} className="h-32 w-full" />
+            <Skeleton key={i} className="h-32 w-full dark:bg-gray-800" />
           ))}
         </div>
       </div>
@@ -111,7 +112,7 @@ const MyTools = () => {
   }
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-gray-50 dark:bg-gray-900 min-h-screen transition-colors duration-150">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <DashboardHeader viewMode={viewMode} setViewMode={setViewMode} />
 
@@ -138,3 +139,4 @@ const MyTools = () => {
 };
 
 export default MyTools;
+
