@@ -1,40 +1,19 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Tool } from "@/data/tools";
-import ToolCard from "@/components/ToolCard";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { 
-  Plus, ArrowLeft, DollarSign, LayoutGrid, Activity, 
-  Calendar, Zap, PieChart, TrendingUp, AlertTriangle,
-  ChevronRight, Sparkles
-} from "lucide-react";
+import { Plus, ArrowLeft, DollarSign, LayoutGrid, Activity, Calendar, Sparkles, PieChart } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { Card } from "@/components/ui/card";
+import { motion } from "framer-motion";
 import { format } from "date-fns";
-import { motion, AnimatePresence } from "framer-motion";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { getAISavingsAnalysis, type AIAnalysis } from "@/utils/toolAnalytics";
-import { Badge } from "@/components/ui/badge";
-
-interface UserTool extends Tool {
-  monthly_cost: number;
-  billing_cycle: string;
-  next_billing_date?: string;
-  subscription_status?: string;
-  usage_stats?: {
-    total_usage_time: number;
-    last_used: string;
-    usage_frequency: number;
-  };
-}
+import { getAISavingsAnalysis } from "@/utils/toolAnalytics";
+import type { UserTool } from "@/data/types";
+import { AIInsightsCard } from "@/components/tools/AIInsightsCard";
+import { MetricsGrid } from "@/components/tools/MetricsGrid";
+import { CategoryTools } from "@/components/tools/CategoryTools";
+import { EmptyToolsState } from "@/components/tools/EmptyToolsState";
 
 const MyTools = () => {
   const [tools, setTools] = useState<UserTool[]>([]);
@@ -52,7 +31,6 @@ const MyTools = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch AI analysis
         const analysis = await getAISavingsAnalysis();
         setAIAnalysis(analysis);
 
@@ -112,7 +90,6 @@ const MyTools = () => {
           setNextBillingTotal(upcomingBillings[0].monthly_cost || 0);
         }
 
-        // Use AI-suggested savings if available
         setTotalSavings(analysis?.potential_savings || 0);
 
       } catch (error) {
@@ -220,146 +197,24 @@ const MyTools = () => {
         </div>
 
         {aiAnalysis && (
-          <AnimatePresence>
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              className="mb-8"
-            >
-              <Card className="bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/50 dark:to-blue-900/50 p-6">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <Sparkles className="w-5 h-5 text-purple-600" />
-                      <h2 className="text-lg font-semibold">AI Insights</h2>
-                    </div>
-                    <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
-                      Based on your usage patterns, we've identified potential optimizations
-                    </p>
-                  </div>
-                  <Badge variant="outline" className="bg-purple-100 text-purple-600 border-purple-200">
-                    Updated {format(new Date(aiAnalysis.recommendations.analysis_date), 'MMM dd, yyyy')}
-                  </Badge>
-                </div>
-                <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  <Card className="bg-white/50 dark:bg-gray-800/50 p-4">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-600 dark:text-gray-400">Potential Monthly Savings</span>
-                      <TrendingUp className="w-4 h-4 text-green-500" />
-                    </div>
-                    <p className="text-2xl font-bold text-green-600 mt-2">${aiAnalysis.potential_savings.toFixed(2)}</p>
-                  </Card>
-                  <Card className="bg-white/50 dark:bg-gray-800/50 p-4">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-600 dark:text-gray-400">Current Utilization</span>
-                      <Activity className="w-4 h-4 text-blue-500" />
-                    </div>
-                    <p className="text-2xl font-bold text-blue-600 mt-2">
-                      {Math.round((activeToolsCount / aiAnalysis.recommendations.total_tools) * 100)}%
-                    </p>
-                  </Card>
-                  <Card className="bg-white/50 dark:bg-gray-800/50 p-4">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-600 dark:text-gray-400">Optimization Score</span>
-                      <AlertTriangle className="w-4 h-4 text-yellow-500" />
-                    </div>
-                    <p className="text-2xl font-bold text-yellow-600 mt-2">
-                      {Math.round((aiAnalysis.potential_savings / aiAnalysis.total_spend) * 100)}%
-                    </p>
-                  </Card>
-                </div>
-                <Button
-                  variant="link"
-                  className="mt-4 text-purple-600 hover:text-purple-700 p-0"
-                  onClick={() => navigate("/tools/optimization")}
-                >
-                  View detailed analysis <ChevronRight className="w-4 h-4 ml-1" />
-                </Button>
-              </Card>
-            </motion.div>
-          </AnimatePresence>
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="mb-8"
+          >
+            <AIInsightsCard aiAnalysis={aiAnalysis} activeToolsCount={activeToolsCount} />
+          </motion.div>
         )}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-          {metrics.map((metric) => (
-            <motion.div
-              key={metric.title}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Card className="p-6 shadow-sm hover:shadow-md transition-all duration-300">
-                      <div className="flex items-start gap-4">
-                        <div className={`p-3 rounded-lg ${metric.color}`}>
-                          <metric.icon className="w-6 h-6" />
-                        </div>
-                        <div>
-                          <p className="text-sm text-gray-500 dark:text-gray-400">{metric.title}</p>
-                          <p className="text-2xl font-semibold mt-1">{metric.value}</p>
-                          {metric.subtext && (
-                            <p className="text-sm text-gray-500 mt-1">{metric.subtext}</p>
-                          )}
-                        </div>
-                      </div>
-                    </Card>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>{metric.tooltip}</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </motion.div>
-          ))}
-        </div>
+        <MetricsGrid metrics={metrics} />
 
         {tools.length === 0 ? (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-center py-16 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700"
-          >
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No Tools Yet</h3>
-            <p className="text-gray-600 dark:text-gray-400 mb-6">Start building your collection by adding some tools.</p>
-            <Button
-              onClick={() => navigate("/tools/add")}
-              className="bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2 mx-auto"
-            >
-              <Plus className="w-4 h-4" /> Browse Tools
-            </Button>
-          </motion.div>
+          <EmptyToolsState />
         ) : (
           <div className="space-y-8">
             {Object.entries(categories).map(([category, categoryTools]) => (
-              <motion.div
-                key={category}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="space-y-4"
-              >
-                <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-                  {category}
-                  <span className="text-gray-500 text-lg ml-2">
-                    ({categoryTools.length} tools)
-                  </span>
-                </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {categoryTools.map((tool) => (
-                    <motion.div
-                      key={tool.id}
-                      layout
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      <ToolCard key={tool.id} tool={tool} />
-                    </motion.div>
-                  ))}
-                </div>
-              </motion.div>
+              <CategoryTools key={category} category={category} tools={categoryTools} />
             ))}
           </div>
         )}

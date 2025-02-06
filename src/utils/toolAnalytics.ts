@@ -39,9 +39,10 @@ export const trackToolInteraction = async (toolId: string, interactionType: Inte
     if (error) throw error;
 
     if (interactionType === 'bookmark') {
-      const { error: updateError } = await supabase.rpc('increment_tool_bookmarks', {
-        p_tool_id: toolId
-      });
+      const { error: updateError } = await supabase
+        .from('tools')
+        .update({ bookmarks: supabase.sql`bookmarks + 1` })
+        .eq('id', toolId);
 
       if (updateError) throw updateError;
     }
@@ -69,7 +70,11 @@ export const getAISavingsAnalysis = async (): Promise<AIAnalysis | null> => {
       return {
         total_spend: existingAnalysis.total_spend,
         potential_savings: existingAnalysis.potential_savings,
-        recommendations: existingAnalysis.ai_recommendations[0]
+        recommendations: {
+          total_tools: existingAnalysis.ai_recommendations[0].total_tools,
+          tools_data: existingAnalysis.ai_recommendations[0].tools_data,
+          analysis_date: existingAnalysis.analysis_date
+        }
       };
     }
 
@@ -95,7 +100,11 @@ export const getAISavingsAnalysis = async (): Promise<AIAnalysis | null> => {
       return {
         total_spend: newAnalysis[0].total_current_spend,
         potential_savings: newAnalysis[0].potential_savings,
-        recommendations: newAnalysis[0].recommendations
+        recommendations: {
+          total_tools: newAnalysis[0].recommendations.total_tools,
+          tools_data: newAnalysis[0].recommendations.tools_data,
+          analysis_date: newAnalysis[0].recommendations.analysis_date
+        }
       };
     }
 
