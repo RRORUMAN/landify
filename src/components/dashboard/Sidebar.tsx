@@ -1,3 +1,4 @@
+
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Search, Plus, Scale, Brain, Sun, Moon, LogOut } from "lucide-react";
@@ -84,7 +85,7 @@ const Sidebar = () => {
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
               Dashboard
             </h2>
-            <p className="text-sm text-[#4361EE] dark:text-[#4361EE]">
+            <p className="text-sm text-[#2563EB] dark:text-[#2563EB]">
               Manage tools
             </p>
           </div>
@@ -98,20 +99,20 @@ const Sidebar = () => {
               className={cn(
                 "group flex items-start gap-4 px-4 py-4 rounded-lg transition-all duration-300 relative overflow-hidden hover:shadow-sm",
                 location.pathname === item.path
-                  ? "bg-[#4361EE]/10 text-[#4361EE]"
+                  ? "bg-[#2563EB]/10 text-[#2563EB]"
                   : "text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800/50"
               )}
             >
               {item.isNew && (
                 <span className="absolute top-2 right-2 flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#4361EE] opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#4361EE]"></span>
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#2563EB] opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#2563EB]"></span>
                 </span>
               )}
               <item.icon className={cn(
                 "h-5 w-5 mt-0.5 transition-transform duration-300 group-hover:scale-110",
                 location.pathname === item.path
-                  ? "text-[#4361EE]"
+                  ? "text-[#2563EB]"
                   : "text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-300"
               )} />
               <div className="flex flex-col">
@@ -119,7 +120,7 @@ const Sidebar = () => {
                 <span className={cn(
                   "text-xs transition-colors duration-300",
                   location.pathname === item.path
-                    ? "text-[#4361EE]/80"
+                    ? "text-[#2563EB]/80"
                     : "text-gray-400 dark:text-gray-500 group-hover:text-gray-500 dark:group-hover:text-gray-400"
                 )}>{item.description}</span>
               </div>

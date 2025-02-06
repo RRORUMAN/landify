@@ -1,13 +1,12 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import type { Tool } from "@/data/types";
-import { ArrowLeft, Download, Save, Filter } from "lucide-react";
+import { ArrowLeft, Download, Save } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import ToolSelectionCard from "./compare/ToolSelectionCard";
 import SelectedToolsGrid from "./compare/SelectedToolsGrid";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
 import CompareStats from "./compare/CompareStats";
 import QuickCompare from "./compare/QuickCompare";
@@ -151,7 +150,7 @@ const CompareTools = () => {
               <Button
                 variant="secondary"
                 onClick={handleSaveComparison}
-                className="flex items-center gap-2 bg-blue-600 text-white hover:bg-blue-700"
+                className="flex items-center gap-2 bg-[#2563EB] text-white hover:bg-[#2563EB]/90"
               >
                 <Save className="h-4 w-4" />
                 Save Comparison
@@ -185,4 +184,3 @@ const CompareTools = () => {
 };
 
 export default CompareTools;
-
