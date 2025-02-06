@@ -12,7 +12,6 @@ import CompareTools from "./pages/tools/CompareTools";
 import AIRecommendations from "./pages/tools/AIRecommendations";
 import Sidebar from "./components/dashboard/Sidebar";
 
-// Create a client
 const queryClient = new QueryClient();
 
 const AppContent = () => {
@@ -29,7 +28,12 @@ const AppContent = () => {
       {showNavbar && <Navbar />}
       <div className="flex">
         {isDashboardRoute(location.pathname) && <Sidebar />}
-        <main className={`flex-1 ${isDashboardRoute(location.pathname) ? 'pl-4 pr-6 pt-6' : ''} bg-white dark:bg-gray-900`}>
+        <main className={cn(
+          "flex-1 transition-colors duration-300",
+          isDashboardRoute(location.pathname) 
+            ? "pl-4 pr-6 pt-6 bg-gray-50 dark:bg-gray-900" 
+            : "bg-white dark:bg-gray-900"
+        )}>
           <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/pricing" element={<Pricing />} />
@@ -60,3 +64,4 @@ function App() {
 }
 
 export default App;
+

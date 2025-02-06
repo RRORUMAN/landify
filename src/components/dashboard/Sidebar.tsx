@@ -75,14 +75,22 @@ const Sidebar = () => {
   ];
 
   return (
-    <aside className="min-h-screen w-80 bg-[#0D1117] border-r border-gray-800 p-6 flex flex-col transition-colors duration-300">
+    <aside className={cn(
+      "min-h-screen w-80 border-r p-6 flex flex-col transition-colors duration-300",
+      isDarkMode 
+        ? "bg-[#0D1117] border-gray-800" 
+        : "bg-white border-gray-200"
+    )}>
       <div className="flex-1">
         <div className="flex items-center justify-between px-2 mb-8">
           <div>
-            <h2 className="text-xl font-semibold text-white mb-2">
+            <h2 className={cn(
+              "text-xl font-semibold mb-2",
+              isDarkMode ? "text-white" : "text-gray-900"
+            )}>
               Dashboard
             </h2>
-            <p className="text-sm text-blue-400">
+            <p className="text-sm text-blue-500">
               Manage tools
             </p>
           </div>
@@ -96,8 +104,10 @@ const Sidebar = () => {
               className={cn(
                 "group flex items-start gap-4 px-4 py-3 rounded-lg transition-all duration-200 relative",
                 location.pathname === item.path
-                  ? "bg-blue-500/10 text-blue-400"
-                  : "text-gray-400 hover:bg-gray-800/50 hover:text-gray-200"
+                  ? "bg-blue-500/10 text-blue-500"
+                  : isDarkMode 
+                    ? "text-gray-400 hover:bg-gray-800/50 hover:text-gray-200"
+                    : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
               )}
             >
               {item.isNew && (
@@ -109,16 +119,20 @@ const Sidebar = () => {
               <item.icon className={cn(
                 "h-5 w-5 mt-0.5 transition-transform duration-200 group-hover:scale-110",
                 location.pathname === item.path
-                  ? "text-blue-400"
-                  : "text-gray-500 group-hover:text-gray-300"
+                  ? "text-blue-500"
+                  : isDarkMode
+                    ? "text-gray-500 group-hover:text-gray-300"
+                    : "text-gray-400 group-hover:text-gray-600"
               )} />
               <div className="flex flex-col">
                 <span className="text-sm font-medium leading-none mb-1">{item.title}</span>
                 <span className={cn(
                   "text-xs transition-colors duration-200",
                   location.pathname === item.path
-                    ? "text-blue-400/80"
-                    : "text-gray-500 group-hover:text-gray-400"
+                    ? "text-blue-500/80"
+                    : isDarkMode
+                      ? "text-gray-500 group-hover:text-gray-400"
+                      : "text-gray-500 group-hover:text-gray-600"
                 )}>{item.description}</span>
               </div>
             </Link>
@@ -126,12 +140,20 @@ const Sidebar = () => {
         </nav>
       </div>
 
-      <div className="pt-4 border-t border-gray-800 mt-4 space-y-2">
+      <div className={cn(
+        "pt-4 border-t mt-4 space-y-2",
+        isDarkMode ? "border-gray-800" : "border-gray-200"
+      )}>
         <Button
           variant="ghost"
           size="sm"
           onClick={toggleDarkMode}
-          className="w-full justify-start gap-3 text-sm text-gray-400 hover:text-gray-200 hover:bg-gray-800/50"
+          className={cn(
+            "w-full justify-start gap-3 text-sm",
+            isDarkMode 
+              ? "text-gray-400 hover:text-gray-200 hover:bg-gray-800/50"
+              : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+          )}
         >
           {isDarkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
           <span>{isDarkMode ? "Light Mode" : "Dark Mode"}</span>
@@ -141,7 +163,12 @@ const Sidebar = () => {
           variant="ghost"
           size="sm"
           onClick={handleSignOut}
-          className="w-full justify-start gap-3 text-sm text-red-400 hover:text-red-300 hover:bg-gray-800/50"
+          className={cn(
+            "w-full justify-start gap-3 text-sm",
+            isDarkMode
+              ? "text-red-400 hover:text-red-300 hover:bg-gray-800/50"
+              : "text-red-500 hover:text-red-600 hover:bg-gray-100"
+          )}
         >
           <LogOut className="h-5 w-5" />
           <span>Sign Out</span>
@@ -152,3 +179,4 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
+
