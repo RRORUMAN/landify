@@ -1,6 +1,7 @@
 
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { cn } from "@/lib/utils";
 import Navbar from "./components/Navbar";
 import Landing from "./pages/Landing";
 import Pricing from "./pages/Pricing";
@@ -64,4 +65,3 @@ function App() {
 }
 
 export default App;
-
