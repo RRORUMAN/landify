@@ -147,6 +147,47 @@ export type Database = {
           },
         ]
       }
+      ai_workflow_insights: {
+        Row: {
+          created_at: string | null
+          id: string
+          insight_data: Json | null
+          insight_type: string
+          priority_level: string | null
+          status: string | null
+          team_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          insight_data?: Json | null
+          insight_type: string
+          priority_level?: string | null
+          status?: string | null
+          team_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          insight_data?: Json | null
+          insight_type?: string
+          priority_level?: string | null
+          status?: string | null
+          team_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_workflow_insights_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       comparison_categories: {
         Row: {
           created_at: string | null
@@ -617,6 +658,112 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "team_activity_logs_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      team_discussions: {
+        Row: {
+          content: string
+          created_at: string | null
+          id: string
+          is_ai_summary: boolean | null
+          metadata: Json | null
+          parent_id: string | null
+          team_id: string | null
+          tool_id: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          content: string
+          created_at?: string | null
+          id?: string
+          is_ai_summary?: boolean | null
+          metadata?: Json | null
+          parent_id?: string | null
+          team_id?: string | null
+          tool_id?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          id?: string
+          is_ai_summary?: boolean | null
+          metadata?: Json | null
+          parent_id?: string | null
+          team_id?: string | null
+          tool_id?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "team_discussions_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "team_discussions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "team_discussions_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "team_discussions_tool_id_fkey"
+            columns: ["tool_id"]
+            isOneToOne: false
+            referencedRelation: "real_time_tool_metrics"
+            referencedColumns: ["tool_id"]
+          },
+          {
+            foreignKeyName: "team_discussions_tool_id_fkey"
+            columns: ["tool_id"]
+            isOneToOne: false
+            referencedRelation: "tools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      team_integrations: {
+        Row: {
+          config: Json | null
+          created_at: string | null
+          id: string
+          integration_type: string
+          is_active: boolean | null
+          team_id: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          config?: Json | null
+          created_at?: string | null
+          id?: string
+          integration_type: string
+          is_active?: boolean | null
+          team_id?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          config?: Json | null
+          created_at?: string | null
+          id?: string
+          integration_type?: string
+          is_active?: boolean | null
+          team_id?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "team_integrations_team_id_fkey"
             columns: ["team_id"]
             isOneToOne: false
             referencedRelation: "teams"
@@ -1548,6 +1695,47 @@ export type Database = {
         }
         Relationships: []
       }
+      user_dashboard_layouts: {
+        Row: {
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          layout_config: Json | null
+          layout_name: string
+          team_id: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          layout_config?: Json | null
+          layout_name: string
+          team_id?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          layout_config?: Json | null
+          layout_name?: string
+          team_id?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_dashboard_layouts_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_preferences: {
         Row: {
           created_at: string | null
@@ -1739,6 +1927,17 @@ export type Database = {
           total_current_spend: number
           potential_savings: number
           recommendations: Json
+        }[]
+      }
+      generate_team_workflow_insights: {
+        Args: {
+          team_id_param: string
+        }
+        Returns: {
+          insight_id: string
+          insight_type: string
+          insight_data: Json
+          priority_level: string
         }[]
       }
       generate_tool_recommendations: {

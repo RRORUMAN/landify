@@ -7,12 +7,13 @@ import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
-import type { Team } from '@/data/types';
+import type { Team, TeamMember } from '@/data/types';
 import { Skeleton } from '@/components/ui/skeleton';
 import TeamOverview from './components/TeamOverview';
 import TeamMembersList from './components/TeamMembersList';
 import TeamToolsGrid from './components/TeamToolsGrid';
 import TeamActivityLog from './components/TeamActivityLog';
+import AIWorkflowInsights from './components/AIWorkflowInsights';
 
 const TeamDashboard = () => {
   const { teamId } = useParams();
@@ -36,7 +37,6 @@ const TeamDashboard = () => {
 
       if (teamError) throw teamError;
       
-      // Transform the data to match our types
       const transformedTeam = {
         ...team,
         team_members: team.team_members.map((member: any) => ({
@@ -86,8 +86,8 @@ const TeamDashboard = () => {
     },
   });
 
-  const isAdmin = teamData?.team_members.some(async member => {
-    const { data: { user } } = await supabase.auth.getUser();
+  const isAdmin = teamData?.team_members.some(member => {
+    const { data: { user } } = supabase.auth.getUser();
     return member.user_id === user?.id && member.role === 'admin';
   });
 
@@ -130,6 +130,10 @@ const TeamDashboard = () => {
             Team Settings
           </Button>
         )}
+      </div>
+
+      <div className="mb-6">
+        <AIWorkflowInsights teamId={teamId!} />
       </div>
 
       <Tabs defaultValue="overview" className="space-y-6">

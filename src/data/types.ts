@@ -175,3 +175,48 @@ export interface ToolNote {
   created_at: string;
   updated_at: string;
 }
+
+export interface AIWorkflowInsight {
+  id: string;
+  insight_type: 'task_suggestion' | 'bottleneck' | 'optimization' | 'cost_saving';
+  insight_data: {
+    tool_id: string;
+    tool_name: string;
+    user_count: number;
+    total_cost: number;
+    suggestion: string;
+  };
+  priority_level: 'high' | 'medium' | 'low';
+  created_at: string;
+  status: 'pending' | 'active';
+}
+
+export interface DashboardLayout {
+  id: string;
+  layout_name: string;
+  layout_config: Record<string, any>;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface TeamDiscussion {
+  id: string;
+  content: string;
+  user_id: string;
+  tool_id: string | null;
+  parent_id: string | null;
+  created_at: string;
+  updated_at: string;
+  is_ai_summary: boolean;
+  metadata: Record<string, any>;
+}
+
+export interface TeamIntegration {
+  id: string;
+  integration_type: 'slack' | 'notion' | 'trello';
+  config: Record<string, any>;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
