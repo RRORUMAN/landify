@@ -85,7 +85,7 @@ const Sidebar = () => {
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
               Dashboard
             </h2>
-            <p className="text-sm text-[#2563EB] dark:text-[#2563EB]">
+            <p className="text-sm text-[#2563EB]">
               Manage tools
             </p>
           </div>
@@ -134,7 +134,7 @@ const Sidebar = () => {
           variant="ghost"
           size="lg"
           onClick={toggleDarkMode}
-          className="w-full justify-start gap-3 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800"
+          className="w-full justify-start gap-3 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-transparent"
         >
           {isDarkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
           <span>{isDarkMode ? "Light Mode" : "Dark Mode"}</span>
@@ -144,7 +144,7 @@ const Sidebar = () => {
           variant="ghost"
           size="lg"
           onClick={handleSignOut}
-          className="w-full justify-start gap-3 text-sm text-red-600 hover:text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:text-red-300 dark:hover:bg-red-900/20"
+          className="w-full justify-start gap-3 text-sm text-red-600 hover:text-red-700 hover:bg-transparent dark:text-red-400 dark:hover:text-red-300"
         >
           <LogOut className="h-5 w-5" />
           <span>Sign Out</span>

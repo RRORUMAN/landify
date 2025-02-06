@@ -119,7 +119,7 @@ const MyTools = () => {
           <div className="flex items-center gap-4">
             <Button
               variant="ghost"
-              className="text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+              className="text-gray-600 hover:text-gray-900 hover:bg-transparent"
               onClick={() => navigate(-1)}
             >
               <ArrowLeft className="w-5 h-5" />
@@ -132,7 +132,7 @@ const MyTools = () => {
                 <TabsTrigger 
                   value="grid" 
                   onClick={() => setViewMode('grid')}
-                  className="data-[state=active]:bg-[#4361EE] data-[state=active]:text-white"
+                  className="data-[state=active]:bg-[#2563EB] data-[state=active]:text-white hover:bg-transparent"
                 >
                   <LayoutGrid className="w-4 h-4 mr-2" />
                   Grid
@@ -140,7 +140,7 @@ const MyTools = () => {
                 <TabsTrigger 
                   value="list" 
                   onClick={() => setViewMode('list')}
-                  className="data-[state=active]:bg-[#4361EE] data-[state=active]:text-white"
+                  className="data-[state=active]:bg-[#2563EB] data-[state=active]:text-white hover:bg-transparent"
                 >
                   <Activity className="w-4 h-4 mr-2" />
                   List
@@ -149,7 +149,7 @@ const MyTools = () => {
             </Tabs>
             <Button
               onClick={() => navigate("/tools/add")}
-              className="bg-[#4361EE] hover:bg-[#3249d8] text-white flex items-center gap-2"
+              className="bg-[#2563EB] hover:bg-[#2563EB] text-white flex items-center gap-2"
             >
               <Plus className="w-4 h-4" /> Add Tools
             </Button>
@@ -165,17 +165,17 @@ const MyTools = () => {
                 <div className="bg-white p-6 rounded-lg border border-gray-100">
                   <h3 className="text-sm font-medium text-gray-500">Monthly Spend</h3>
                   <div className="mt-2 flex items-baseline">
-                    <p className="text-3xl font-semibold text-[#4361EE]">${monthlySpend.toFixed(2)}</p>
+                    <p className="text-3xl font-semibold text-[#2563EB]">${monthlySpend.toFixed(2)}</p>
                     <p className="ml-2 text-sm text-gray-500">/ month</p>
                   </div>
                 </div>
                 <div className="bg-white p-6 rounded-lg border border-gray-100">
                   <h3 className="text-sm font-medium text-gray-500">Active Tools</h3>
-                  <p className="mt-2 text-3xl font-semibold text-[#4361EE]">{activeToolsCount}</p>
+                  <p className="mt-2 text-3xl font-semibold text-[#2563EB]">{activeToolsCount}</p>
                 </div>
                 <div className="bg-white p-6 rounded-lg border border-gray-100">
                   <h3 className="text-sm font-medium text-gray-500">Most Used Category</h3>
-                  <p className="mt-2 text-3xl font-semibold text-[#4361EE]">{mostUsedCategory}</p>
+                  <p className="mt-2 text-3xl font-semibold text-[#2563EB]">{mostUsedCategory}</p>
                 </div>
               </div>
             </Card>
