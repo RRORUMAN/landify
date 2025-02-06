@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -19,21 +20,21 @@ export default {
     },
     extend: {
       colors: {
-        // Three-color system
+        // Three-color system with consistent blue
         primary: {
-          DEFAULT: "#000000", // Black
-          light: "#333333", // Lighter black for hover states
-          dark: "#000000", // Pure black
+          DEFAULT: "#4361EE", // Main blue
+          light: "#647EF5", // Lighter blue for hover states
+          dark: "#3249D8", // Darker blue for active states
         },
         accent: {
-          DEFAULT: "#0066FF", // Icon blue
-          light: "#3385FF", // Lighter blue for hover states
-          dark: "#0052CC", // Darker blue for active states
+          DEFAULT: "#4361EE", // Same blue for consistency
+          light: "#647EF5",
+          dark: "#3249D8",
         },
         // System colors mapped to our three-color system
-        border: "#E5E5E5", // Light gray border
+        border: "#E5E5E5",
         input: "#000000",
-        ring: "#0066FF",
+        ring: "#4361EE",
         background: "#FFFFFF",
         foreground: "#000000",
         secondary: {
