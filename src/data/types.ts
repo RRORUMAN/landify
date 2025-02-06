@@ -57,6 +57,7 @@ export interface UserTool {
   billing_cycle: string | null;
   next_billing_date: string | null;
   usage_stats: Record<string, any> | null;
+  active_sessions?: number;
   tool?: Tool;
 }
 
