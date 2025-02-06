@@ -311,3 +311,31 @@
                  0 0 40px rgba(59, 130, 246, 0.2);
   }
 }
+
+/* Subtle animation for the "Business" text */
+@keyframes subtitle {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-subtitle {
+  background-size: 200% auto;
+  animation: subtitle 8s ease infinite;
+}
+
+/* Button hover effect */
+.button-hover {
+  transition: all 0.3s ease;
+}
+
+.button-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}

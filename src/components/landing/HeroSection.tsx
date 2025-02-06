@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { ArrowRight, Sparkles } from "lucide-react";
@@ -45,7 +44,7 @@ const HeroSection = () => {
                 repeat: Infinity,
                 delay: i * 0.1,
               }}
-              className="aspect-square bg-accent/20 rounded-lg"
+              className="aspect-square bg-primary/20 rounded-lg"
             />
           ))}
         </div>
@@ -60,8 +59,8 @@ const HeroSection = () => {
             variants={itemVariants}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium neo-blur"
           >
-            <Sparkles className="w-4 h-4 text-primary animate-pulse" />
-            <span className="bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
+            <Sparkles className="w-4 h-4 text-blue-500 animate-pulse" />
+            <span className="bg-gradient-to-r from-blue-500 to-blue-600 bg-clip-text text-transparent">
               Your AI Tool Discovery Platform
             </span>
           </motion.div>
@@ -72,9 +71,8 @@ const HeroSection = () => {
           >
             Find the Perfect AI Tools for Your{" "}
             <span className="inline-block">
-              <span className="inline-block animate-gradient bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600 bg-clip-text text-transparent relative">
+              <span className="inline-block bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600 bg-clip-text text-transparent animate-subtitle">
                 Business
-                <div className="absolute inset-0 blur-lg opacity-30 bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600 animate-pulse" />
               </span>
             </span>
           </motion.h1>
@@ -100,7 +98,7 @@ const HeroSection = () => {
                 className="relative overflow-hidden bg-primary hover:bg-primary/90 text-white font-semibold px-8 py-6 text-lg rounded-xl w-full sm:w-auto transition-all duration-500 ease-out transform hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)]"
                 onClick={() => navigate("/auth")}
               >
-                <span className="relative z-10 flex items-center">
+                <span className="relative z-10 flex items-center text-white">
                   Start Discovering AI Tools
                   <ArrowRight className="ml-2 transition-transform duration-300 group-hover:translate-x-1" />
                 </span>
