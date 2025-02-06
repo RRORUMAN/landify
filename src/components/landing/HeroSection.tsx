@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { ArrowRight, Sparkles } from "lucide-react";
@@ -59,8 +60,8 @@ const HeroSection = () => {
             variants={itemVariants}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium neo-blur"
           >
-            <Sparkles className="w-4 h-4 text-accent animate-pulse" />
-            <span className="bg-gradient-to-r from-accent to-accent/80 bg-clip-text text-transparent">
+            <Sparkles className="w-4 h-4 text-primary animate-pulse" />
+            <span className="bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
               Your AI Tool Discovery Platform
             </span>
           </motion.div>
@@ -70,8 +71,11 @@ const HeroSection = () => {
             className="text-5xl md:text-7xl font-bold tracking-tight text-black dark:text-white"
           >
             Find the Perfect AI Tools for Your{" "}
-            <span className="bg-gradient-to-r from-accent to-accent/80 bg-clip-text text-transparent animate-gradient">
-              Business
+            <span className="inline-block">
+              <span className="inline-block animate-gradient bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600 bg-clip-text text-transparent relative">
+                Business
+                <div className="absolute inset-0 blur-lg opacity-30 bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600 animate-pulse" />
+              </span>
             </span>
           </motion.h1>
           
@@ -93,7 +97,7 @@ const HeroSection = () => {
             >
               <Button
                 size="lg"
-                className="relative overflow-hidden bg-accent hover:bg-accent/90 text-white font-semibold px-8 py-6 text-lg rounded-xl w-full sm:w-auto transition-all duration-500 ease-out transform hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)]"
+                className="relative overflow-hidden bg-primary hover:bg-primary/90 text-white font-semibold px-8 py-6 text-lg rounded-xl w-full sm:w-auto transition-all duration-500 ease-out transform hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)]"
                 onClick={() => navigate("/auth")}
               >
                 <span className="relative z-10 flex items-center">
@@ -101,7 +105,7 @@ const HeroSection = () => {
                   <ArrowRight className="ml-2 transition-transform duration-300 group-hover:translate-x-1" />
                 </span>
                 <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-accent/40 to-accent/60"
+                  className="absolute inset-0 bg-gradient-to-r from-primary/40 to-primary/60"
                   initial={{ x: "100%" }}
                   animate={{ x: "-100%" }}
                   transition={{
@@ -114,7 +118,7 @@ const HeroSection = () => {
                   }}
                 />
               </Button>
-              <div className="absolute -inset-0.5 bg-gradient-to-r from-accent to-accent/80 rounded-xl blur opacity-30 group-hover:opacity-50 transition duration-500" />
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-primary to-primary/80 rounded-xl blur opacity-30 group-hover:opacity-50 transition duration-500" />
             </motion.div>
             <motion.span 
               variants={itemVariants}

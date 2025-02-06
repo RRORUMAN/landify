@@ -260,3 +260,54 @@
     transform: translateY(-20px) translateX(10px);
   }
 }
+
+/* Gradient Text Animation */
+.animate-gradient-text {
+  background-size: 200% auto;
+  animation: textGradient 5s linear infinite;
+}
+
+@keyframes textGradient {
+  0% { background-position: 0% center; }
+  50% { background-position: 100% center; }
+  100% { background-position: 0% center; }
+}
+
+/* Button Glow Effect */
+.button-glow {
+  position: relative;
+  overflow: hidden;
+}
+
+.button-glow::after {
+  content: '';
+  position: absolute;
+  inset: -10px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transform: translateX(-100%);
+  animation: glow 2s linear infinite;
+}
+
+@keyframes glow {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Text Glow Animation */
+.text-glow {
+  animation: textGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes textGlow {
+  from {
+    text-shadow: 0 0 10px rgba(59, 130, 246, 0.5),
+                 0 0 20px rgba(59, 130, 246, 0.3),
+                 0 0 30px rgba(59, 130, 246, 0.2);
+  }
+  to {
+    text-shadow: 0 0 20px rgba(59, 130, 246, 0.6),
+                 0 0 30px rgba(59, 130, 246, 0.4),
+                 0 0 40px rgba(59, 130, 246, 0.2);
+  }
+}
