@@ -10,7 +10,6 @@ import ToolCategories from "./pages/tools/ToolCategories";
 import AddTool from "./pages/tools/AddTool";
 import CompareTools from "./pages/tools/CompareTools";
 import AIRecommendations from "./pages/tools/AIRecommendations";
-import Analytics from "./pages/tools/Analytics";
 import Sidebar from "./components/dashboard/Sidebar";
 
 // Create a client
@@ -42,7 +41,6 @@ const AppContent = () => {
               <Route path="add" element={<AddTool />} />
               <Route path="compare" element={<CompareTools />} />
               <Route path="recommendations" element={<AIRecommendations />} />
-              <Route path="analytics" element={<Analytics />} />
             </Route>
           </Routes>
         </main>

@@ -1,7 +1,6 @@
-
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { Search, Plus, Scale, Brain, Sun, Moon, LogOut, BarChart3 } from "lucide-react";
+import { Search, Plus, Scale, Brain, Sun, Moon, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -50,13 +49,6 @@ const Sidebar = () => {
       icon: Brain,
       path: "/tools/recommendations",
       description: "Get personalized recommendations",
-      isNew: true,
-    },
-    {
-      title: "Analytics",
-      icon: BarChart3,
-      path: "/tools/analytics",
-      description: "Track spending and usage",
       isNew: true,
     },
   ];
