@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { categories } from "@/data/tools";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { Link } from "lucide-react";
+import { Link, ExternalLink } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import type { UserTool } from "@/data/types";
@@ -14,10 +14,13 @@ import type { UserTool } from "@/data/types";
 const PRICING_OPTIONS = ["Free", "Paid", "Custom", "Contact Sales", "Enterprise"] as const;
 type PricingOption = typeof PRICING_OPTIONS[number];
 
+const BILLING_CYCLES = ["monthly", "annual", "lifetime"] as const;
+type BillingCycle = typeof BILLING_CYCLES[number];
+
 const AddTool = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
-  const [userTools, setUserTools] = useState<UserTool[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -25,42 +28,15 @@ const AddTool = () => {
     visitUrl: "",
     notes: "",
     price: "",
-    billingCycle: "monthly",
+    billingCycle: "monthly" as BillingCycle,
     pricing: PRICING_OPTIONS[0] as PricingOption,
   });
 
-  useEffect(() => {
-    fetchUserTools();
-  }, []);
-
-  const fetchUserTools = async () => {
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
-        navigate("/auth");
-        return;
-      }
-
-      const { data: tools, error } = await supabase
-        .from("user_tools")
-        .select("*, tool:tools(*)")
-        .eq("user_id", user.id);
-
-      if (error) throw error;
-
-      setUserTools(tools as UserTool[]);
-    } catch (error) {
-      console.error("Error fetching tools:", error);
-      toast({
-        title: "Error fetching tools",
-        description: "There was an error loading your tools.",
-        variant: "destructive",
-      });
-    }
-  };
+  const isPaidTool = !["Free", "Custom"].includes(formData.pricing);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
     
     try {
       const { data: { user } } = await supabase.auth.getUser();
@@ -70,14 +46,18 @@ const AddTool = () => {
           description: "Please sign in to add tools.",
           variant: "destructive",
         });
+        navigate("/auth");
         return;
       }
+
+      // Create a tool ID from the name
+      const toolId = formData.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
       // First create or get the tool in the tools table
       const { data: toolData, error: toolError } = await supabase
         .from("tools")
         .upsert({
-          id: formData.name.toLowerCase().replace(/\s+/g, '-'),
+          id: toolId,
           name: formData.name,
           description: formData.description,
           category: formData.category,
@@ -101,13 +81,13 @@ const AddTool = () => {
           user_id: user.id,
           tool_id: toolData.id,
           notes: formData.notes,
-          monthly_cost: parseFloat(formData.price) || 0,
+          monthly_cost: isPaidTool ? parseFloat(formData.price) || 0 : 0,
           billing_cycle: formData.billingCycle,
           subscription_details: {
             category: formData.category,
             description: formData.description,
             url: formData.visitUrl,
-            price: parseFloat(formData.price) || 0,
+            price: isPaidTool ? parseFloat(formData.price) || 0 : 0,
             billing_cycle: formData.billingCycle,
             pricing_type: formData.pricing,
           },
@@ -120,18 +100,6 @@ const AddTool = () => {
         description: "Your tool has been added to your collection.",
       });
       
-      setFormData({
-        name: "",
-        description: "",
-        category: "",
-        visitUrl: "",
-        notes: "",
-        price: "",
-        billingCycle: "monthly",
-        pricing: PRICING_OPTIONS[0],
-      });
-      
-      fetchUserTools();
       navigate("/my-tools");
     } catch (error) {
       console.error("Error adding tool:", error);
@@ -140,11 +108,13 @@ const AddTool = () => {
         description: "There was an error adding your tool. Please try again.",
         variant: "destructive",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <div className="p-6 max-w-7xl mx-auto">
+    <div className="p-6 max-w-4xl mx-auto">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Add New Tool</h1>
         <p className="text-gray-600 dark:text-gray-300">Track and manage your AI tool collection</p>
@@ -155,7 +125,7 @@ const AddTool = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
-                Tool Name
+                Tool Name *
               </label>
               <Input
                 value={formData.name}
@@ -167,7 +137,7 @@ const AddTool = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
-                Category
+                Category *
               </label>
               <select
                 value={formData.category}
@@ -186,7 +156,7 @@ const AddTool = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
-                Pricing Type
+                Pricing Type *
               </label>
               <select
                 value={formData.pricing}
@@ -202,22 +172,25 @@ const AddTool = () => {
               </select>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
-                Your Cost
-              </label>
-              <div className="relative">
-                <span className="absolute left-3 top-2.5 text-gray-500">$</span>
-                <Input
-                  type="number"
-                  step="0.01"
-                  value={formData.price}
-                  onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                  placeholder="0.00"
-                  className="pl-8"
-                />
+            {isPaidTool && (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+                  Your Cost
+                </label>
+                <div className="relative">
+                  <span className="absolute left-3 top-2.5 text-gray-500">$</span>
+                  <Input
+                    type="number"
+                    step="0.01"
+                    value={formData.price}
+                    onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                    placeholder="0.00"
+                    className="pl-8"
+                    required={isPaidTool}
+                  />
+                </div>
               </div>
-            </div>
+            )}
 
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
@@ -225,21 +198,24 @@ const AddTool = () => {
               </label>
               <select
                 value={formData.billingCycle}
-                onChange={(e) => setFormData({ ...formData, billingCycle: e.target.value })}
+                onChange={(e) => setFormData({ ...formData, billingCycle: e.target.value as BillingCycle })}
                 className="w-full rounded-md border border-gray-200 dark:border-gray-600 dark:bg-gray-700 px-3 py-2 text-gray-900 dark:text-white"
+                disabled={!isPaidTool}
               >
-                <option value="monthly">Monthly</option>
-                <option value="annual">Annual</option>
-                <option value="lifetime">Lifetime</option>
+                {BILLING_CYCLES.map((cycle) => (
+                  <option key={cycle} value={cycle}>
+                    {cycle.charAt(0).toUpperCase() + cycle.slice(1)}
+                  </option>
+                ))}
               </select>
             </div>
 
             <div className="col-span-2">
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
-                Tool Website
+                Tool Website *
               </label>
               <div className="relative">
-                <Link className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+                <ExternalLink className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
                 <Input
                   type="url"
                   value={formData.visitUrl}
@@ -264,19 +240,21 @@ const AddTool = () => {
             </div>
           </div>
 
-          <div className="flex justify-end gap-4">
+          <div className="flex justify-end gap-4 pt-4">
             <Button
               type="button"
               variant="outline"
               onClick={() => navigate("/my-tools")}
+              disabled={isLoading}
             >
               Cancel
             </Button>
             <Button
               type="submit"
               className="bg-blue-600 hover:bg-blue-700 text-white"
+              disabled={isLoading}
             >
-              Add Tool
+              {isLoading ? "Adding Tool..." : "Add Tool"}
             </Button>
           </div>
         </form>

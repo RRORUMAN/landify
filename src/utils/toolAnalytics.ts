@@ -1,7 +1,9 @@
 
 import { supabase } from "@/integrations/supabase/client";
 
-export const trackToolInteraction = async (toolId: string, interactionType: 'view' | 'click' | 'bookmark' | 'share') => {
+type InteractionType = 'view' | 'click' | 'bookmark' | 'share';
+
+export const trackToolInteraction = async (toolId: string, interactionType: InteractionType) => {
   try {
     const { data: { user } } = await supabase.auth.getUser();
     
