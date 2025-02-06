@@ -1,7 +1,6 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import type { UserTool } from "@/data/types";
-import ToolCard from "@/components/ToolCard";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { format } from "date-fns";
 import { ArrowUpRight, Activity, DollarSign } from "lucide-react";
@@ -35,19 +34,14 @@ export const CategoryTools = ({ category, tools, viewMode = 'grid' }: CategoryTo
             {validTools.map((userTool) => (
               <TableRow key={userTool.id} className="hover:bg-gray-50 dark:hover:bg-gray-800">
                 <TableCell className="font-medium">
-                  <div className="flex items-center gap-3">
-                    <img 
-                      src={userTool.tool?.logo} 
-                      alt={userTool.tool?.name} 
-                      className="w-8 h-8 rounded-lg"
-                    />
-                    {userTool.tool?.name}
-                  </div>
+                  {userTool.tool?.name}
                 </TableCell>
                 <TableCell>
                   <div className="flex items-center gap-2">
                     <DollarSign className="w-4 h-4 text-gray-500" />
-                    ${userTool.monthly_cost?.toFixed(2) || '0.00'}
+                    <span className="font-medium text-gray-900">
+                      ${userTool.monthly_cost?.toFixed(2) || '0.00'}
+                    </span>
                   </div>
                 </TableCell>
                 <TableCell>
@@ -58,20 +52,22 @@ export const CategoryTools = ({ category, tools, viewMode = 'grid' }: CategoryTo
                 <TableCell>
                   <div className="flex items-center gap-2">
                     <Activity className="w-4 h-4 text-gray-500" />
-                    High
+                    <span className="text-gray-900">High</span>
                   </div>
                 </TableCell>
                 <TableCell>
-                  {userTool.next_billing_date 
-                    ? format(new Date(userTool.next_billing_date), 'MMM dd, yyyy')
-                    : 'N/A'}
+                  <span className="text-gray-900">
+                    {userTool.next_billing_date 
+                      ? format(new Date(userTool.next_billing_date), 'MMM dd, yyyy')
+                      : 'N/A'}
+                  </span>
                 </TableCell>
                 <TableCell className="text-right">
                   <Button
                     size="sm"
                     variant="outline"
                     onClick={() => window.open(userTool.tool?.visit_url, '_blank')}
-                    className="flex items-center gap-2"
+                    className="flex items-center gap-2 text-blue-600 hover:text-blue-700"
                   >
                     Visit <ArrowUpRight className="w-4 h-4" />
                   </Button>
@@ -95,18 +91,51 @@ export const CategoryTools = ({ category, tools, viewMode = 'grid' }: CategoryTo
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
             transition={{ duration: 0.2 }}
+            className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow"
           >
-            {userTool.tool && (
-              <ToolCard
-                tool={{
-                  ...userTool.tool,
-                  monthly_cost: userTool.monthly_cost,
-                  billing_cycle: userTool.billing_cycle,
-                  next_billing_date: userTool.next_billing_date,
-                  subscription_status: userTool.subscription_status,
-                }}
-              />
-            )}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-gray-900">
+                {userTool.tool?.name}
+              </h3>
+              
+              <div className="flex items-center justify-between">
+                <div className="space-y-1">
+                  <span className="text-sm text-gray-500">Monthly Cost</span>
+                  <div className="flex items-center gap-1">
+                    <DollarSign className="w-4 h-4 text-blue-600" />
+                    <span className="text-xl font-semibold text-gray-900">
+                      {userTool.monthly_cost?.toFixed(2) || '0.00'}
+                    </span>
+                  </div>
+                </div>
+                <Badge variant={userTool.subscription_status === 'active' ? 'default' : 'secondary'}>
+                  {userTool.subscription_status}
+                </Badge>
+              </div>
+
+              <div className="space-y-2">
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-500">Next Billing</span>
+                  <span className="text-gray-900">
+                    {userTool.next_billing_date 
+                      ? format(new Date(userTool.next_billing_date), 'MMM dd, yyyy')
+                      : 'N/A'}
+                  </span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-500">Usage</span>
+                  <span className="text-gray-900">High</span>
+                </div>
+              </div>
+
+              <Button
+                variant="outline"
+                onClick={() => window.open(userTool.tool?.visit_url, '_blank')}
+                className="w-full flex items-center justify-center gap-2 text-blue-600 hover:text-blue-700"
+              >
+                Visit Tool <ArrowUpRight className="w-4 h-4" />
+              </Button>
+            </div>
           </motion.div>
         ))}
       </AnimatePresence>

@@ -4,14 +4,13 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import type { Tool } from "@/data/types";
-import { ArrowLeft, Download, Save, Filter } from "lucide-react";
+import { ArrowLeft, Download, Save } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import ToolSelectionCard from "@/components/compare/ToolSelectionCard";
 import SelectedToolsGrid from "@/components/compare/SelectedToolsGrid";
 import { useToast } from "@/components/ui/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
 import CompareStats from "@/components/compare/CompareStats";
-import QuickCompare from "@/components/compare/QuickCompare";
 import type { ToolCompatibility } from "@/types/aiTypes";
 import { getToolCompatibility } from "@/utils/aiAnalytics";
 import type { AIInsight } from "@/types/aiTypes";
@@ -167,7 +166,7 @@ const CompareTools = () => {
             <Button
               variant="ghost"
               onClick={handleReset}
-              className="flex items-center gap-2"
+              className="flex items-center gap-2 text-gray-600"
             >
               <ArrowLeft className="h-4 w-4" />
               Compare Different Tools
@@ -176,13 +175,13 @@ const CompareTools = () => {
               <Button
                 variant="outline"
                 onClick={() => handleExport('csv')}
-                className="flex items-center gap-2"
+                className="flex items-center gap-2 text-blue-600"
               >
                 <Download className="h-4 w-4" />
                 Export CSV
               </Button>
               <Button
-                variant="secondary"
+                variant="default"
                 onClick={handleSaveComparison}
                 className="flex items-center gap-2 bg-blue-600 text-white hover:bg-blue-700"
               >
@@ -198,16 +197,6 @@ const CompareTools = () => {
             setIsSelecting={setIsSelecting}
           />
 
-          {compatibility && (
-            <AICompatibilityScore
-              score={compatibility.compatibility_score}
-              factors={compatibility.integration_factors}
-              useCases={compatibility.use_case_match}
-            />
-          )}
-
-          <QuickCompare tools={selectedTools} />
-          
           {insights.length > 0 && (
             <SmartFeatureMatch
               tools={selectedTools}
@@ -217,14 +206,13 @@ const CompareTools = () => {
                 values: selectedTools.map(tool => ({
                   toolId: tool.id,
                   value: insight.insight_data[tool.id] || false,
-                  notes: insight.recommendations?.find(r => r.toolId === tool.id)?.text
+                  notes: insight.recommendations.find(r => r.toolId === tool.id)?.text
                 }))
               }))}
             />
           )}
 
           <CompareStats tools={selectedTools} />
-          <CompareROI tools={selectedTools} />
         </div>
       ) : (
         <ToolSelectionCard

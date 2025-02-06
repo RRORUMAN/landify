@@ -4,7 +4,7 @@ export interface ToolCompatibility {
   tool_id_1: string;
   tool_id_2: string;
   compatibility_score: number;
-  integration_factors: Record<string, any>;
+  integration_factors: { [key: string]: any };
   use_case_match: string[];
   last_analyzed: string;
 }
@@ -13,9 +13,12 @@ export interface AIInsight {
   id: string;
   tool_id: string;
   insight_type: 'workflow' | 'budget' | 'team';
-  insight_data: Record<string, any>;
+  insight_data: { [key: string]: any };
   confidence_score: number;
-  recommendations: string[];
+  recommendations: Array<{
+    toolId: string;
+    text: string;
+  }>;
   last_updated: string;
 }
 
@@ -27,7 +30,7 @@ export interface ROIMetrics {
   cost_savings: number;
   productivity_gain: number;
   roi_score: number;
-  historical_data: Record<string, any>[];
+  historical_data: Array<{ [key: string]: any }>;
   predictions: {
     projected_savings: number;
     payback_period: number;
@@ -39,7 +42,7 @@ export interface ROIMetrics {
 export interface AIAnalysis {
   total_spend: number;
   total_tools: number;
-  tools_data: Record<string, any>;
+  tools_data: { [key: string]: any };
   analysis_date: string;
   potential_savings: number;
   recommendations: {
