@@ -1,4 +1,3 @@
-
 export interface ToolCompatibility {
   id: string;
   tool_id_1: string;
@@ -51,4 +50,20 @@ export interface FeatureCategory {
   name: string;
   description: string;
   features: ComparisonFeature[];
+}
+
+export interface Report {
+  id: string;
+  name: string;
+  type: 'usage' | 'cost' | 'performance';
+  schedule: 'daily' | 'weekly' | 'monthly' | null;
+  recipients: string[];
+  next_send: string;
+}
+
+export interface ROIMetrics {
+  timeSaved: number;
+  costSavings: number;
+  productivityGain: number;
+  score: number;
 }

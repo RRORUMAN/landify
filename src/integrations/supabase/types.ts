@@ -263,6 +263,48 @@ export type Database = {
           },
         ]
       }
+      custom_reports: {
+        Row: {
+          columns: Json | null
+          created_at: string | null
+          export_format: string | null
+          filters: Json | null
+          id: string
+          last_generated: string | null
+          name: string
+          schedule: string | null
+          type: string
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          columns?: Json | null
+          created_at?: string | null
+          export_format?: string | null
+          filters?: Json | null
+          id?: string
+          last_generated?: string | null
+          name: string
+          schedule?: string | null
+          type: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          columns?: Json | null
+          created_at?: string | null
+          export_format?: string | null
+          filters?: Json | null
+          id?: string
+          last_generated?: string | null
+          name?: string
+          schedule?: string | null
+          type?: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       integration_health: {
         Row: {
           created_at: string | null
