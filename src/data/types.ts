@@ -35,6 +35,17 @@ export interface Tool {
       reviews: number;
     };
   }[];
+  ai_insights?: {
+    compatibility_score?: number;
+    feature_match_confidence?: number;
+    recommendation_strength?: number;
+    use_cases?: string[];
+  };
+  integration_details?: {
+    compatibility_factors?: Record<string, number>;
+    integration_score?: number;
+    potential_issues?: string[];
+  };
 }
 
 export interface Category {

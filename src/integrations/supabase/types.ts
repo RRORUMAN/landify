@@ -412,6 +412,44 @@ export type Database = {
         }
         Relationships: []
       }
+      tool_ai_insights: {
+        Row: {
+          confidence_score: number | null
+          id: string
+          insight_data: Json | null
+          insight_type: string
+          last_updated: string | null
+          recommendations: Json | null
+          tool_id: string | null
+        }
+        Insert: {
+          confidence_score?: number | null
+          id?: string
+          insight_data?: Json | null
+          insight_type: string
+          last_updated?: string | null
+          recommendations?: Json | null
+          tool_id?: string | null
+        }
+        Update: {
+          confidence_score?: number | null
+          id?: string
+          insight_data?: Json | null
+          insight_type?: string
+          last_updated?: string | null
+          recommendations?: Json | null
+          tool_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tool_ai_insights_tool_id_fkey"
+            columns: ["tool_id"]
+            isOneToOne: false
+            referencedRelation: "tools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tool_analytics: {
         Row: {
           created_at: string | null
@@ -447,6 +485,51 @@ export type Database = {
           {
             foreignKeyName: "tool_analytics_tool_id_fkey"
             columns: ["tool_id"]
+            isOneToOne: false
+            referencedRelation: "tools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tool_compatibility_scores: {
+        Row: {
+          compatibility_score: number | null
+          id: string
+          integration_factors: Json | null
+          last_analyzed: string | null
+          tool_id_1: string | null
+          tool_id_2: string | null
+          use_case_match: Json | null
+        }
+        Insert: {
+          compatibility_score?: number | null
+          id?: string
+          integration_factors?: Json | null
+          last_analyzed?: string | null
+          tool_id_1?: string | null
+          tool_id_2?: string | null
+          use_case_match?: Json | null
+        }
+        Update: {
+          compatibility_score?: number | null
+          id?: string
+          integration_factors?: Json | null
+          last_analyzed?: string | null
+          tool_id_1?: string | null
+          tool_id_2?: string | null
+          use_case_match?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tool_compatibility_scores_tool_id_1_fkey"
+            columns: ["tool_id_1"]
+            isOneToOne: false
+            referencedRelation: "tools"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tool_compatibility_scores_tool_id_2_fkey"
+            columns: ["tool_id_2"]
             isOneToOne: false
             referencedRelation: "tools"
             referencedColumns: ["id"]
@@ -565,6 +648,97 @@ export type Database = {
             foreignKeyName: "tool_reviews_sentiment_tool_id_fkey"
             columns: ["tool_id"]
             isOneToOne: true
+            referencedRelation: "tools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tool_roi_analytics: {
+        Row: {
+          cost_savings: number | null
+          historical_data: Json | null
+          id: string
+          last_updated: string | null
+          predictions: Json | null
+          productivity_gain: number | null
+          roi_score: number | null
+          time_saved: number | null
+          tool_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          cost_savings?: number | null
+          historical_data?: Json | null
+          id?: string
+          last_updated?: string | null
+          predictions?: Json | null
+          productivity_gain?: number | null
+          roi_score?: number | null
+          time_saved?: number | null
+          tool_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          cost_savings?: number | null
+          historical_data?: Json | null
+          id?: string
+          last_updated?: string | null
+          predictions?: Json | null
+          productivity_gain?: number | null
+          roi_score?: number | null
+          time_saved?: number | null
+          tool_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tool_roi_analytics_tool_id_fkey"
+            columns: ["tool_id"]
+            isOneToOne: false
+            referencedRelation: "tools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tool_usage_analytics: {
+        Row: {
+          activity_type: string | null
+          created_at: string | null
+          id: string
+          productivity_score: number | null
+          tool_id: string | null
+          usage_context: Json | null
+          usage_duration: number | null
+          usage_timestamp: string | null
+          user_id: string | null
+        }
+        Insert: {
+          activity_type?: string | null
+          created_at?: string | null
+          id?: string
+          productivity_score?: number | null
+          tool_id?: string | null
+          usage_context?: Json | null
+          usage_duration?: number | null
+          usage_timestamp?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          activity_type?: string | null
+          created_at?: string | null
+          id?: string
+          productivity_score?: number | null
+          tool_id?: string | null
+          usage_context?: Json | null
+          usage_duration?: number | null
+          usage_timestamp?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tool_usage_analytics_tool_id_fkey"
+            columns: ["tool_id"]
+            isOneToOne: false
             referencedRelation: "tools"
             referencedColumns: ["id"]
           },
@@ -739,6 +913,47 @@ export type Database = {
           },
         ]
       }
+      usage_anomalies: {
+        Row: {
+          anomaly_data: Json | null
+          anomaly_type: string
+          detection_timestamp: string | null
+          id: string
+          is_resolved: boolean | null
+          severity_level: string | null
+          tool_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          anomaly_data?: Json | null
+          anomaly_type: string
+          detection_timestamp?: string | null
+          id?: string
+          is_resolved?: boolean | null
+          severity_level?: string | null
+          tool_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          anomaly_data?: Json | null
+          anomaly_type?: string
+          detection_timestamp?: string | null
+          id?: string
+          is_resolved?: boolean | null
+          severity_level?: string | null
+          tool_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "usage_anomalies_tool_id_fkey"
+            columns: ["tool_id"]
+            isOneToOne: false
+            referencedRelation: "tools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       usage_reports: {
         Row: {
           created_at: string | null
@@ -905,6 +1120,21 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      analyze_tool_usage_patterns: {
+        Args: {
+          p_user_id: string
+          p_tool_id: string
+          p_time_range?: unknown
+        }
+        Returns: Json
+      }
+      calculate_tool_compatibility: {
+        Args: {
+          p_tool_id_1: string
+          p_tool_id_2: string
+        }
+        Returns: number
+      }
       calculate_tool_savings: {
         Args: {
           p_user_id: string
