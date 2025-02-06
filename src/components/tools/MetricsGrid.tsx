@@ -41,10 +41,10 @@ export const MetricsGrid = ({ metrics }: MetricsGridProps) => {
                       <metric.icon className="w-6 h-6" />
                     </div>
                     <div>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">{metric.title}</p>
-                      <p className="text-2xl font-semibold mt-1">{metric.value}</p>
+                      <p className="text-sm text-black dark:text-white">{metric.title}</p>
+                      <p className="text-2xl font-semibold text-[#000000e6]">{metric.value}</p>
                       {metric.subtext && (
-                        <p className="text-sm text-gray-500 mt-1">{metric.subtext}</p>
+                        <p className="text-sm text-black dark:text-white mt-1">{metric.subtext}</p>
                       )}
                     </div>
                   </div>

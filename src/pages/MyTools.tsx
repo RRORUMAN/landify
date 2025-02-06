@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
@@ -113,7 +112,7 @@ const MyTools = () => {
 
   return (
     <div className="bg-gray-50 dark:bg-gray-900 min-h-screen transition-colors duration-150">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-black dark:text-white">
         <DashboardHeader viewMode={viewMode} setViewMode={setViewMode} />
 
         {tools.length === 0 ? (
@@ -139,4 +138,3 @@ const MyTools = () => {
 };
 
 export default MyTools;
-
