@@ -37,8 +37,13 @@ export interface ROIMetrics {
 }
 
 export interface AIAnalysis {
+  total_spend: number;
   total_tools: number;
   tools_data: Record<string, any>;
   analysis_date: string;
   potential_savings: number;
+  recommendations: {
+    total_tools: number;
+    analysis_date: string;
+  };
 }

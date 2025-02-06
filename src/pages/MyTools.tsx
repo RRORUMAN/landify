@@ -1,22 +1,19 @@
+
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { Plus, ArrowLeft, DollarSign, LayoutGrid, Activity, Calendar, Sparkles, PieChart } from "lucide-react";
+import { Plus, ArrowLeft, DollarSign, LayoutGrid, Activity, Calendar } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { motion, AnimatePresence } from "framer-motion";
 import { format } from "date-fns";
 import { Skeleton } from "@/components/ui/skeleton";
-import { getAISavingsAnalysis } from "@/utils/toolAnalytics";
 import type { UserTool } from "@/data/types";
-import type { AIAnalysis } from "@/types/aiTypes";
-import { AIInsightsCard } from "@/components/tools/AIInsightsCard";
 import { MetricsGrid } from "@/components/tools/MetricsGrid";
 import { CategoryTools } from "@/components/tools/CategoryTools";
 import { EmptyToolsState } from "@/components/tools/EmptyToolsState";
 import { Card } from "@/components/ui/card";
 import { TabsContent, Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { AIFeatures } from "@/components/tools/AIFeatures";
 
 const MyTools = () => {
   const [tools, setTools] = useState<UserTool[]>([]);
@@ -25,9 +22,6 @@ const MyTools = () => {
   const [activeToolsCount, setActiveToolsCount] = useState(0);
   const [nextBillingTotal, setNextBillingTotal] = useState(0);
   const [nextBillingDate, setNextBillingDate] = useState<string | null>(null);
-  const [totalSavings, setTotalSavings] = useState(0);
-  const [mostUsedCategory, setMostUsedCategory] = useState("");
-  const [aiAnalysis, setAIAnalysis] = useState<AIAnalysis | null>(null);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -35,9 +29,6 @@ const MyTools = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const analysis = await getAISavingsAnalysis();
-        setAIAnalysis(analysis);
-
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) {
           navigate("/auth");
@@ -66,18 +57,6 @@ const MyTools = () => {
         setMonthlySpend(totalMonthly);
         setActiveToolsCount(processedTools.length);
         
-        // Calculate most used category
-        const categoryCount = processedTools.reduce((acc: Record<string, number>, tool) => {
-          const category = tool.tool?.category || 'Uncategorized';
-          acc[category] = (acc[category] || 0) + 1;
-          return acc;
-        }, {});
-        
-        const mostUsed = Object.entries(categoryCount).reduce((a, b) => 
-          categoryCount[a[0]] > categoryCount[b[0]] ? a : b
-        )[0];
-        setMostUsedCategory(mostUsed);
-        
         // Find next billing
         const upcomingBillings = processedTools
           .filter(tool => tool.next_billing_date)
@@ -87,8 +66,6 @@ const MyTools = () => {
           setNextBillingDate(upcomingBillings[0].next_billing_date!);
           setNextBillingTotal(upcomingBillings[0].monthly_cost || 0);
         }
-
-        setTotalSavings(analysis?.potential_savings || 0);
 
       } catch (error) {
         console.error("Error fetching tools:", error);
@@ -114,18 +91,18 @@ const MyTools = () => {
       tooltip: "Total monthly cost across all tools"
     },
     {
-      title: "AI-Suggested Savings",
-      value: `$${totalSavings.toFixed(2)}`,
-      icon: Sparkles,
-      color: "bg-purple-100 text-purple-600 dark:bg-purple-900 dark:text-purple-300",
-      tooltip: "AI-calculated potential monthly savings based on usage patterns"
-    },
-    {
       title: "Active Tools",
       value: activeToolsCount.toString(),
       icon: LayoutGrid,
       color: "bg-green-100 text-green-600 dark:bg-green-900 dark:text-green-300",
       tooltip: "Number of tools currently in use"
+    },
+    {
+      title: "Usage Efficiency",
+      value: `${activeToolsCount > 0 ? Math.round((activeToolsCount / tools.length) * 100) : 0}%`,
+      icon: Activity,
+      color: "bg-yellow-100 text-yellow-600 dark:bg-yellow-900 dark:text-yellow-300",
+      tooltip: "Percentage of tools actively used this month"
     },
     {
       title: "Next Billing",
@@ -134,20 +111,6 @@ const MyTools = () => {
       icon: Calendar,
       color: "bg-orange-100 text-orange-600 dark:bg-orange-900 dark:text-orange-300",
       tooltip: "Amount due on next billing cycle"
-    },
-    {
-      title: "Most Used Category",
-      value: mostUsedCategory || "N/A",
-      icon: PieChart,
-      color: "bg-indigo-100 text-indigo-600 dark:bg-indigo-900 dark:text-indigo-300",
-      tooltip: "Category with the most tools"
-    },
-    {
-      title: "Usage Efficiency",
-      value: `${activeToolsCount > 0 ? Math.round((activeToolsCount / tools.length) * 100) : 0}%`,
-      icon: Activity,
-      color: "bg-yellow-100 text-yellow-600 dark:bg-yellow-900 dark:text-yellow-300",
-      tooltip: "Percentage of tools actively used this month"
     }
   ];
 
@@ -164,7 +127,7 @@ const MyTools = () => {
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-          {[1, 2, 3, 4, 5, 6].map((i) => (
+          {[1, 2, 3, 4].map((i) => (
             <Skeleton key={i} className="h-32 w-full" />
           ))}
         </div>
@@ -202,25 +165,10 @@ const MyTools = () => {
           </div>
         </div>
 
-        {/* AI Features - Compact version at the top */}
-        <div className="mb-6">
-          <AIFeatures />
-        </div>
-
         {/* Key Metrics */}
-        <MetricsGrid metrics={metrics} />
-
-        {/* AI Insights - More detailed but compact */}
-        {aiAnalysis && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="mb-6"
-          >
-            <AIInsightsCard aiAnalysis={aiAnalysis} activeToolsCount={activeToolsCount} />
-          </motion.div>
-        )}
+        <div className="mb-6">
+          <MetricsGrid metrics={metrics} />
+        </div>
 
         {/* Tools Grid/List */}
         {tools.length === 0 ? (
