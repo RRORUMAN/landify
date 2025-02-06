@@ -127,7 +127,7 @@ const MyTools = () => {
             </Tabs>
             <Button
               onClick={() => navigate("/tools/add")}
-              className="bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2"
+              className="bg-accent hover:bg-accent-dark text-white flex items-center gap-2"
             >
               <Plus className="w-4 h-4" /> Add Tools
             </Button>
