@@ -175,7 +175,7 @@ const MyTools = () => {
   return (
     <div className="bg-gray-50 dark:bg-gray-900 min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex justify-between items-center mb-6">
           <div className="flex items-center gap-4">
             <Button
               variant="ghost"
@@ -202,28 +202,31 @@ const MyTools = () => {
           </div>
         </div>
 
+        {/* AI Features - Compact version at the top */}
+        <div className="mb-6">
+          <AIFeatures />
+        </div>
+
+        {/* Key Metrics */}
+        <MetricsGrid metrics={metrics} />
+
+        {/* AI Insights - More detailed but compact */}
         {aiAnalysis && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
+            initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="mb-8"
+            exit={{ opacity: 0, y: -10 }}
+            className="mb-6"
           >
             <AIInsightsCard aiAnalysis={aiAnalysis} activeToolsCount={activeToolsCount} />
           </motion.div>
         )}
 
-        <MetricsGrid metrics={metrics} />
-        
-        {/* Add AI Features section */}
-        <div className="my-8">
-          <AIFeatures />
-        </div>
-
+        {/* Tools Grid/List */}
         {tools.length === 0 ? (
           <EmptyToolsState />
         ) : (
-          <div className="space-y-8">
+          <div className="space-y-6">
             <AnimatePresence mode="wait">
               {Object.entries(categories).map(([category, categoryTools]) => (
                 <motion.div
