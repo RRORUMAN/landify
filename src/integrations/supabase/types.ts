@@ -45,6 +45,13 @@ export type Database = {
             foreignKeyName: "active_sessions_tool_id_fkey"
             columns: ["tool_id"]
             isOneToOne: false
+            referencedRelation: "real_time_tool_metrics"
+            referencedColumns: ["tool_id"]
+          },
+          {
+            foreignKeyName: "active_sessions_tool_id_fkey"
+            columns: ["tool_id"]
+            isOneToOne: false
             referencedRelation: "tools"
             referencedColumns: ["id"]
           },
@@ -124,6 +131,13 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "ai_tool_recommendations_tool_id_fkey"
+            columns: ["tool_id"]
+            isOneToOne: false
+            referencedRelation: "real_time_tool_metrics"
+            referencedColumns: ["tool_id"]
+          },
           {
             foreignKeyName: "ai_tool_recommendations_tool_id_fkey"
             columns: ["tool_id"]
@@ -258,6 +272,13 @@ export type Database = {
             foreignKeyName: "comparison_features_tool_id_fkey"
             columns: ["tool_id"]
             isOneToOne: false
+            referencedRelation: "real_time_tool_metrics"
+            referencedColumns: ["tool_id"]
+          },
+          {
+            foreignKeyName: "comparison_features_tool_id_fkey"
+            columns: ["tool_id"]
+            isOneToOne: false
             referencedRelation: "tools"
             referencedColumns: ["id"]
           },
@@ -344,6 +365,13 @@ export type Database = {
             foreignKeyName: "integration_health_tool_id_fkey"
             columns: ["tool_id"]
             isOneToOne: false
+            referencedRelation: "real_time_tool_metrics"
+            referencedColumns: ["tool_id"]
+          },
+          {
+            foreignKeyName: "integration_health_tool_id_fkey"
+            columns: ["tool_id"]
+            isOneToOne: false
             referencedRelation: "tools"
             referencedColumns: ["id"]
           },
@@ -423,6 +451,13 @@ export type Database = {
           tool_id?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "performance_metrics_tool_id_fkey"
+            columns: ["tool_id"]
+            isOneToOne: false
+            referencedRelation: "real_time_tool_metrics"
+            referencedColumns: ["tool_id"]
+          },
           {
             foreignKeyName: "performance_metrics_tool_id_fkey"
             columns: ["tool_id"]
@@ -552,6 +587,13 @@ export type Database = {
             foreignKeyName: "tool_ai_insights_tool_id_fkey"
             columns: ["tool_id"]
             isOneToOne: false
+            referencedRelation: "real_time_tool_metrics"
+            referencedColumns: ["tool_id"]
+          },
+          {
+            foreignKeyName: "tool_ai_insights_tool_id_fkey"
+            columns: ["tool_id"]
+            isOneToOne: false
             referencedRelation: "tools"
             referencedColumns: ["id"]
           },
@@ -593,6 +635,13 @@ export type Database = {
             foreignKeyName: "tool_analytics_tool_id_fkey"
             columns: ["tool_id"]
             isOneToOne: false
+            referencedRelation: "real_time_tool_metrics"
+            referencedColumns: ["tool_id"]
+          },
+          {
+            foreignKeyName: "tool_analytics_tool_id_fkey"
+            columns: ["tool_id"]
+            isOneToOne: false
             referencedRelation: "tools"
             referencedColumns: ["id"]
           },
@@ -600,28 +649,37 @@ export type Database = {
       }
       tool_compatibility_scores: {
         Row: {
+          ai_ranking: number | null
+          comparison_metrics: Json | null
           compatibility_score: number | null
           id: string
           integration_factors: Json | null
           last_analyzed: string | null
+          real_time_data: Json | null
           tool_id_1: string | null
           tool_id_2: string | null
           use_case_match: Json | null
         }
         Insert: {
+          ai_ranking?: number | null
+          comparison_metrics?: Json | null
           compatibility_score?: number | null
           id?: string
           integration_factors?: Json | null
           last_analyzed?: string | null
+          real_time_data?: Json | null
           tool_id_1?: string | null
           tool_id_2?: string | null
           use_case_match?: Json | null
         }
         Update: {
+          ai_ranking?: number | null
+          comparison_metrics?: Json | null
           compatibility_score?: number | null
           id?: string
           integration_factors?: Json | null
           last_analyzed?: string | null
+          real_time_data?: Json | null
           tool_id_1?: string | null
           tool_id_2?: string | null
           use_case_match?: Json | null
@@ -631,8 +689,22 @@ export type Database = {
             foreignKeyName: "tool_compatibility_scores_tool_id_1_fkey"
             columns: ["tool_id_1"]
             isOneToOne: false
+            referencedRelation: "real_time_tool_metrics"
+            referencedColumns: ["tool_id"]
+          },
+          {
+            foreignKeyName: "tool_compatibility_scores_tool_id_1_fkey"
+            columns: ["tool_id_1"]
+            isOneToOne: false
             referencedRelation: "tools"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tool_compatibility_scores_tool_id_2_fkey"
+            columns: ["tool_id_2"]
+            isOneToOne: false
+            referencedRelation: "real_time_tool_metrics"
+            referencedColumns: ["tool_id"]
           },
           {
             foreignKeyName: "tool_compatibility_scores_tool_id_2_fkey"
@@ -689,6 +761,13 @@ export type Database = {
             foreignKeyName: "tool_feature_evaluations_tool_id_fkey"
             columns: ["tool_id"]
             isOneToOne: false
+            referencedRelation: "real_time_tool_metrics"
+            referencedColumns: ["tool_id"]
+          },
+          {
+            foreignKeyName: "tool_feature_evaluations_tool_id_fkey"
+            columns: ["tool_id"]
+            isOneToOne: false
             referencedRelation: "tools"
             referencedColumns: ["id"]
           },
@@ -726,6 +805,13 @@ export type Database = {
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "tool_integration_status_tool_id_fkey"
+            columns: ["tool_id"]
+            isOneToOne: false
+            referencedRelation: "real_time_tool_metrics"
+            referencedColumns: ["tool_id"]
+          },
           {
             foreignKeyName: "tool_integration_status_tool_id_fkey"
             columns: ["tool_id"]
@@ -768,6 +854,13 @@ export type Database = {
             foreignKeyName: "tool_integrations_tool_id_fkey"
             columns: ["tool_id"]
             isOneToOne: false
+            referencedRelation: "real_time_tool_metrics"
+            referencedColumns: ["tool_id"]
+          },
+          {
+            foreignKeyName: "tool_integrations_tool_id_fkey"
+            columns: ["tool_id"]
+            isOneToOne: false
             referencedRelation: "tools"
             referencedColumns: ["id"]
           },
@@ -802,6 +895,13 @@ export type Database = {
           tool_id?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "tool_reviews_sentiment_tool_id_fkey"
+            columns: ["tool_id"]
+            isOneToOne: true
+            referencedRelation: "real_time_tool_metrics"
+            referencedColumns: ["tool_id"]
+          },
           {
             foreignKeyName: "tool_reviews_sentiment_tool_id_fkey"
             columns: ["tool_id"]
@@ -853,6 +953,13 @@ export type Database = {
             foreignKeyName: "tool_roi_analytics_tool_id_fkey"
             columns: ["tool_id"]
             isOneToOne: false
+            referencedRelation: "real_time_tool_metrics"
+            referencedColumns: ["tool_id"]
+          },
+          {
+            foreignKeyName: "tool_roi_analytics_tool_id_fkey"
+            columns: ["tool_id"]
+            isOneToOne: false
             referencedRelation: "tools"
             referencedColumns: ["id"]
           },
@@ -897,6 +1004,13 @@ export type Database = {
             foreignKeyName: "tool_usage_analytics_tool_id_fkey"
             columns: ["tool_id"]
             isOneToOne: false
+            referencedRelation: "real_time_tool_metrics"
+            referencedColumns: ["tool_id"]
+          },
+          {
+            foreignKeyName: "tool_usage_analytics_tool_id_fkey"
+            columns: ["tool_id"]
+            isOneToOne: false
             referencedRelation: "tools"
             referencedColumns: ["id"]
           },
@@ -934,6 +1048,13 @@ export type Database = {
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "tool_usage_stats_tool_id_fkey"
+            columns: ["tool_id"]
+            isOneToOne: false
+            referencedRelation: "real_time_tool_metrics"
+            referencedColumns: ["tool_id"]
+          },
           {
             foreignKeyName: "tool_usage_stats_tool_id_fkey"
             columns: ["tool_id"]
@@ -1066,6 +1187,13 @@ export type Database = {
             foreignKeyName: "trending_tools_tool_id_fkey"
             columns: ["tool_id"]
             isOneToOne: true
+            referencedRelation: "real_time_tool_metrics"
+            referencedColumns: ["tool_id"]
+          },
+          {
+            foreignKeyName: "trending_tools_tool_id_fkey"
+            columns: ["tool_id"]
+            isOneToOne: true
             referencedRelation: "tools"
             referencedColumns: ["id"]
           },
@@ -1103,6 +1231,13 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "usage_anomalies_tool_id_fkey"
+            columns: ["tool_id"]
+            isOneToOne: false
+            referencedRelation: "real_time_tool_metrics"
+            referencedColumns: ["tool_id"]
+          },
           {
             foreignKeyName: "usage_anomalies_tool_id_fkey"
             columns: ["tool_id"]
@@ -1274,6 +1409,13 @@ export type Database = {
             foreignKeyName: "user_tools_tool_id_fkey"
             columns: ["tool_id"]
             isOneToOne: false
+            referencedRelation: "real_time_tool_metrics"
+            referencedColumns: ["tool_id"]
+          },
+          {
+            foreignKeyName: "user_tools_tool_id_fkey"
+            columns: ["tool_id"]
+            isOneToOne: false
             referencedRelation: "tools"
             referencedColumns: ["id"]
           },
@@ -1281,7 +1423,26 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      real_time_tool_metrics: {
+        Row: {
+          ai_ranking: number | null
+          category: string | null
+          cons: Json | null
+          customer_satisfaction_score: number | null
+          ease_of_use_score: number | null
+          feature_depth_score: number | null
+          key_insights: string[] | null
+          name: string | null
+          pricing: string | null
+          pros: Json | null
+          roi_score: number | null
+          sentiment_score: number | null
+          support_score: number | null
+          tool_id: string | null
+          trend_score: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       analyze_tool_usage_patterns: {
@@ -1291,6 +1452,12 @@ export type Database = {
           p_time_range?: unknown
         }
         Returns: Json
+      }
+      calculate_ai_ranking: {
+        Args: {
+          p_tool_id: string
+        }
+        Returns: number
       }
       calculate_tool_compatibility: {
         Args: {
