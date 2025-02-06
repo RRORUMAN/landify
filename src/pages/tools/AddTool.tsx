@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,20 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { motion } from "framer-motion";
-
-interface UserTool {
-  id: string;
-  tool_id: string;
-  subscription_status: string;
-  subscription_details: {
-    category: string;
-    description: string;
-    url: string;
-    price?: number;
-    billing_cycle?: string;
-  };
-  notes: string;
-}
+import type { UserTool } from "@/data/types";
 
 const AddTool = () => {
   const { toast } = useToast();
@@ -47,19 +35,19 @@ const AddTool = () => {
   const fetchUserTools = async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
+      if (!user) {
+        navigate("/auth");
+        return;
+      }
 
       const { data: tools, error } = await supabase
         .from("user_tools")
-        .select("*")
+        .select("*, tool:tools(*)")
         .eq("user_id", user.id);
 
       if (error) throw error;
 
-      setUserTools(tools.map(tool => ({
-        ...tool,
-        subscription_details: tool.subscription_details as UserTool['subscription_details']
-      })));
+      setUserTools(tools as UserTool[]);
     } catch (error) {
       console.error("Error fetching tools:", error);
       toast({
@@ -84,21 +72,47 @@ const AddTool = () => {
         return;
       }
 
-      const { error } = await supabase.from("user_tools").insert({
-        user_id: user.id,
-        tool_id: formData.name,
-        subscription_status: formData.subscriptionType,
-        notes: formData.notes,
-        subscription_details: {
-          category: formData.category,
+      // First create or get the tool in the tools table
+      const { data: toolData, error: toolError } = await supabase
+        .from("tools")
+        .upsert({
+          id: formData.name.toLowerCase().replace(/\s+/g, '-'),
+          name: formData.name,
           description: formData.description,
-          url: formData.visitUrl,
-          price: parseFloat(formData.price) || 0,
-          billing_cycle: formData.billingCycle,
-        },
-      });
+          category: formData.category,
+          visit_url: formData.visitUrl,
+          logo: "https://placeholder.co/100", // Default placeholder logo
+          rating: 0,
+          reviews: 0,
+          pricing: formData.subscriptionType,
+          tags: [],
+          featured: false,
+        })
+        .select()
+        .single();
 
-      if (error) throw error;
+      if (toolError) throw toolError;
+
+      // Then create the user-tool relationship
+      const { error: userToolError } = await supabase
+        .from("user_tools")
+        .insert({
+          user_id: user.id,
+          tool_id: toolData.id,
+          subscription_status: formData.subscriptionType,
+          notes: formData.notes,
+          monthly_cost: parseFloat(formData.price) || 0,
+          billing_cycle: formData.billingCycle,
+          subscription_details: {
+            category: formData.category,
+            description: formData.description,
+            url: formData.visitUrl,
+            price: parseFloat(formData.price) || 0,
+            billing_cycle: formData.billingCycle,
+          },
+        });
+
+      if (userToolError) throw userToolError;
 
       toast({
         title: "Tool added successfully",
@@ -154,8 +168,8 @@ const AddTool = () => {
 
   const getTotalMonthlySpend = () => {
     return userTools.reduce((total, tool) => {
-      const price = tool.subscription_details.price || 0;
-      const multiplier = tool.subscription_details.billing_cycle === 'annual' ? 1/12 : 1;
+      const price = tool.monthly_cost || 0;
+      const multiplier = tool.billing_cycle === 'annual' ? 1/12 : 1;
       return total + (price * multiplier);
     }, 0);
   };
@@ -252,6 +266,24 @@ const AddTool = () => {
                   />
                 </div>
               </div>
+
+              <div className="col-span-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+                  Subscription Type
+                </label>
+                <select
+                  value={formData.subscriptionType}
+                  onChange={(e) => setFormData({ ...formData, subscriptionType: e.target.value })}
+                  className="w-full rounded-md border border-gray-200 dark:border-gray-600 dark:bg-gray-700 px-3 py-2 text-gray-900 dark:text-white"
+                  required
+                >
+                  <option value="">Select subscription type</option>
+                  <option value="free">Free</option>
+                  <option value="freemium">Freemium</option>
+                  <option value="paid">Paid</option>
+                  <option value="enterprise">Enterprise</option>
+                </select>
+              </div>
             </div>
 
             <div>
@@ -289,7 +321,7 @@ const AddTool = () => {
         <div className="space-y-6">
           <Card className="p-6 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-sm">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Your Tools</h2>
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Analytics Overview</h2>
               <div className="bg-blue-50 dark:bg-blue-900/20 px-4 py-2 rounded-lg">
                 <p className="text-sm text-blue-600 dark:text-blue-400">
                   Monthly Spend: ${getTotalMonthlySpend().toFixed(2)}
@@ -297,7 +329,37 @@ const AddTool = () => {
               </div>
             </div>
             
-            <ScrollArea className="h-[600px] pr-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+              <Card className="p-4 bg-green-50 dark:bg-green-900/20">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-green-100 dark:bg-green-800 rounded-lg">
+                    <Tag className="w-5 h-5 text-green-600 dark:text-green-400" />
+                  </div>
+                  <div>
+                    <p className="text-sm text-green-600 dark:text-green-400">Active Tools</p>
+                    <p className="text-xl font-semibold text-green-700 dark:text-green-300">
+                      {userTools.length}
+                    </p>
+                  </div>
+                </div>
+              </Card>
+
+              <Card className="p-4 bg-purple-50 dark:bg-purple-900/20">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-purple-100 dark:bg-purple-800 rounded-lg">
+                    <Clock className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                  </div>
+                  <div>
+                    <p className="text-sm text-purple-600 dark:text-purple-400">Active Sessions</p>
+                    <p className="text-xl font-semibold text-purple-700 dark:text-purple-300">
+                      {userTools.reduce((acc, tool) => acc + (tool.active_sessions || 0), 0)}
+                    </p>
+                  </div>
+                </div>
+              </Card>
+            </div>
+
+            <ScrollArea className="h-[400px] pr-4">
               <div className="space-y-4">
                 {userTools.map((tool) => (
                   <motion.div
@@ -311,17 +373,15 @@ const AddTool = () => {
                       <div className="flex justify-between items-start">
                         <div className="space-y-2">
                           <h3 className="font-semibold text-gray-900 dark:text-white">
-                            {tool.tool_id}
+                            {tool.tool?.name}
                           </h3>
                           <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
                             <Tag className="h-4 w-4" />
-                            <span>{tool.subscription_details.category}</span>
+                            <span>{tool.tool?.category}</span>
                           </div>
                           <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
                             <DollarSign className="h-4 w-4" />
-                            <span>
-                              ${tool.subscription_details.price || 0} / {tool.subscription_details.billing_cycle}
-                            </span>
+                            <span>${tool.monthly_cost}/mo</span>
                           </div>
                           <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
                             <Clock className="h-4 w-4" />
@@ -332,7 +392,7 @@ const AddTool = () => {
                           <Button
                             variant="outline"
                             size="sm"
-                            onClick={() => window.open(tool.subscription_details.url, '_blank')}
+                            onClick={() => window.open(tool.tool?.visit_url, '_blank')}
                             className="text-blue-600 border-blue-200 hover:bg-blue-50 dark:text-blue-400 dark:border-blue-800 dark:hover:bg-blue-900/20"
                           >
                             Visit

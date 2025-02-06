@@ -757,6 +757,7 @@ export type Database = {
       }
       user_tools: {
         Row: {
+          active_sessions: number | null
           billing_cycle: string | null
           id: string
           monthly_cost: number | null
@@ -773,6 +774,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          active_sessions?: number | null
           billing_cycle?: string | null
           id?: string
           monthly_cost?: number | null
@@ -789,6 +791,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          active_sessions?: number | null
           billing_cycle?: string | null
           id?: string
           monthly_cost?: number | null
