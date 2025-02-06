@@ -12,6 +12,7 @@ import { Card } from "@/components/ui/card";
 import type { UserTool } from "@/data/types";
 
 const PRICING_OPTIONS = ["Free", "Paid", "Custom", "Contact Sales", "Enterprise"] as const;
+type PricingOption = typeof PRICING_OPTIONS[number];
 
 const AddTool = () => {
   const { toast } = useToast();
@@ -25,7 +26,7 @@ const AddTool = () => {
     notes: "",
     price: "",
     billingCycle: "monthly",
-    pricing: PRICING_OPTIONS[0],
+    pricing: PRICING_OPTIONS[0] as PricingOption,
   });
 
   useEffect(() => {
@@ -189,7 +190,7 @@ const AddTool = () => {
               </label>
               <select
                 value={formData.pricing}
-                onChange={(e) => setFormData({ ...formData, pricing: e.target.value as typeof PRICING_OPTIONS[number] })}
+                onChange={(e) => setFormData({ ...formData, pricing: e.target.value as PricingOption })}
                 className="w-full rounded-md border border-gray-200 dark:border-gray-600 dark:bg-gray-700 px-3 py-2 text-gray-900 dark:text-white"
                 required
               >
