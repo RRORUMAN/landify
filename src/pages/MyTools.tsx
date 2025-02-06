@@ -57,7 +57,8 @@ const MyTools = () => {
         setMonthlySpend(calculateMonthlySpend(processedTools));
         setActiveToolsCount(processedTools.filter(t => t.subscription_status === 'active').length);
         
-        const categoryCount = processedTools.reduce((acc: Record<string, number>, tool: UserTool) => {
+        // Fix type safety in category counting
+        const categoryCount: Record<string, number> = processedTools.reduce((acc: Record<string, number>, tool: UserTool) => {
           const category = tool.tool?.category || 'Uncategorized';
           acc[category] = (acc[category] || 0) + 1;
           return acc;

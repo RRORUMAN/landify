@@ -13,6 +13,12 @@ export interface AIAnalysis {
   };
 }
 
+interface AIRecommendation {
+  total_tools: number;
+  tools_data: any[];
+  analysis_date: string;
+}
+
 export const trackToolInteraction = async (toolId: string, interactionType: InteractionType) => {
   try {
     const { data: { user } } = await supabase.auth.getUser();
@@ -73,12 +79,13 @@ export const getAISavingsAnalysis = async (): Promise<AIAnalysis | null> => {
 
     // If analysis is less than 24 hours old, return it
     if (existingAnalysis && new Date(existingAnalysis.analysis_date).getTime() > Date.now() - 24 * 60 * 60 * 1000) {
+      const aiRec = existingAnalysis.ai_recommendations?.[0] as AIRecommendation | undefined;
       return {
         total_spend: existingAnalysis.total_spend,
         potential_savings: existingAnalysis.potential_savings,
         recommendations: {
-          total_tools: existingAnalysis.ai_recommendations?.[0]?.total_tools || 0,
-          tools_data: existingAnalysis.ai_recommendations?.[0]?.tools_data || [],
+          total_tools: aiRec?.total_tools || 0,
+          tools_data: aiRec?.tools_data || [],
           analysis_date: existingAnalysis.analysis_date
         }
       };
@@ -93,9 +100,9 @@ export const getAISavingsAnalysis = async (): Promise<AIAnalysis | null> => {
     if (error) throw error;
 
     if (newAnalysis?.[0]) {
-      const recommendations = {
-        total_tools: newAnalysis[0].recommendations?.total_tools || 0,
-        tools_data: newAnalysis[0].recommendations?.tools_data || [],
+      const recommendations: AIRecommendation = {
+        total_tools: (newAnalysis[0].recommendations as any)?.total_tools || 0,
+        tools_data: (newAnalysis[0].recommendations as any)?.tools_data || [],
         analysis_date: new Date().toISOString()
       };
 
