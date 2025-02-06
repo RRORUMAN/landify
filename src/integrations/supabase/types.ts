@@ -543,6 +543,39 @@ export type Database = {
           },
         ]
       }
+      referral_rewards: {
+        Row: {
+          claimed_at: string | null
+          created_at: string | null
+          earned_at: string | null
+          id: string
+          reward_amount: number
+          reward_type: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          claimed_at?: string | null
+          created_at?: string | null
+          earned_at?: string | null
+          id?: string
+          reward_amount: number
+          reward_type: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          claimed_at?: string | null
+          created_at?: string | null
+          earned_at?: string | null
+          id?: string
+          reward_amount?: number
+          reward_type?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       saved_comparisons: {
         Row: {
           comparison_data: Json
@@ -778,9 +811,11 @@ export type Database = {
           id: string
           invite_code: string
           invited_by: string
+          reward_credited: boolean | null
           role: string
           team_id: string | null
           used_at: string | null
+          used_by: string | null
           uses_remaining: number | null
         }
         Insert: {
@@ -789,9 +824,11 @@ export type Database = {
           id?: string
           invite_code?: string
           invited_by: string
+          reward_credited?: boolean | null
           role?: string
           team_id?: string | null
           used_at?: string | null
+          used_by?: string | null
           uses_remaining?: number | null
         }
         Update: {
@@ -800,9 +837,11 @@ export type Database = {
           id?: string
           invite_code?: string
           invited_by?: string
+          reward_credited?: boolean | null
           role?: string
           team_id?: string | null
           used_at?: string | null
+          used_by?: string | null
           uses_remaining?: number | null
         }
         Relationships: [
