@@ -9,17 +9,10 @@ import { ArrowLeft, Download, Save } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import ToolSelectionCard from "@/components/compare/ToolSelectionCard";
 import SelectedToolsGrid from "@/components/compare/SelectedToolsGrid";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
 import CompareStats from "@/components/compare/CompareStats";
-import type { ToolCompatibility } from "@/types/aiTypes";
-import { getToolCompatibility } from "@/utils/aiAnalytics";
-import type { AIInsight } from "@/types/aiTypes";
-import { getToolInsights } from "@/utils/aiAnalytics";
-import { AICompatibilityScore } from "@/components/compare/AICompatibilityScore";
 import { SmartFeatureMatch } from "@/components/compare/SmartFeatureMatch";
-import CompareROI from "@/components/compare/CompareROI";
-import { ComparisonFeature, FeatureCategory } from "@/types/aiTypes";
 
 const CompareTools = () => {
   const [selectedTools, setSelectedTools] = useState<Tool[]>([]);
@@ -48,14 +41,7 @@ const CompareTools = () => {
       
       const { data, error } = await query;
       
-      if (error) {
-        toast({
-          title: "Error loading tools",
-          description: "Failed to load tools. Please try again.",
-          variant: "destructive",
-        });
-        throw error;
-      }
+      if (error) throw error;
       
       return (data || []).map(tool => ({
         ...tool,
@@ -87,13 +73,6 @@ const CompareTools = () => {
     setSelectedCategory(null);
   };
 
-  const handleExport = async (format: 'pdf' | 'csv') => {
-    toast({
-      title: "Export Started",
-      description: `Exporting comparison in ${format.toUpperCase()} format...`,
-    });
-  };
-
   const handleSaveComparison = async () => {
     if (!selectedTools.length) return;
 
@@ -123,64 +102,17 @@ const CompareTools = () => {
     }
   };
 
-  const { data: featureCategories = [], isLoading: isLoadingFeatures } = useQuery({
-    queryKey: ['feature-categories'],
-    queryFn: async () => {
-      const { data: categories, error: categoriesError } = await supabase
-        .from('comparison_categories')
-        .select('*')
-        .order('sort_order');
-
-      if (categoriesError) throw categoriesError;
-
-      const { data: features, error: featuresError } = await supabase
-        .from('comparison_feature_definitions')
-        .select('*')
-        .order('sort_order');
-
-      if (featuresError) throw featuresError;
-
-      return categories.map(category => ({
-        name: category.name,
-        description: category.description || '',
-        features: features
-          .filter(f => f.category_id === category.id)
-          .map(f => ({
-            name: f.name,
-            importance: f.importance || 'medium',
-            category: category.name,
-            description: f.description || '',
-            values: selectedTools.map(tool => ({
-              toolId: tool.id,
-              value: 'Pending evaluation',
-              confidenceScore: 0.5
-            }))
-          }))
-      }));
-    },
-    enabled: selectedTools.length > 0
-  });
-
-  const { data: evaluations = [] } = useQuery({
-    queryKey: ['tool-evaluations', selectedTools.map(t => t.id)],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('tool_feature_evaluations')
-        .select(`
-          *,
-          feature:comparison_feature_definitions(
-            name,
-            importance,
-            category_id
-          )
-        `)
-        .in('tool_id', selectedTools.map(t => t.id));
-
-      if (error) throw error;
-      return data;
-    },
-    enabled: selectedTools.length > 0
-  });
+  if (isLoading) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+          {[1, 2, 3, 4, 5].map((i) => (
+            <Skeleton key={i} className="h-32 w-full" />
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 max-w-7xl mx-auto min-h-screen">
@@ -200,24 +132,14 @@ const CompareTools = () => {
               <ArrowLeft className="h-4 w-4" />
               Compare Different Tools
             </Button>
-            <div className="flex items-center gap-2">
-              <Button
-                variant="outline"
-                onClick={() => handleExport('csv')}
-                className="flex items-center gap-2 text-blue-600"
-              >
-                <Download className="h-4 w-4" />
-                Export CSV
-              </Button>
-              <Button
-                variant="default"
-                onClick={handleSaveComparison}
-                className="flex items-center gap-2 bg-blue-600 text-white hover:bg-blue-700"
-              >
-                <Save className="h-4 w-4" />
-                Save Comparison
-              </Button>
-            </div>
+            <Button
+              variant="default"
+              onClick={handleSaveComparison}
+              className="flex items-center gap-2 bg-[#2563EB] text-white hover:bg-[#2563EB]"
+            >
+              <Save className="h-4 w-4" />
+              Save Comparison
+            </Button>
           </div>
 
           <SelectedToolsGrid
@@ -225,13 +147,6 @@ const CompareTools = () => {
             handleRemoveTool={handleRemoveTool}
             setIsSelecting={setIsSelecting}
           />
-
-          {featureCategories.length > 0 && (
-            <SmartFeatureMatch
-              tools={selectedTools}
-              featureCategories={featureCategories}
-            />
-          )}
 
           <CompareStats tools={selectedTools} />
         </div>
