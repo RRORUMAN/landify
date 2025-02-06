@@ -24,6 +24,7 @@ export interface Tool {
   company_website?: string | null;
   integration_count?: number | null;
   pricing_range?: string | null;
+  monthly_cost?: number;
   trending_tools?: {
     trend_score: number;
     trend_data?: {

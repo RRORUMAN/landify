@@ -1,3 +1,4 @@
+
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Search, Plus, Scale, Brain, Sun, Moon, LogOut } from "lucide-react";
@@ -33,7 +34,7 @@ const Sidebar = () => {
     {
       title: "My Tools",
       icon: Plus,
-      path: "/tools/add",
+      path: "/my-tools",
       description: "Manage your tools",
       isNew: false,
     },
