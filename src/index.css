@@ -6,53 +6,53 @@
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 0 0% 0%;
+    --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 0%;
+    --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 0%;
-    --primary: 222 84% 53%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 0 0% 96%;
-    --secondary-foreground: 0 0% 0%;
-    --muted: 0 0% 96%;
-    --muted-foreground: 0 0% 40%;
-    --accent: 222 84% 53%;
-    --accent-foreground: 0 0% 100%;
-    --destructive: 0 0% 0%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 0 0% 90%;
-    --input: 0 0% 0%;
-    --ring: 222 84% 53%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 221.2 83.2% 53.3%;
     --radius: 0.5rem;
   }
- 
+
   .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 222 84% 53%;
-    --primary-foreground: 240 5.9% 10%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 222 84% 53%;
-    --accent-foreground: 0 0% 98%;
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 240 4.9% 83.9%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 224.3 76.3% 48%;
   }
 }
 
 @layer base {
   * {
-    @apply border-border selection:bg-white/10 selection:text-white dark:selection:bg-gray-800 dark:selection:text-white;
+    @apply border-border selection:bg-primary/10;
   }
   
   body {
@@ -65,48 +65,39 @@
   }
 }
 
-@layer utilities {
-  .scrollbar-none {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  
-  .scrollbar-none::-webkit-scrollbar {
-    display: none;
-  }
-
-  .glass-morphism {
-    @apply backdrop-blur-xl bg-white/5 dark:bg-black/10 border border-white/10 dark:border-white/5;
-  }
-  
-  .neo-blur {
-    @apply backdrop-blur-2xl bg-white/80 dark:bg-black/40 border border-white/20 dark:border-white/10;
-  }
-  
-  .text-gradient {
-    @apply bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 dark:from-white dark:via-white/90 dark:to-white/70 bg-clip-text text-transparent;
-  }
+/* Dark mode specific styles */
+.dark {
+  @apply bg-[#0A0A0A] text-gray-100;
 }
 
-/* Make select options and dropdowns visible in dark mode */
-select option,
-.select-content {
-  @apply bg-white dark:bg-gray-800 !important;
+.dark .card {
+  @apply bg-[#1A1F2C] border-gray-800;
 }
 
-/* Fix button hover states */
-.button,
-button[class*="bg-blue"] {
-  @apply transition-colors hover:bg-[#2563EB]/90 dark:hover:bg-[#2563EB]/80 !important;
+.dark .glass-morphism {
+  @apply bg-black/40 border-white/10;
 }
 
-/* Ensure select dropdowns are visible */
-[role="listbox"],
-[role="option"] {
-  @apply bg-white dark:bg-gray-800 z-50 !important;
+/* Fix select dropdowns in dark mode */
+.dark select option,
+.dark .select-content {
+  @apply bg-[#1A1F2C] text-white !important;
 }
 
-/* Modern scrollbar for dark mode */
+/* Sidebar specific dark mode styles */
+.dark .sidebar {
+  @apply bg-[#0D1117] border-gray-800;
+}
+
+.dark .sidebar-item {
+  @apply hover:bg-gray-800/50;
+}
+
+.dark .sidebar-item.active {
+  @apply bg-primary/10 text-primary;
+}
+
+/* Modern scrollbar styling */
 ::-webkit-scrollbar {
   @apply w-2;
 }
@@ -116,14 +107,22 @@ button[class*="bg-blue"] {
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-gray-300 dark:bg-gray-600 rounded-full hover:bg-gray-400 dark:hover:bg-gray-500;
+  @apply bg-gray-300 dark:bg-gray-700 rounded-full hover:bg-gray-400 dark:hover:bg-gray-600;
 }
 
-/* Card and container styles */
+/* Fix dropdowns and tooltips in dark mode */
+.dark [role="listbox"],
+.dark [role="option"],
+.dark [role="tooltip"] {
+  @apply bg-[#1A1F2C] border-gray-800 !important;
+}
+
+/* Card styles with proper dark mode support */
 .card {
-  @apply bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm;
+  @apply bg-white dark:bg-[#1A1F2C] border border-gray-200 dark:border-gray-800 shadow-sm transition-colors duration-200;
 }
 
+/* Container styles */
 .container {
   @apply px-4 mx-auto sm:px-6 lg:px-8;
 }

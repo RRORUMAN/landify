@@ -52,21 +52,18 @@ const Sidebar = () => {
       icon: Search,
       path: "/tools/categories",
       description: "Search and filter tools",
-      isNew: false,
     },
     {
       title: "My Tools",
       icon: Plus,
       path: "/my-tools",
       description: "Manage your tools",
-      isNew: false,
     },
     {
       title: "Compare",
       icon: Scale,
       path: "/tools/compare",
       description: "Compare tool features",
-      isNew: false,
     },
     {
       title: "AI Suggestions",
@@ -78,50 +75,50 @@ const Sidebar = () => {
   ];
 
   return (
-    <aside className="min-h-screen w-80 bg-white dark:bg-gray-900 border-r border-gray-100 dark:border-gray-800 p-6 relative transition-colors duration-300 flex flex-col">
-      <div className="flex-1 space-y-8">
-        <div className="flex items-center justify-between px-2">
+    <aside className="min-h-screen w-80 bg-[#0D1117] border-r border-gray-800 p-6 flex flex-col transition-colors duration-300">
+      <div className="flex-1">
+        <div className="flex items-center justify-between px-2 mb-8">
           <div>
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+            <h2 className="text-xl font-semibold text-white mb-2">
               Dashboard
             </h2>
-            <p className="text-sm text-[#2563EB]">
+            <p className="text-sm text-blue-400">
               Manage tools
             </p>
           </div>
         </div>
         
-        <nav className="space-y-3">
+        <nav className="space-y-1">
           {menuItems.map((item) => (
             <Link
               key={item.title}
               to={item.path}
               className={cn(
-                "group flex items-start gap-4 px-4 py-4 rounded-lg transition-all duration-300 relative overflow-hidden hover:shadow-sm",
+                "group flex items-start gap-4 px-4 py-3 rounded-lg transition-all duration-200 relative",
                 location.pathname === item.path
-                  ? "bg-[#2563EB]/10 text-[#2563EB]"
-                  : "text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800/50"
+                  ? "bg-blue-500/10 text-blue-400"
+                  : "text-gray-400 hover:bg-gray-800/50 hover:text-gray-200"
               )}
             >
               {item.isNew && (
                 <span className="absolute top-2 right-2 flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#2563EB] opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#2563EB]"></span>
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
                 </span>
               )}
               <item.icon className={cn(
-                "h-5 w-5 mt-0.5 transition-transform duration-300 group-hover:scale-110",
+                "h-5 w-5 mt-0.5 transition-transform duration-200 group-hover:scale-110",
                 location.pathname === item.path
-                  ? "text-[#2563EB]"
-                  : "text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-300"
+                  ? "text-blue-400"
+                  : "text-gray-500 group-hover:text-gray-300"
               )} />
               <div className="flex flex-col">
                 <span className="text-sm font-medium leading-none mb-1">{item.title}</span>
                 <span className={cn(
-                  "text-xs transition-colors duration-300",
+                  "text-xs transition-colors duration-200",
                   location.pathname === item.path
-                    ? "text-[#2563EB]/80"
-                    : "text-gray-400 dark:text-gray-500 group-hover:text-gray-500 dark:group-hover:text-gray-400"
+                    ? "text-blue-400/80"
+                    : "text-gray-500 group-hover:text-gray-400"
                 )}>{item.description}</span>
               </div>
             </Link>
@@ -129,12 +126,12 @@ const Sidebar = () => {
         </nav>
       </div>
 
-      <div className="space-y-3 pt-6 mt-auto">
+      <div className="pt-4 border-t border-gray-800 mt-4 space-y-2">
         <Button
           variant="ghost"
-          size="lg"
+          size="sm"
           onClick={toggleDarkMode}
-          className="w-full justify-start gap-3 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-transparent"
+          className="w-full justify-start gap-3 text-sm text-gray-400 hover:text-gray-200 hover:bg-gray-800/50"
         >
           {isDarkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
           <span>{isDarkMode ? "Light Mode" : "Dark Mode"}</span>
@@ -142,9 +139,9 @@ const Sidebar = () => {
 
         <Button
           variant="ghost"
-          size="lg"
+          size="sm"
           onClick={handleSignOut}
-          className="w-full justify-start gap-3 text-sm text-red-600 hover:text-red-700 hover:bg-transparent dark:text-red-400 dark:hover:text-red-300"
+          className="w-full justify-start gap-3 text-sm text-red-400 hover:text-red-300 hover:bg-gray-800/50"
         >
           <LogOut className="h-5 w-5" />
           <span>Sign Out</span>
