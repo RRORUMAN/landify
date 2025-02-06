@@ -12,11 +12,13 @@ export const trackToolInteraction = async (toolId: string, interactionType: Inte
       .insert({
         tool_id: toolId,
         user_id: user?.id || null,
-        usage_type: interactionType,
+        usage_type: interactionType as string, // Fix type error by explicitly casting
         usage_details: {
           source: 'web',
           timestamp: new Date().toISOString(),
-          page: window.location.pathname
+          page: window.location.pathname,
+          session_id: crypto.randomUUID(),
+          user_agent: navigator.userAgent
         }
       });
 
