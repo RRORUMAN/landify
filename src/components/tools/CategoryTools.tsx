@@ -4,8 +4,9 @@ import type { UserTool } from "@/data/types";
 import ToolCard from "@/components/ToolCard";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { format } from "date-fns";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Activity, DollarSign } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 interface CategoryToolsProps {
   category: string;
@@ -18,49 +19,68 @@ export const CategoryTools = ({ category, tools, viewMode = 'grid' }: CategoryTo
   
   if (viewMode === 'list') {
     return (
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Tool Name</TableHead>
-            <TableHead>Monthly Cost</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Next Billing</TableHead>
-            <TableHead>Action</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {validTools.map((userTool) => (
-            <TableRow key={userTool.id}>
-              <TableCell className="font-medium">{userTool.tool?.name}</TableCell>
-              <TableCell>${userTool.monthly_cost?.toFixed(2) || '0.00'}</TableCell>
-              <TableCell>
-                <span className={`px-2 py-1 rounded-full text-xs ${
-                  userTool.subscription_status === 'active' 
-                    ? 'bg-green-100 text-green-800'
-                    : 'bg-yellow-100 text-yellow-800'
-                }`}>
-                  {userTool.subscription_status}
-                </span>
-              </TableCell>
-              <TableCell>
-                {userTool.next_billing_date 
-                  ? format(new Date(userTool.next_billing_date), 'MMM dd, yyyy')
-                  : 'N/A'}
-              </TableCell>
-              <TableCell>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => window.open(userTool.tool?.visit_url, '_blank')}
-                  className="flex items-center gap-2"
-                >
-                  Visit <ArrowUpRight className="w-4 h-4" />
-                </Button>
-              </TableCell>
+      <div className="overflow-x-auto">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Tool Name</TableHead>
+              <TableHead>Monthly Cost</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Usage</TableHead>
+              <TableHead>Next Billing</TableHead>
+              <TableHead className="text-right">Action</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {validTools.map((userTool) => (
+              <TableRow key={userTool.id} className="hover:bg-gray-50 dark:hover:bg-gray-800">
+                <TableCell className="font-medium">
+                  <div className="flex items-center gap-3">
+                    <img 
+                      src={userTool.tool?.logo} 
+                      alt={userTool.tool?.name} 
+                      className="w-8 h-8 rounded-lg"
+                    />
+                    {userTool.tool?.name}
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <div className="flex items-center gap-2">
+                    <DollarSign className="w-4 h-4 text-gray-500" />
+                    ${userTool.monthly_cost?.toFixed(2) || '0.00'}
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <Badge variant={userTool.subscription_status === 'active' ? 'default' : 'secondary'}>
+                    {userTool.subscription_status}
+                  </Badge>
+                </TableCell>
+                <TableCell>
+                  <div className="flex items-center gap-2">
+                    <Activity className="w-4 h-4 text-gray-500" />
+                    High
+                  </div>
+                </TableCell>
+                <TableCell>
+                  {userTool.next_billing_date 
+                    ? format(new Date(userTool.next_billing_date), 'MMM dd, yyyy')
+                    : 'N/A'}
+                </TableCell>
+                <TableCell className="text-right">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => window.open(userTool.tool?.visit_url, '_blank')}
+                    className="flex items-center gap-2"
+                  >
+                    Visit <ArrowUpRight className="w-4 h-4" />
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     );
   }
 

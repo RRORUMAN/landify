@@ -12,7 +12,7 @@ export interface ToolCompatibility {
 export interface AIInsight {
   id: string;
   tool_id: string;
-  insight_type: string;
+  insight_type: 'workflow' | 'budget' | 'team';
   insight_data: Record<string, any>;
   confidence_score: number;
   recommendations: string[];
