@@ -1,21 +1,6 @@
 
 import { supabase } from "@/integrations/supabase/client";
-
-export type InteractionType = 'view' | 'click' | 'bookmark' | 'share';
-
-export interface AIAnalysis {
-  total_spend: number;
-  potential_savings: number;
-  recommendations: {
-    total_tools: number;
-    tools_data: Array<{
-      tool_id: string;
-      monthly_cost: number;
-      usage_stats: Record<string, any>;
-    }>;
-    analysis_date: string;
-  };
-}
+import type { InteractionType, AIAnalysis } from "@/types/aiTypes";
 
 export const trackToolInteraction = async (toolId: string, interactionType: InteractionType) => {
   try {
@@ -38,10 +23,20 @@ export const trackToolInteraction = async (toolId: string, interactionType: Inte
 
     if (error) throw error;
 
+    // Handle bookmarks separately - removed increment_bookmarks as it's not a valid function
     if (interactionType === 'bookmark') {
+      // Fetch current bookmarks count and increment
+      const { data: currentTool } = await supabase
+        .from('tools')
+        .select('bookmarks')
+        .eq('id', toolId)
+        .single();
+
+      const newCount = ((currentTool?.bookmarks || 0) + 1);
+
       const { error: updateError } = await supabase
         .from('tools')
-        .update({ bookmarks: supabase.rpc('increment_bookmarks') })
+        .update({ bookmarks: newCount })
         .eq('id', toolId);
 
       if (updateError) throw updateError;
@@ -71,14 +66,14 @@ export const getAISavingsAnalysis = async (): Promise<AIAnalysis | null> => {
         total_spend: existingAnalysis.total_spend,
         potential_savings: existingAnalysis.potential_savings,
         recommendations: {
-          total_tools: existingAnalysis.ai_recommendations[0].total_tools,
-          tools_data: existingAnalysis.ai_recommendations[0].tools_data,
+          total_tools: existingAnalysis.ai_recommendations?.[0]?.total_tools || 0,
+          tools_data: existingAnalysis.ai_recommendations?.[0]?.tools_data || [],
           analysis_date: existingAnalysis.analysis_date
         }
       };
     }
 
-    // Calculate new analysis
+    // Calculate new analysis using the RPC function
     const { data: newAnalysis, error } = await supabase
       .rpc('calculate_tool_savings', {
         p_user_id: user.id
@@ -87,6 +82,10 @@ export const getAISavingsAnalysis = async (): Promise<AIAnalysis | null> => {
     if (error) throw error;
 
     if (newAnalysis?.[0]) {
+      const recommendations = typeof newAnalysis[0].recommendations === 'object' 
+        ? newAnalysis[0].recommendations 
+        : { total_tools: 0, tools_data: [], analysis_date: new Date().toISOString() };
+
       // Store the new analysis
       await supabase
         .from('ai_savings_analysis')
@@ -94,16 +93,16 @@ export const getAISavingsAnalysis = async (): Promise<AIAnalysis | null> => {
           user_id: user.id,
           total_spend: newAnalysis[0].total_current_spend,
           potential_savings: newAnalysis[0].potential_savings,
-          ai_recommendations: [newAnalysis[0].recommendations]
+          ai_recommendations: [recommendations]
         });
 
       return {
         total_spend: newAnalysis[0].total_current_spend,
         potential_savings: newAnalysis[0].potential_savings,
         recommendations: {
-          total_tools: newAnalysis[0].recommendations.total_tools,
-          tools_data: newAnalysis[0].recommendations.tools_data,
-          analysis_date: newAnalysis[0].recommendations.analysis_date
+          total_tools: recommendations.total_tools || 0,
+          tools_data: recommendations.tools_data || [],
+          analysis_date: recommendations.analysis_date
         }
       };
     }

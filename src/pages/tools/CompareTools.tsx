@@ -1,3 +1,4 @@
+
 import CompareToolsComponent from "@/components/CompareTools";
 import { Toaster } from "@/components/ui/toaster";
 import { useState } from "react";
@@ -15,7 +16,6 @@ import type { ToolCompatibility } from "@/types/aiTypes";
 import { getToolCompatibility } from "@/utils/aiAnalytics";
 import type { AIInsight } from "@/types/aiTypes";
 import { getToolInsights } from "@/utils/aiAnalytics";
-import { getROIAnalytics } from "@/utils/aiAnalytics";
 import { AICompatibilityScore } from "@/components/compare/AICompatibilityScore";
 import { SmartFeatureMatch } from "@/components/compare/SmartFeatureMatch";
 import CompareROI from "@/components/compare/CompareROI";

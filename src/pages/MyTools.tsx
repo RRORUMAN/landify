@@ -49,8 +49,8 @@ const MyTools = () => {
 
         setTools(processedTools);
         
-        // Calculate total monthly spend from numeric values only
-        const totalMonthly = processedTools.reduce((acc, tool) => {
+        // Calculate total monthly spend ensuring we only use valid numbers
+        const totalMonthly = processedTools.reduce((acc: number, tool: UserTool) => {
           const cost = typeof tool.monthly_cost === 'number' ? tool.monthly_cost : 0;
           return acc + cost;
         }, 0);
@@ -58,11 +58,11 @@ const MyTools = () => {
         setMonthlySpend(totalMonthly);
         setActiveToolsCount(processedTools.length);
         
-        const categoryCount = processedTools.reduce((acc, tool) => {
+        const categoryCount = processedTools.reduce((acc: Record<string, number>, tool: UserTool) => {
           const category = tool.tool?.category || 'Uncategorized';
           acc[category] = (acc[category] || 0) + 1;
           return acc;
-        }, {} as Record<string, number>);
+        }, {});
         
         const mostUsed = Object.entries(categoryCount).sort((a, b) => b[1] - a[1])[0];
         setMostUsedCategory(mostUsed?.[0] || 'None');
