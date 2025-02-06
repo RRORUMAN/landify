@@ -1215,7 +1215,9 @@ export type Database = {
         Row: {
           active_sessions: number | null
           billing_cycle: string | null
+          edit_history: Json | null
           id: string
+          last_edited_at: string | null
           monthly_cost: number | null
           next_billing_date: string | null
           notes: string | null
@@ -1232,7 +1234,9 @@ export type Database = {
         Insert: {
           active_sessions?: number | null
           billing_cycle?: string | null
+          edit_history?: Json | null
           id?: string
+          last_edited_at?: string | null
           monthly_cost?: number | null
           next_billing_date?: string | null
           notes?: string | null
@@ -1249,7 +1253,9 @@ export type Database = {
         Update: {
           active_sessions?: number | null
           billing_cycle?: string | null
+          edit_history?: Json | null
           id?: string
+          last_edited_at?: string | null
           monthly_cost?: number | null
           next_billing_date?: string | null
           notes?: string | null
