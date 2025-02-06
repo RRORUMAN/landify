@@ -11,6 +11,9 @@ import ToolCategories from "./pages/tools/ToolCategories";
 import AddTool from "./pages/tools/AddTool";
 import CompareTools from "./pages/tools/CompareTools";
 import AIRecommendations from "./pages/tools/AIRecommendations";
+import Teams from "./pages/teams/Teams";
+import TeamDashboard from "./pages/teams/TeamDashboard";
+import TeamFolders from "./pages/teams/TeamFolders";
 import Sidebar from "./components/dashboard/Sidebar";
 
 const queryClient = new QueryClient();
@@ -19,7 +22,7 @@ const AppContent = () => {
   const location = useLocation();
   
   const isDashboardRoute = (pathname: string) => {
-    return pathname.startsWith('/tools') || pathname === '/my-tools';
+    return pathname.startsWith('/tools') || pathname === '/my-tools' || pathname.startsWith('/teams');
   };
 
   const showNavbar = ['/', '/pricing'].includes(location.pathname);
@@ -46,6 +49,11 @@ const AppContent = () => {
               <Route path="add" element={<AddTool />} />
               <Route path="compare" element={<CompareTools />} />
               <Route path="recommendations" element={<AIRecommendations />} />
+            </Route>
+            <Route path="/teams">
+              <Route index element={<Teams />} />
+              <Route path=":teamId" element={<TeamDashboard />} />
+              <Route path=":teamId/folders/*" element={<TeamFolders />} />
             </Route>
           </Routes>
         </main>

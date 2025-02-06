@@ -326,6 +326,41 @@ export type Database = {
         }
         Relationships: []
       }
+      folder_tools: {
+        Row: {
+          added_at: string
+          added_by: string
+          folder_id: string
+          id: string
+          notes: string | null
+          tool_id: string
+        }
+        Insert: {
+          added_at?: string
+          added_by: string
+          folder_id: string
+          id?: string
+          notes?: string | null
+          tool_id: string
+        }
+        Update: {
+          added_at?: string
+          added_by?: string
+          folder_id?: string
+          id?: string
+          notes?: string | null
+          tool_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "folder_tools_folder_id_fkey"
+            columns: ["folder_id"]
+            isOneToOne: false
+            referencedRelation: "tool_folders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       integration_health: {
         Row: {
           created_at: string | null
@@ -554,6 +589,65 @@ export type Database = {
         }
         Relationships: []
       }
+      team_members: {
+        Row: {
+          id: string
+          joined_at: string
+          role: string
+          team_id: string
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          joined_at?: string
+          role?: string
+          team_id: string
+          user_id: string
+        }
+        Update: {
+          id?: string
+          joined_at?: string
+          role?: string
+          team_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "team_members_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      teams: {
+        Row: {
+          created_at: string
+          created_by: string
+          description: string | null
+          id: string
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          description?: string | null
+          id?: string
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          description?: string | null
+          id?: string
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       tool_ai_insights: {
         Row: {
           confidence_score: number | null
@@ -769,6 +863,57 @@ export type Database = {
             columns: ["tool_id"]
             isOneToOne: false
             referencedRelation: "tools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tool_folders: {
+        Row: {
+          created_at: string
+          created_by: string
+          description: string | null
+          id: string
+          is_shared: boolean | null
+          name: string
+          parent_folder_id: string | null
+          team_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          description?: string | null
+          id?: string
+          is_shared?: boolean | null
+          name: string
+          parent_folder_id?: string | null
+          team_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          description?: string | null
+          id?: string
+          is_shared?: boolean | null
+          name?: string
+          parent_folder_id?: string | null
+          team_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tool_folders_parent_folder_id_fkey"
+            columns: ["parent_folder_id"]
+            isOneToOne: false
+            referencedRelation: "tool_folders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tool_folders_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
             referencedColumns: ["id"]
           },
         ]

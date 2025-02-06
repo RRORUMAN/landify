@@ -102,3 +102,42 @@ export interface SubscriptionLimit {
   price_monthly: number;
   features: Record<string, any>;
 }
+
+export interface Team {
+  id: string;
+  name: string;
+  description: string | null;
+  created_by: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface TeamMember {
+  id: string;
+  team_id: string;
+  user_id: string;
+  role: 'admin' | 'member';
+  joined_at: string;
+}
+
+export interface ToolFolder {
+  id: string;
+  name: string;
+  description: string | null;
+  team_id: string | null;
+  created_by: string;
+  parent_folder_id: string | null;
+  is_shared: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface FolderTool {
+  id: string;
+  folder_id: string;
+  tool_id: string;
+  added_by: string;
+  added_at: string;
+  notes: string | null;
+  tool?: Tool;
+}
