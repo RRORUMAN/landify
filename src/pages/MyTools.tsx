@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { Plus, ArrowLeft } from "lucide-react";
+import { Plus, ArrowLeft, LayoutGrid, Activity } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { motion, AnimatePresence } from "framer-motion";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -49,7 +49,12 @@ const MyTools = () => {
 
         setTools(processedTools);
         
-        const totalMonthly = processedTools.reduce((acc, tool) => acc + (tool.monthly_cost || 0), 0);
+        // Calculate total monthly spend from numeric values only
+        const totalMonthly = processedTools.reduce((acc, tool) => {
+          const cost = typeof tool.monthly_cost === 'number' ? tool.monthly_cost : 0;
+          return acc + cost;
+        }, 0);
+        
         setMonthlySpend(totalMonthly);
         setActiveToolsCount(processedTools.length);
         
