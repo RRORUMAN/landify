@@ -23,6 +23,15 @@ const MyTools = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
+  const calculateMonthlySpend = (toolsList: UserTool[]) => {
+    return toolsList.reduce((acc: number, tool: UserTool) => {
+      if (tool.subscription_status === 'active') {
+        return acc + (typeof tool.monthly_cost === 'number' ? tool.monthly_cost : 0);
+      }
+      return acc;
+    }, 0);
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -48,15 +57,8 @@ const MyTools = () => {
         }));
 
         setTools(processedTools);
-        
-        // Calculate total monthly spend ensuring we only use valid numbers
-        const totalMonthly = processedTools.reduce((acc: number, tool: UserTool) => {
-          const cost = typeof tool.monthly_cost === 'number' ? tool.monthly_cost : 0;
-          return acc + cost;
-        }, 0);
-        
-        setMonthlySpend(totalMonthly);
-        setActiveToolsCount(processedTools.length);
+        setMonthlySpend(calculateMonthlySpend(processedTools));
+        setActiveToolsCount(processedTools.filter(t => t.subscription_status === 'active').length);
         
         const categoryCount = processedTools.reduce((acc: Record<string, number>, tool: UserTool) => {
           const category = tool.tool?.category || 'Uncategorized';
@@ -83,7 +85,19 @@ const MyTools = () => {
   }, [navigate, toast]);
 
   const handleRemoveTool = (toolId: string) => {
-    setTools(prev => prev.filter(tool => tool.tool_id !== toolId));
+    const updatedTools = tools.filter(tool => tool.tool_id !== toolId);
+    setTools(updatedTools);
+    setMonthlySpend(calculateMonthlySpend(updatedTools));
+    setActiveToolsCount(updatedTools.filter(t => t.subscription_status === 'active').length);
+  };
+
+  const handleUpdateTool = (toolId: string, updates: Partial<UserTool>) => {
+    const updatedTools = tools.map(tool => 
+      tool.tool_id === toolId ? { ...tool, ...updates } : tool
+    );
+    setTools(updatedTools);
+    setMonthlySpend(calculateMonthlySpend(updatedTools));
+    setActiveToolsCount(updatedTools.filter(t => t.subscription_status === 'active').length);
   };
 
   if (loading) {
@@ -115,11 +129,19 @@ const MyTools = () => {
           <div className="flex items-center gap-4">
             <Tabs defaultValue="grid" className="w-[200px]">
               <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="grid" onClick={() => setViewMode('grid')}>
+                <TabsTrigger 
+                  value="grid" 
+                  onClick={() => setViewMode('grid')}
+                  className="data-[state=active]:bg-[#4361EE] data-[state=active]:text-white"
+                >
                   <LayoutGrid className="w-4 h-4 mr-2" />
                   Grid
                 </TabsTrigger>
-                <TabsTrigger value="list" onClick={() => setViewMode('list')}>
+                <TabsTrigger 
+                  value="list" 
+                  onClick={() => setViewMode('list')}
+                  className="data-[state=active]:bg-[#4361EE] data-[state=active]:text-white"
+                >
                   <Activity className="w-4 h-4 mr-2" />
                   List
                 </TabsTrigger>
@@ -127,7 +149,7 @@ const MyTools = () => {
             </Tabs>
             <Button
               onClick={() => navigate("/tools/add")}
-              className="bg-accent hover:bg-accent-dark text-white flex items-center gap-2"
+              className="bg-[#4361EE] hover:bg-[#3249d8] text-white flex items-center gap-2"
             >
               <Plus className="w-4 h-4" /> Add Tools
             </Button>
@@ -139,18 +161,22 @@ const MyTools = () => {
         ) : (
           <div className="space-y-6">
             <Card className="p-6">
-              <div className="flex justify-between items-center mb-4">
-                <div>
-                  <h2 className="text-xl font-semibold text-gray-900">
-                    Monthly Spend Overview
-                  </h2>
-                  <p className="text-gray-500">
-                    Total monthly cost: ${monthlySpend.toFixed(2)}
-                  </p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="bg-white p-6 rounded-lg border border-gray-100">
+                  <h3 className="text-sm font-medium text-gray-500">Monthly Spend</h3>
+                  <div className="mt-2 flex items-baseline">
+                    <p className="text-3xl font-semibold text-[#4361EE]">${monthlySpend.toFixed(2)}</p>
+                    <p className="ml-2 text-sm text-gray-500">/ month</p>
+                  </div>
                 </div>
-                <p className="text-gray-500">
-                  Active tools: {activeToolsCount}
-                </p>
+                <div className="bg-white p-6 rounded-lg border border-gray-100">
+                  <h3 className="text-sm font-medium text-gray-500">Active Tools</h3>
+                  <p className="mt-2 text-3xl font-semibold text-[#4361EE]">{activeToolsCount}</p>
+                </div>
+                <div className="bg-white p-6 rounded-lg border border-gray-100">
+                  <h3 className="text-sm font-medium text-gray-500">Most Used Category</h3>
+                  <p className="mt-2 text-3xl font-semibold text-[#4361EE]">{mostUsedCategory}</p>
+                </div>
               </div>
             </Card>
 
@@ -184,6 +210,7 @@ const MyTools = () => {
                       tools={categoryTools}
                       viewMode={viewMode}
                       onRemoveTool={handleRemoveTool}
+                      onUpdateTool={handleUpdateTool}
                     />
                   </Card>
                 </motion.div>

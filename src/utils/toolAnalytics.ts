@@ -1,6 +1,17 @@
 
 import { supabase } from "@/integrations/supabase/client";
-import type { InteractionType, AIAnalysis } from "@/types/aiTypes";
+
+export type InteractionType = 'view' | 'click' | 'bookmark' | 'compare';
+
+export interface AIAnalysis {
+  total_spend: number;
+  potential_savings: number;
+  recommendations: {
+    total_tools: number;
+    tools_data: any[];
+    analysis_date: string;
+  };
+}
 
 export const trackToolInteraction = async (toolId: string, interactionType: InteractionType) => {
   try {
@@ -11,7 +22,7 @@ export const trackToolInteraction = async (toolId: string, interactionType: Inte
       .insert({
         tool_id: toolId,
         user_id: user?.id || null,
-        usage_type: interactionType as string,
+        usage_type: interactionType,
         usage_details: {
           source: 'web',
           timestamp: new Date().toISOString(),
@@ -23,7 +34,7 @@ export const trackToolInteraction = async (toolId: string, interactionType: Inte
 
     if (error) throw error;
 
-    // Handle bookmarks separately - removed increment_bookmarks as it's not a valid function
+    // Handle bookmarks separately
     if (interactionType === 'bookmark') {
       // Fetch current bookmarks count and increment
       const { data: currentTool } = await supabase
@@ -62,12 +73,13 @@ export const getAISavingsAnalysis = async (): Promise<AIAnalysis | null> => {
 
     // If analysis is less than 24 hours old, return it
     if (existingAnalysis && new Date(existingAnalysis.analysis_date).getTime() > Date.now() - 24 * 60 * 60 * 1000) {
+      const recommendations = existingAnalysis.ai_recommendations?.[0] || {};
       return {
         total_spend: existingAnalysis.total_spend,
         potential_savings: existingAnalysis.potential_savings,
         recommendations: {
-          total_tools: existingAnalysis.ai_recommendations?.[0]?.total_tools || 0,
-          tools_data: existingAnalysis.ai_recommendations?.[0]?.tools_data || [],
+          total_tools: recommendations.total_tools || 0,
+          tools_data: recommendations.tools_data || [],
           analysis_date: existingAnalysis.analysis_date
         }
       };
@@ -99,11 +111,7 @@ export const getAISavingsAnalysis = async (): Promise<AIAnalysis | null> => {
       return {
         total_spend: newAnalysis[0].total_current_spend,
         potential_savings: newAnalysis[0].potential_savings,
-        recommendations: {
-          total_tools: recommendations.total_tools || 0,
-          tools_data: recommendations.tools_data || [],
-          analysis_date: recommendations.analysis_date
-        }
+        recommendations
       };
     }
 

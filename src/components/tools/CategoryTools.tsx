@@ -16,15 +16,17 @@ interface CategoryToolsProps {
   tools: UserTool[];
   viewMode?: 'grid' | 'list';
   onRemoveTool?: (toolId: string) => void;
+  onUpdateTool?: (toolId: string, updates: Partial<UserTool>) => void;
 }
 
-export const CategoryTools = ({ category, tools, viewMode = 'grid', onRemoveTool }: CategoryToolsProps) => {
+export const CategoryTools = ({ category, tools, viewMode = 'grid', onRemoveTool, onUpdateTool }: CategoryToolsProps) => {
   const validTools = tools.filter(userTool => userTool.tool !== undefined);
   const [editingTool, setEditingTool] = useState<string | null>(null);
   const [editForm, setEditForm] = useState<{
     monthly_cost: string;
     subscription_status: string;
   }>({ monthly_cost: '', subscription_status: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleEditStart = (tool: UserTool) => {
     setEditingTool(tool.tool_id);
@@ -41,19 +43,26 @@ export const CategoryTools = ({ category, tools, viewMode = 'grid', onRemoveTool
 
   const handleEditSave = async (toolId: string) => {
     try {
+      setIsSubmitting(true);
+      const updates = {
+        monthly_cost: parseFloat(editForm.monthly_cost) || 0,
+        subscription_status: editForm.subscription_status,
+      };
+
       const { error } = await supabase
         .from('user_tools')
-        .update({
-          monthly_cost: parseFloat(editForm.monthly_cost),
-          subscription_status: editForm.subscription_status,
-        })
+        .update(updates)
         .eq('tool_id', toolId);
 
       if (error) throw error;
 
+      // Update local state through parent component
+      onUpdateTool?.(toolId, updates);
+
       toast({
-        title: "Tool updated",
+        title: "Success",
         description: "Your changes have been saved successfully",
+        variant: "default",
       });
       setEditingTool(null);
     } catch (error) {
@@ -62,6 +71,8 @@ export const CategoryTools = ({ category, tools, viewMode = 'grid', onRemoveTool
         description: "Failed to update tool. Please try again.",
         variant: "destructive",
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -76,7 +87,7 @@ export const CategoryTools = ({ category, tools, viewMode = 'grid', onRemoveTool
 
       onRemoveTool?.(toolId);
       toast({
-        title: "Tool removed",
+        title: "Success",
         description: "The tool has been removed from your list",
       });
     } catch (error) {
@@ -97,7 +108,7 @@ export const CategoryTools = ({ category, tools, viewMode = 'grid', onRemoveTool
       <AnimatePresence>
         {validTools.map((userTool) => (
           <motion.div
-            key={userTool.id}
+            key={userTool.tool_id}
             layout
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -117,6 +128,7 @@ export const CategoryTools = ({ category, tools, viewMode = 'grid', onRemoveTool
                         size="sm"
                         variant="ghost"
                         onClick={() => handleEditCancel()}
+                        disabled={isSubmitting}
                       >
                         <XCircle className="h-4 w-4" />
                       </Button>
@@ -124,8 +136,10 @@ export const CategoryTools = ({ category, tools, viewMode = 'grid', onRemoveTool
                         size="sm"
                         onClick={() => handleEditSave(userTool.tool_id)}
                         className="bg-[#4361EE] hover:bg-[#3249d8] text-white"
+                        disabled={isSubmitting}
                       >
-                        <Save className="h-4 w-4" />
+                        <Save className="h-4 w-4 mr-2" />
+                        {isSubmitting ? 'Saving...' : 'Save'}
                       </Button>
                     </div>
                   </div>
@@ -141,6 +155,8 @@ export const CategoryTools = ({ category, tools, viewMode = 'grid', onRemoveTool
                           onChange={(e) => setEditForm(prev => ({ ...prev, monthly_cost: e.target.value }))}
                           className="pl-8"
                           placeholder="0.00"
+                          step="0.01"
+                          min="0"
                         />
                       </div>
                     </div>
@@ -179,8 +195,8 @@ export const CategoryTools = ({ category, tools, viewMode = 'grid', onRemoveTool
                       <div className="space-y-1">
                         <span className="text-sm text-gray-500">Monthly Cost</span>
                         <div className="flex items-center gap-1">
-                          <DollarSign className="w-4 h-4 text-blue-600" />
-                          <span className="text-xl font-semibold text-gray-900">
+                          <DollarSign className={`w-4 h-4 ${userTool.subscription_status === 'active' ? 'text-blue-600' : 'text-gray-400'}`} />
+                          <span className={`text-xl font-semibold ${userTool.subscription_status === 'active' ? 'text-gray-900' : 'text-gray-400 line-through'}`}>
                             {userTool.monthly_cost?.toFixed(2) || '0.00'}
                           </span>
                         </div>
