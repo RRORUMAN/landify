@@ -14,6 +14,7 @@ import AIRecommendations from "./pages/tools/AIRecommendations";
 import Teams from "./pages/teams/Teams";
 import TeamDashboard from "./pages/teams/TeamDashboard";
 import TeamFolders from "./pages/teams/TeamFolders";
+import ReferralProgram from "./pages/teams/ReferralProgram";
 import Sidebar from "./components/dashboard/Sidebar";
 
 const queryClient = new QueryClient();
@@ -54,6 +55,7 @@ const AppContent = () => {
               <Route index element={<Teams />} />
               <Route path=":teamId" element={<TeamDashboard />} />
               <Route path=":teamId/folders/*" element={<TeamFolders />} />
+              <Route path="referral" element={<ReferralProgram />} />
             </Route>
           </Routes>
         </main>
