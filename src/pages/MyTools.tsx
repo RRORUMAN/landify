@@ -154,7 +154,7 @@ const MyTools = () => {
   ];
 
   const categories = tools.reduce((acc, tool) => {
-    const category = tool.category;
+    const category = tool.tool?.category || 'Uncategorized';
     if (!acc[category]) {
       acc[category] = [];
     }

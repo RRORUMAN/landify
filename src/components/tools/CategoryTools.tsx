@@ -32,7 +32,7 @@ export const CategoryTools = ({ category, tools }: CategoryToolsProps) => {
               exit={{ opacity: 0, scale: 0.9 }}
               transition={{ duration: 0.2 }}
             >
-              <ToolCard tool={tool} />
+              <ToolCard tool={tool.tool!} />
             </motion.div>
           ))}
         </AnimatePresence>
