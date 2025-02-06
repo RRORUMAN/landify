@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Star, Bookmark, ArrowUpRight } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import type { Tool } from "@/data/types";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { trackToolInteraction } from "@/utils/toolAnalytics";
