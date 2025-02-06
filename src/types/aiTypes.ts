@@ -34,27 +34,6 @@ export interface AIInsight {
   last_updated: string;
 }
 
-export interface ROIMetrics {
-  id: string;
-  user_id: string;
-  tool_id: string;
-  time_saved: number;
-  cost_savings: number;
-  productivity_gain: number;
-  roi_score: number;
-  historical_data: Array<{
-    date: string;
-    metric: string;
-    value: number;
-  }>;
-  predictions: {
-    projected_savings: number;
-    payback_period: number;
-    confidence_level: number;
-  };
-  last_updated: string;
-}
-
 export interface ComparisonFeature {
   name: string;
   importance: 'critical' | 'high' | 'medium' | 'low';

@@ -13,7 +13,6 @@ export async function getToolCompatibility(toolId1: string, toolId2: string): Pr
       .single();
 
     if (error) throw error;
-
     if (!data) return null;
 
     return {
@@ -52,39 +51,5 @@ export async function getToolInsights(toolId: string): Promise<AIInsight[]> {
   } catch (error) {
     console.error('Error fetching tool insights:', error);
     return [];
-  }
-}
-
-export async function getROIAnalytics(toolId: string): Promise<ROIMetrics | null> {
-  try {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return null;
-
-    const { data, error } = await supabase
-      .from('tool_roi_analytics')
-      .select('*')
-      .eq('tool_id', toolId)
-      .eq('user_id', user.id)
-      .single();
-
-    if (error) throw error;
-
-    if (!data) return null;
-
-    return {
-      id: data.id,
-      user_id: data.user_id,
-      tool_id: data.tool_id,
-      time_saved: data.time_saved || 0,
-      cost_savings: data.cost_savings || 0,
-      productivity_gain: data.productivity_gain || 0,
-      roi_score: data.roi_score || 0,
-      historical_data: data.historical_data as ROIMetrics['historical_data'],
-      predictions: data.predictions as ROIMetrics['predictions'],
-      last_updated: data.last_updated || new Date().toISOString()
-    };
-  } catch (error) {
-    console.error('Error fetching ROI analytics:', error);
-    return null;
   }
 }
