@@ -13,7 +13,7 @@ import UseCaseComparison from "./detailed/UseCaseComparison";
 import SecurityComparison from "./detailed/SecurityComparison";
 import ResourceComparison from "./detailed/ResourceComparison";
 import PricingComparison from "./detailed/PricingComparison";
-import AICompatibilityScore from "./AICompatibilityScore";
+import { AICompatibilityScore } from "./AICompatibilityScore";
 
 interface CompareFeatureGridProps {
   tools: Tool[];
@@ -72,11 +72,11 @@ const CompareFeatureGrid = ({ tools }: CompareFeatureGridProps) => {
           .eq('tool_id', tool.id);
 
         toolComparisons[tool.id] = {
-          performance,
-          useCases,
-          security,
-          resources,
-          pricing,
+          performance: performance as ToolPerformance,
+          useCases: (useCases || []) as ToolUseCases[],
+          security: (security || []) as ToolSecurity[],
+          resources: (resources || []) as ToolResources[],
+          pricing: (pricing || []) as ToolPricingDetail[],
         };
       }
 

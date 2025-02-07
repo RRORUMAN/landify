@@ -30,7 +30,7 @@ const SecurityComparison = ({ tools, getDetailedComparison }: SecurityComparison
                         <Shield className="h-4 w-4 text-blue-500" />
                         <h5 className="font-medium text-sm">{feature.security_feature}</h5>
                       </div>
-                      <Badge variant={feature.security_score >= 0.8 ? "success" : "warning"}>
+                      <Badge variant={feature.security_score >= 0.8 ? "default" : "secondary"}>
                         Score: {Math.round(feature.security_score * 100)}%
                       </Badge>
                     </div>

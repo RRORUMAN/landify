@@ -55,3 +55,38 @@ export interface DetailedComparison {
   resources: ToolResources[];
   pricing: ToolPricingDetail[];
 }
+
+export interface ComparisonFeature {
+  id: string;
+  feature_name: string;
+  feature_category: string;
+  feature_value: string | null;
+  feature_details: Record<string, any>;
+  importance: 'high' | 'medium' | 'low';
+  feature_group: string | null;
+  help_text: string | null;
+}
+
+export interface FeatureCategory {
+  name: string;
+  features: ComparisonFeature[];
+}
+
+export interface ToolCompatibility {
+  score: number;
+  factors: Record<string, number>;
+  recommendations: string[];
+}
+
+export interface AIInsight {
+  type: string;
+  score: number;
+  details: Record<string, any>;
+}
+
+export interface ROIMetrics {
+  savings: number;
+  productivity: number;
+  timeframe: string;
+  details: Record<string, any>;
+}
