@@ -57,6 +57,42 @@ export type Database = {
           },
         ]
       }
+      ai_recommendation_results: {
+        Row: {
+          comparison_data: Json | null
+          created_at: string | null
+          id: string
+          key_strengths: Json[] | null
+          match_scores: Json | null
+          query: string
+          results: Json
+          use_case_fit: Json | null
+          user_id: string | null
+        }
+        Insert: {
+          comparison_data?: Json | null
+          created_at?: string | null
+          id?: string
+          key_strengths?: Json[] | null
+          match_scores?: Json | null
+          query: string
+          results: Json
+          use_case_fit?: Json | null
+          user_id?: string | null
+        }
+        Update: {
+          comparison_data?: Json | null
+          created_at?: string | null
+          id?: string
+          key_strengths?: Json[] | null
+          match_scores?: Json | null
+          query?: string
+          results?: Json
+          use_case_fit?: Json | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       ai_savings_analysis: {
         Row: {
           ai_recommendations: Json | null
