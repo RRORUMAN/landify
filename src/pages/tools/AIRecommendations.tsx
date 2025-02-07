@@ -32,7 +32,7 @@ const AIRecommendations = () => {
       const { data, error } = await supabase.rpc(
         'generate_tool_recommendations',
         { 
-          p_user_id: user?.id,
+          p_user_id: user?.id || '',
           p_query: userNeeds,
           p_limit: 5
         }
@@ -40,8 +40,8 @@ const AIRecommendations = () => {
 
       if (error) throw error;
 
-      // Convert the recommendations to Tool type array
-      const toolRecommendations = data?.map((rec: any) => ({
+      // Convert the recommendations to Tool type array with all required properties
+      const toolRecommendations: Tool[] = data?.map((rec: any) => ({
         id: rec.tool_id,
         name: rec.name,
         description: rec.description,
@@ -51,6 +51,9 @@ const AIRecommendations = () => {
         rating: rec.score || 0,
         reviews: rec.reviews || 0,
         bookmarks: rec.bookmarks || 0,
+        pricing: rec.pricing || 'Free',
+        category: rec.category || 'AI',
+        featured: rec.featured || false,
         trending_tools: rec.trending_tools || [],
       })) || [];
 
