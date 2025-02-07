@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Plus, Users, FolderPlus, Copy, Check, Loader2 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
@@ -15,6 +15,7 @@ import type { Team, TeamInvite } from '@/data/types';
 
 const Teams = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [newTeam, setNewTeam] = useState({ name: '', description: '' });
   const [copiedInviteCode, setCopiedInviteCode] = useState<string | null>(null);
@@ -25,7 +26,10 @@ const Teams = () => {
     queryFn: async () => {
       console.log('Fetching teams...');
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('Not authenticated');
+      if (!user) {
+        navigate('/auth');
+        throw new Error('Not authenticated');
+      }
 
       const { data: teamsData, error: teamsError } = await supabase
         .from('teams')
@@ -42,6 +46,8 @@ const Teams = () => {
         console.error('Error fetching teams:', teamsError);
         throw teamsError;
       }
+
+      console.log('Teams data:', teamsData);
       return teamsData as Team[];
     }
   });
@@ -60,6 +66,7 @@ const Teams = () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
+        navigate('/auth');
         throw new Error('Not authenticated');
       }
 
@@ -127,12 +134,18 @@ const Teams = () => {
         .single();
 
       if (error || !invite) {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
+          navigate('/auth');
+          throw new Error('Not authenticated');
+        }
+
         // Create new invite if none exists
         const { data: newInvite, error: createError } = await supabase
           .from('team_invites')
           .insert({
             team_id: teamId,
-            invited_by: (await supabase.auth.getUser()).data.user?.id,
+            invited_by: user.id,
             uses_remaining: 5
           })
           .select()
@@ -161,6 +174,7 @@ const Teams = () => {
         });
       }
     } catch (error) {
+      console.error('Error copying invite link:', error);
       toast({
         title: 'Error copying invite link',
         description: 'There was an error generating the invite link.',
