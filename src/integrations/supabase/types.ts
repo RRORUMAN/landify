@@ -456,6 +456,7 @@ export type Database = {
       performance_metrics: {
         Row: {
           adoption_rate: number | null
+          ai_ranking: number | null
           api_reliability_score: number | null
           automation_score: number | null
           confidence_score: number | null
@@ -480,6 +481,7 @@ export type Database = {
         }
         Insert: {
           adoption_rate?: number | null
+          ai_ranking?: number | null
           api_reliability_score?: number | null
           automation_score?: number | null
           confidence_score?: number | null
@@ -504,6 +506,7 @@ export type Database = {
         }
         Update: {
           adoption_rate?: number | null
+          ai_ranking?: number | null
           api_reliability_score?: number | null
           automation_score?: number | null
           confidence_score?: number | null
