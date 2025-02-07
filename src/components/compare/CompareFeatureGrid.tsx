@@ -5,27 +5,22 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { DetailedComparison } from "@/types/aiTypes";
 import ToolHeader from "./features/ToolHeader";
 import FeatureGroup from "./features/FeatureGroup";
+import PerformanceComparison from "./detailed/PerformanceComparison";
+import UseCaseComparison from "./detailed/UseCaseComparison";
+import SecurityComparison from "./detailed/SecurityComparison";
+import ResourceComparison from "./detailed/ResourceComparison";
+import PricingComparison from "./detailed/PricingComparison";
+import AICompatibilityScore from "./AICompatibilityScore";
 
 interface CompareFeatureGridProps {
   tools: Tool[];
 }
 
-interface Feature {
-  tool_id: string;
-  feature_category: string;
-  feature_group: string;
-  feature_name: string;
-  feature_value: string;
-  is_premium: boolean;
-  importance: 'high' | 'medium' | 'low';
-  help_text: string | null;
-  sort_order: number;
-}
-
 const CompareFeatureGrid = ({ tools }: CompareFeatureGridProps) => {
-  const { data: features = [], isLoading } = useQuery({
+  const { data: features = [], isLoading: isFeaturesLoading } = useQuery({
     queryKey: ['comparison_features', tools.map(t => t.id)],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -35,7 +30,57 @@ const CompareFeatureGrid = ({ tools }: CompareFeatureGridProps) => {
         .order('sort_order', { ascending: true });
       
       if (error) throw error;
-      return data as Feature[];
+      return data;
+    }
+  });
+
+  const { data: detailedComparisons = {}, isLoading: isDetailsLoading } = useQuery({
+    queryKey: ['detailed_comparisons', tools.map(t => t.id)],
+    queryFn: async () => {
+      const toolComparisons: Record<string, DetailedComparison> = {};
+
+      for (const tool of tools) {
+        // Fetch performance metrics
+        const { data: performance } = await supabase
+          .from('tool_performance')
+          .select('*')
+          .eq('tool_id', tool.id)
+          .single();
+
+        // Fetch use cases
+        const { data: useCases } = await supabase
+          .from('tool_use_cases')
+          .select('*')
+          .eq('tool_id', tool.id);
+
+        // Fetch security features
+        const { data: security } = await supabase
+          .from('tool_security')
+          .select('*')
+          .eq('tool_id', tool.id);
+
+        // Fetch resources
+        const { data: resources } = await supabase
+          .from('tool_resources')
+          .select('*')
+          .eq('tool_id', tool.id);
+
+        // Fetch pricing details
+        const { data: pricing } = await supabase
+          .from('tool_pricing_details')
+          .select('*')
+          .eq('tool_id', tool.id);
+
+        toolComparisons[tool.id] = {
+          performance,
+          useCases,
+          security,
+          resources,
+          pricing,
+        };
+      }
+
+      return toolComparisons;
     }
   });
 
@@ -75,39 +120,98 @@ const CompareFeatureGrid = ({ tools }: CompareFeatureGridProps) => {
     return metrics.find(m => m.tool_id === toolId);
   };
 
-  if (isLoading) {
-    return <div className="text-center py-8">Loading features comparison...</div>;
+  const getDetailedComparison = (toolId: string) => {
+    return detailedComparisons[toolId];
+  };
+
+  if (isFeaturesLoading || isDetailsLoading) {
+    return <div className="text-center py-8">Loading comparison data...</div>;
   }
 
   return (
     <TooltipProvider>
-      <Card className="p-6">
-        <div className="sticky top-0 bg-white z-10 pb-4 border-b">
-          <div className="grid grid-cols-[1fr,repeat(4,1fr)] gap-4">
-            <div className="font-semibold text-gray-500">Feature</div>
-            {tools.map((tool) => (
-              <ToolHeader
+      <div className="space-y-6">
+        {/* AI Compatibility Analysis */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {tools.map((tool) => {
+            const comparison = getDetailedComparison(tool.id);
+            if (!comparison) return null;
+            
+            return (
+              <AICompatibilityScore
                 key={tool.id}
-                tool={tool}
-                metric={getMetricForTool(tool.id)}
+                score={comparison.performance?.accuracy_score || 0}
+                factors={{
+                  'API Reliability': comparison.performance?.api_reliability_score || 0,
+                  'Cost Efficiency': comparison.performance?.cost_efficiency_score || 0,
+                  'Support Quality': comparison.performance?.support_quality_score || 0,
+                }}
+                useCases={comparison.useCases?.map(uc => uc.use_case) || []}
               />
-            ))}
-          </div>
+            );
+          })}
         </div>
 
-        <ScrollArea className="h-[600px] mt-4">
-          {Object.entries(featuresByGroup).map(([groupKey, { category, group, features: featureSet }]) => (
-            <FeatureGroup
-              key={groupKey}
-              category={category}
-              group={group}
-              features={featureSet}
+        {/* Detailed Comparisons */}
+        <Card className="p-6">
+          <div className="sticky top-0 bg-white z-10 pb-4 border-b">
+            <div className="grid grid-cols-[1fr,repeat(4,1fr)] gap-4">
+              <div className="font-semibold text-gray-500">Feature</div>
+              {tools.map((tool) => (
+                <ToolHeader
+                  key={tool.id}
+                  tool={tool}
+                  metric={getMetricForTool(tool.id)}
+                />
+              ))}
+            </div>
+          </div>
+
+          <ScrollArea className="h-[600px] mt-4">
+            {/* Performance Metrics */}
+            <PerformanceComparison
               tools={tools}
-              getFeatureValue={getFeatureValue}
+              getDetailedComparison={getDetailedComparison}
             />
-          ))}
-        </ScrollArea>
-      </Card>
+
+            {/* Use Cases */}
+            <UseCaseComparison
+              tools={tools}
+              getDetailedComparison={getDetailedComparison}
+            />
+
+            {/* Security Features */}
+            <SecurityComparison
+              tools={tools}
+              getDetailedComparison={getDetailedComparison}
+            />
+
+            {/* Resources & Training */}
+            <ResourceComparison
+              tools={tools}
+              getDetailedComparison={getDetailedComparison}
+            />
+
+            {/* Pricing Analysis */}
+            <PricingComparison
+              tools={tools}
+              getDetailedComparison={getDetailedComparison}
+            />
+
+            {/* Feature Groups */}
+            {Object.entries(featuresByGroup).map(([groupKey, { category, group, features: featureSet }]) => (
+              <FeatureGroup
+                key={groupKey}
+                category={category}
+                group={group}
+                features={featureSet}
+                tools={tools}
+                getFeatureValue={getFeatureValue}
+              />
+            ))}
+          </ScrollArea>
+        </Card>
+      </div>
     </TooltipProvider>
   );
 };

@@ -1,69 +1,57 @@
-export interface ToolCompatibility {
-  id: string;
-  tool_id_1: string;
-  tool_id_2: string;
-  compatibility_score: number;
-  integration_factors: {
-    api_compatibility: number;
-    data_sync: number;
-    workflow_integration: number;
-    user_experience: number;
-  };
-  use_case_match: string[];
-  last_analyzed: string;
+
+export interface ToolPerformance {
+  accuracy_score: number;
+  response_time: number;
+  scalability_score: number;
+  ease_of_use_score: number;
+  cost_efficiency_score: number;
+  support_quality_score: number;
+  api_reliability_score: number;
+  customization_score: number;
+  update_frequency: number;
 }
 
-export interface AIInsight {
-  id: string;
-  tool_id: string;
-  insight_type: 'workflow' | 'budget' | 'team';
-  insight_data: {
-    efficiency_score?: number;
-    cost_impact?: number;
-    team_adoption?: number;
-    learning_curve?: number;
-    automation_potential?: number;
-    integration_complexity?: number;
-  };
-  confidence_score: number;
-  recommendations: Array<{
-    toolId: string;
-    text: string;
-  }>;
-  last_updated: string;
+export interface ToolUseCases {
+  use_case: string;
+  effectiveness_score: number;
+  implementation_complexity: number;
+  cost_impact: number;
+  time_savings: number;
+  details: Record<string, any>;
 }
 
-export interface ComparisonFeature {
-  name: string;
-  importance: 'critical' | 'high' | 'medium' | 'low';
-  category: string;
-  description: string;
-  values: {
-    toolId: string;
-    value: string | boolean | number;
-    notes?: string;
-    confidenceScore: number;
-  }[];
+export interface ToolSecurity {
+  security_feature: string;
+  compliance_standards: string[];
+  certification_status: string;
+  last_audit_date: string;
+  security_score: number;
+  details: Record<string, any>;
 }
 
-export interface FeatureCategory {
-  name: string;
-  description: string;
-  features: ComparisonFeature[];
+export interface ToolResources {
+  resource_type: string;
+  quality_score: number;
+  accessibility_score: number;
+  comprehensiveness_score: number;
+  update_frequency: string;
+  details: Record<string, any>;
 }
 
-export interface Report {
-  id: string;
-  name: string;
-  type: 'usage' | 'cost' | 'performance';
-  schedule: 'daily' | 'weekly' | 'monthly' | null;
-  recipients: string[];
-  next_send: string;
+export interface ToolPricingDetail {
+  plan_name: string;
+  monthly_cost: number;
+  features_included: string[];
+  usage_limits: Record<string, any>;
+  overage_costs: Record<string, any>;
+  minimum_commitment: string;
+  details: Record<string, any>;
 }
 
-export interface ROIMetrics {
-  timeSaved: number;
-  costSavings: number;
-  productivityGain: number;
-  score: number;
+export interface DetailedComparison {
+  performance: ToolPerformance;
+  useCases: ToolUseCases[];
+  security: ToolSecurity[];
+  resources: ToolResources[];
+  pricing: ToolPricingDetail[];
 }
