@@ -8,7 +8,7 @@ interface KeyMetricsProps {
 }
 
 const KeyMetrics = ({ metrics }: KeyMetricsProps) => {
-  const getTrendIndicator = (value: number, threshold: number = 7.5) => {
+  const getTrendIndicator = (value: number, threshold: number = 0.75) => {
     if (value >= threshold) {
       return <TrendingUp className="h-4 w-4 text-green-500" />;
     }
@@ -24,8 +24,7 @@ const KeyMetrics = ({ metrics }: KeyMetricsProps) => {
           title="User Satisfaction"
           value={metrics?.customer_satisfaction_score}
           max={5}
-          trend={getTrendIndicator(metrics?.customer_satisfaction_score || 0)}
-          unit="/5"
+          trend={getTrendIndicator(metrics?.customer_satisfaction_score / 5)}
           color="text-purple-500"
         />
         <MetricCard
@@ -33,8 +32,7 @@ const KeyMetrics = ({ metrics }: KeyMetricsProps) => {
           title="Learning Curve"
           value={metrics?.learning_curve_score}
           max={5}
-          trend={getTrendIndicator(metrics?.learning_curve_score || 0)}
-          unit="/5"
+          trend={getTrendIndicator(metrics?.learning_curve_score / 5)}
           color="text-blue-500"
         />
         <MetricCard
@@ -42,16 +40,15 @@ const KeyMetrics = ({ metrics }: KeyMetricsProps) => {
           title="API Reliability"
           value={metrics?.api_reliability_score}
           max={5}
-          trend={getTrendIndicator(metrics?.api_reliability_score || 0)}
-          unit="/5"
+          trend={getTrendIndicator(metrics?.api_reliability_score / 5)}
           color="text-green-500"
         />
         <MetricCard
           icon={Clock}
           title="Support Response"
           value={metrics?.support_response_time}
-          trend={getTrendIndicator(24 - (metrics?.support_response_time || 0))}
           unit="hrs"
+          trend={getTrendIndicator(24 - (metrics?.support_response_time || 0), 12)}
           color="text-orange-500"
           inverse
         />

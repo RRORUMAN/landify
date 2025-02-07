@@ -16,6 +16,7 @@ const MetricBar = ({ icon: Icon, title, value, max, unit, color, trend }: Metric
   if (!value) return null;
 
   const percentage = (value / max) * 100;
+  const formattedValue = Math.round(value * 10) / 10;
 
   return (
     <div className="space-y-2">
@@ -26,7 +27,7 @@ const MetricBar = ({ icon: Icon, title, value, max, unit, color, trend }: Metric
         </div>
         <div className="flex items-center gap-2">
           <span className="text-sm font-semibold">
-            {value}{unit}
+            {formattedValue}{unit}
           </span>
           {trend}
         </div>

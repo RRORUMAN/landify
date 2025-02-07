@@ -8,7 +8,7 @@ interface PerformanceIndicatorsProps {
 }
 
 const PerformanceIndicators = ({ metrics }: PerformanceIndicatorsProps) => {
-  const getTrendIndicator = (value: number, threshold: number = 7.5) => {
+  const getTrendIndicator = (value: number, threshold: number = 0.75) => {
     if (value >= threshold) {
       return <TrendingUp className="h-4 w-4 text-green-500" />;
     }
@@ -24,7 +24,7 @@ const PerformanceIndicators = ({ metrics }: PerformanceIndicatorsProps) => {
         value={metrics?.ease_of_use_score}
         max={10}
         color="bg-blue-500"
-        trend={getTrendIndicator(metrics?.ease_of_use_score || 0)}
+        trend={getTrendIndicator(metrics?.ease_of_use_score / 10)}
       />
       <MetricBar
         icon={Timer}
@@ -33,7 +33,7 @@ const PerformanceIndicators = ({ metrics }: PerformanceIndicatorsProps) => {
         max={30}
         unit="min"
         color="bg-green-500"
-        trend={getTrendIndicator(metrics?.time_saved_per_task || 0, 15)}
+        trend={getTrendIndicator(metrics?.time_saved_per_task / 30)}
       />
       <MetricBar
         icon={BarChart3}
@@ -41,7 +41,7 @@ const PerformanceIndicators = ({ metrics }: PerformanceIndicatorsProps) => {
         value={metrics?.roi_score}
         max={10}
         color="bg-purple-500"
-        trend={getTrendIndicator(metrics?.roi_score || 0)}
+        trend={getTrendIndicator(metrics?.roi_score / 10)}
       />
     </div>
   );
