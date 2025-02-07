@@ -8,12 +8,12 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import type { Team, TeamMember } from '@/data/types';
-import type { TeamActivityLog } from '@/types/aiTypes';
+import type { TeamActivityLog as TeamActivityLogType } from '@/types/aiTypes';
 import { Skeleton } from '@/components/ui/skeleton';
 import TeamOverview from './components/TeamOverview';
 import TeamMembersList from './components/TeamMembersList';
 import TeamToolsGrid from './components/TeamToolsGrid';
-import TeamActivityLog from './components/TeamActivityLog';
+import TeamActivityLogComponent from './components/TeamActivityLog';
 import AIWorkflowInsights from './components/AIWorkflowInsights';
 
 const TeamDashboard = () => {
@@ -38,7 +38,7 @@ const TeamDashboard = () => {
 
       if (teamError) throw teamError;
       
-      const transformedTeam = {
+      return {
         ...team,
         team_members: team.team_members.map((member: any) => ({
           ...member,
@@ -47,8 +47,6 @@ const TeamDashboard = () => {
           }
         }))
       } as Team & { team_members: (TeamMember & { user: { email: string } })[] };
-
-      return transformedTeam;
     },
   });
 
@@ -87,12 +85,12 @@ const TeamDashboard = () => {
       return logs.map(log => ({
         ...log,
         activity_data: log.activity_data as Record<string, any>
-      })) as TeamActivityLog[];
+      })) as TeamActivityLogType[];
     },
   });
 
-  const isAdmin = teamData?.team_members.some(member => {
-    const { data: { user } } = supabase.auth.getUser();
+  const isAdmin = teamData?.team_members.some(async member => {
+    const { data: { user } } = await supabase.auth.getUser();
     return member.user_id === user?.id && member.role === 'admin';
   });
 
@@ -169,7 +167,7 @@ const TeamDashboard = () => {
         </TabsContent>
 
         <TabsContent value="activity">
-          <TeamActivityLog logs={activityLogs} />
+          <TeamActivityLogComponent logs={activityLogs} />
         </TabsContent>
       </Tabs>
     </div>

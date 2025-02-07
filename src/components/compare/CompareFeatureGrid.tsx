@@ -1,4 +1,3 @@
-
 import { Tool } from "@/data/types";
 import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -30,7 +29,7 @@ const CompareFeatureGrid = ({ tools }: CompareFeatureGridProps) => {
         ...feature,
         feature_details: feature.feature_details as Record<string, any>,
         name: feature.feature_name,
-        description: feature.feature_details?.description || '',
+        description: (feature.feature_details as Record<string, any>)?.description || '',
         values: []
       })) as ComparisonFeature[];
     }
@@ -191,4 +190,3 @@ const CompareFeatureGrid = ({ tools }: CompareFeatureGridProps) => {
 };
 
 export default CompareFeatureGrid;
-
