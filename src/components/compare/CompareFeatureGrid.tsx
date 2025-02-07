@@ -1,11 +1,10 @@
-
 import { Tool } from "@/data/types";
 import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { DetailedComparison } from "@/types/aiTypes";
+import { DetailedComparison, ComparisonFeature } from "@/types/aiTypes";
 import ToolHeader from "./features/ToolHeader";
 import FeatureGroup from "./features/FeatureGroup";
 import PerformanceComparison from "./detailed/PerformanceComparison";
@@ -40,43 +39,38 @@ const CompareFeatureGrid = ({ tools }: CompareFeatureGridProps) => {
       const toolComparisons: Record<string, DetailedComparison> = {};
 
       for (const tool of tools) {
-        // Fetch performance metrics
         const { data: performance } = await supabase
           .from('tool_performance')
           .select('*')
           .eq('tool_id', tool.id)
           .single();
 
-        // Fetch use cases
         const { data: useCases } = await supabase
           .from('tool_use_cases')
           .select('*')
           .eq('tool_id', tool.id);
 
-        // Fetch security features
         const { data: security } = await supabase
           .from('tool_security')
           .select('*')
           .eq('tool_id', tool.id);
 
-        // Fetch resources
         const { data: resources } = await supabase
           .from('tool_resources')
           .select('*')
           .eq('tool_id', tool.id);
 
-        // Fetch pricing details
         const { data: pricing } = await supabase
           .from('tool_pricing_details')
           .select('*')
           .eq('tool_id', tool.id);
 
         toolComparisons[tool.id] = {
-          performance: performance as ToolPerformance,
-          useCases: (useCases || []) as ToolUseCases[],
-          security: (security || []) as ToolSecurity[],
-          resources: (resources || []) as ToolResources[],
-          pricing: (pricing || []) as ToolPricingDetail[],
+          performance: performance || {},
+          useCases: useCases || [],
+          security: security || [],
+          resources: resources || [],
+          pricing: pricing || [],
         };
       }
 
@@ -110,10 +104,23 @@ const CompareFeatureGrid = ({ tools }: CompareFeatureGridProps) => {
     return acc;
   }, {} as Record<string, { category: string; group: string; features: Set<string> }>);
 
-  const getFeatureValue = (toolId: string, featureName: string) => {
-    return features.find(
+  const getFeatureValue = (toolId: string, featureName: string): ComparisonFeature | undefined => {
+    const feature = features.find(
       f => f.tool_id === toolId && f.feature_name === featureName
     );
+    
+    if (!feature) return undefined;
+
+    return {
+      id: feature.id,
+      feature_name: feature.feature_name,
+      feature_category: feature.feature_category,
+      feature_value: feature.feature_value,
+      feature_details: feature.feature_details as Record<string, any>,
+      importance: feature.importance as 'high' | 'medium' | 'low',
+      feature_group: feature.feature_group,
+      help_text: feature.help_text
+    };
   };
 
   const getMetricForTool = (toolId: string) => {

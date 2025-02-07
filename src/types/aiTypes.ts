@@ -65,10 +65,18 @@ export interface ComparisonFeature {
   importance: 'high' | 'medium' | 'low';
   feature_group: string | null;
   help_text: string | null;
+  values?: Array<{
+    toolId: string;
+    value: string | number | boolean;
+    confidenceScore: number;
+    notes?: string;
+  }>;
+  description?: string;
 }
 
 export interface FeatureCategory {
   name: string;
+  description: string;
   features: ComparisonFeature[];
 }
 
@@ -76,12 +84,19 @@ export interface ToolCompatibility {
   score: number;
   factors: Record<string, number>;
   recommendations: string[];
+  integration_factors: Record<string, any>;
 }
 
 export interface AIInsight {
+  id: string;
   type: string;
   score: number;
   details: Record<string, any>;
+  insight_data: Record<string, any>;
+  recommendations: string[];
+  insight_type: string;
+  confidence_score: number;
+  last_updated: string;
 }
 
 export interface ROIMetrics {
@@ -89,4 +104,23 @@ export interface ROIMetrics {
   productivity: number;
   timeframe: string;
   details: Record<string, any>;
+}
+
+export interface TeamActivityLog {
+  id: string;
+  team_id: string;
+  user_id: string;
+  activity_type: string;
+  activity_data: Record<string, any>;
+  created_at: string;
+}
+
+export interface AIWorkflowInsight {
+  id: string;
+  insight_id: string;
+  insight_type: string;
+  insight_data: Record<string, any>;
+  priority_level: string;
+  created_at: string;
+  status: string;
 }
