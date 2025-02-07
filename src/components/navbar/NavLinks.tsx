@@ -19,7 +19,7 @@ const NavLinks = () => {
     <div className="flex items-center space-x-8">
       <Link 
         to="/" 
-        className="text-black font-medium hover:text-blue-600 transition-colors relative group"
+        className="text-black font-medium hover:text-blue-600 transition-all duration-300 transform hover:-translate-y-0.5 relative group"
       >
         <span className="relative z-10">Home</span>
         <span className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-600 transform scale-x-0 transition-transform duration-300 group-hover:scale-x-100" />
@@ -27,14 +27,14 @@ const NavLinks = () => {
       <a 
         href="#features" 
         onClick={scrollToFeatures}
-        className="text-black font-medium hover:text-blue-600 transition-colors relative group cursor-pointer"
+        className="text-black font-medium hover:text-blue-600 transition-all duration-300 transform hover:-translate-y-0.5 relative group cursor-pointer"
       >
         <span className="relative z-10">Features</span>
         <span className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-600 transform scale-x-0 transition-transform duration-300 group-hover:scale-x-100" />
       </a>
       <Link 
         to="/pricing" 
-        className="text-black font-medium hover:text-blue-600 transition-colors relative group"
+        className="text-black font-medium hover:text-blue-600 transition-all duration-300 transform hover:-translate-y-0.5 relative group"
       >
         <span className="relative z-10">Pricing</span>
         <span className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-600 transform scale-x-0 transition-transform duration-300 group-hover:scale-x-100" />
