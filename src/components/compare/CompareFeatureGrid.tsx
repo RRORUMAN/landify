@@ -1,10 +1,12 @@
+
 import { Tool } from "@/data/types";
 import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { DetailedComparison, ComparisonFeature } from "@/types/aiTypes";
+import { ComparisonFeature, DetailedComparison } from "@/types/aiTypes";
+import { AICompatibilityScore } from "./AICompatibilityScore";
 import ToolHeader from "./features/ToolHeader";
 import FeatureGroup from "./features/FeatureGroup";
 import PerformanceComparison from "./detailed/PerformanceComparison";
@@ -12,7 +14,6 @@ import UseCaseComparison from "./detailed/UseCaseComparison";
 import SecurityComparison from "./detailed/SecurityComparison";
 import ResourceComparison from "./detailed/ResourceComparison";
 import PricingComparison from "./detailed/PricingComparison";
-import { AICompatibilityScore } from "./AICompatibilityScore";
 
 interface CompareFeatureGridProps {
   tools: Tool[];
@@ -29,7 +30,10 @@ const CompareFeatureGrid = ({ tools }: CompareFeatureGridProps) => {
         .order('sort_order', { ascending: true });
       
       if (error) throw error;
-      return data;
+      return data.map(feature => ({
+        ...feature,
+        feature_details: feature.feature_details as Record<string, any>,
+      }));
     }
   });
 
@@ -66,11 +70,35 @@ const CompareFeatureGrid = ({ tools }: CompareFeatureGridProps) => {
           .eq('tool_id', tool.id);
 
         toolComparisons[tool.id] = {
-          performance: performance || {},
-          useCases: useCases || [],
-          security: security || [],
-          resources: resources || [],
-          pricing: pricing || [],
+          performance: performance ? {
+            accuracy_score: performance.accuracy_score || 0,
+            response_time: performance.response_time || 0,
+            scalability_score: performance.scalability_score || 0,
+            ease_of_use_score: performance.ease_of_use_score || 0,
+            cost_efficiency_score: performance.cost_efficiency_score || 0,
+            support_quality_score: performance.support_quality_score || 0,
+            api_reliability_score: performance.api_reliability_score || 0,
+            customization_score: performance.customization_score || 0,
+            update_frequency: performance.update_frequency || 0,
+          } : {} as DetailedComparison['performance'],
+          useCases: (useCases || []).map(uc => ({
+            ...uc,
+            details: uc.details as Record<string, any>
+          })),
+          security: (security || []).map(s => ({
+            ...s,
+            details: s.details as Record<string, any>
+          })),
+          resources: (resources || []).map(r => ({
+            ...r,
+            details: r.details as Record<string, any>
+          })),
+          pricing: (pricing || []).map(p => ({
+            ...p,
+            usage_limits: p.usage_limits as Record<string, any>,
+            overage_costs: p.overage_costs as Record<string, any>,
+            details: p.details as Record<string, any>
+          }))
         };
       }
 
@@ -119,7 +147,10 @@ const CompareFeatureGrid = ({ tools }: CompareFeatureGridProps) => {
       feature_details: feature.feature_details as Record<string, any>,
       importance: feature.importance as 'high' | 'medium' | 'low',
       feature_group: feature.feature_group,
-      help_text: feature.help_text
+      help_text: feature.help_text,
+      tool_id: feature.tool_id,
+      is_premium: feature.is_premium,
+      sort_order: feature.sort_order
     };
   };
 
