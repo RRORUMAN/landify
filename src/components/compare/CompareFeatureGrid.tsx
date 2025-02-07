@@ -6,14 +6,10 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ComparisonFeature, DetailedComparison } from "@/types/aiTypes";
-import { AICompatibilityScore } from "./AICompatibilityScore";
-import ToolHeader from "./features/ToolHeader";
-import FeatureGroup from "./features/FeatureGroup";
-import PerformanceComparison from "./detailed/PerformanceComparison";
-import UseCaseComparison from "./detailed/UseCaseComparison";
-import SecurityComparison from "./detailed/SecurityComparison";
-import ResourceComparison from "./detailed/ResourceComparison";
-import PricingComparison from "./detailed/PricingComparison";
+import AICompatibilitySection from "./grid/AICompatibilitySection";
+import ComparisonHeader from "./grid/ComparisonHeader";
+import DetailedComparisons from "./grid/DetailedComparison";
+import FeatureGroupList from "./grid/FeatureGroupList";
 
 interface CompareFeatureGridProps {
   tools: Tool[];
@@ -33,7 +29,10 @@ const CompareFeatureGrid = ({ tools }: CompareFeatureGridProps) => {
       return data.map(feature => ({
         ...feature,
         feature_details: feature.feature_details as Record<string, any>,
-      }));
+        name: feature.feature_name,
+        description: feature.feature_details?.description || '',
+        values: []
+      })) as ComparisonFeature[];
     }
   });
 
@@ -140,17 +139,10 @@ const CompareFeatureGrid = ({ tools }: CompareFeatureGridProps) => {
     if (!feature) return undefined;
 
     return {
-      id: feature.id,
-      feature_name: feature.feature_name,
-      feature_category: feature.feature_category,
-      feature_value: feature.feature_value,
-      feature_details: feature.feature_details as Record<string, any>,
-      importance: feature.importance as 'high' | 'medium' | 'low',
-      feature_group: feature.feature_group,
-      help_text: feature.help_text,
-      tool_id: feature.tool_id,
-      is_premium: feature.is_premium,
-      sort_order: feature.sort_order
+      ...feature,
+      name: feature.feature_name,
+      description: feature.feature_details?.description || '',
+      values: []
     };
   };
 
@@ -169,84 +161,28 @@ const CompareFeatureGrid = ({ tools }: CompareFeatureGridProps) => {
   return (
     <TooltipProvider>
       <div className="space-y-6">
-        {/* AI Compatibility Analysis */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {tools.map((tool) => {
-            const comparison = getDetailedComparison(tool.id);
-            if (!comparison) return null;
-            
-            return (
-              <AICompatibilityScore
-                key={tool.id}
-                score={comparison.performance?.accuracy_score || 0}
-                factors={{
-                  'API Reliability': comparison.performance?.api_reliability_score || 0,
-                  'Cost Efficiency': comparison.performance?.cost_efficiency_score || 0,
-                  'Support Quality': comparison.performance?.support_quality_score || 0,
-                }}
-                useCases={comparison.useCases?.map(uc => uc.use_case) || []}
-              />
-            );
-          })}
-        </div>
+        <AICompatibilitySection
+          tools={tools}
+          getDetailedComparison={getDetailedComparison}
+        />
 
-        {/* Detailed Comparisons */}
         <Card className="p-6">
-          <div className="sticky top-0 bg-white z-10 pb-4 border-b">
-            <div className="grid grid-cols-[1fr,repeat(4,1fr)] gap-4">
-              <div className="font-semibold text-gray-500">Feature</div>
-              {tools.map((tool) => (
-                <ToolHeader
-                  key={tool.id}
-                  tool={tool}
-                  metric={getMetricForTool(tool.id)}
-                />
-              ))}
-            </div>
-          </div>
+          <ComparisonHeader
+            tools={tools}
+            getMetricForTool={getMetricForTool}
+          />
 
           <ScrollArea className="h-[600px] mt-4">
-            {/* Performance Metrics */}
-            <PerformanceComparison
+            <DetailedComparisons
               tools={tools}
               getDetailedComparison={getDetailedComparison}
             />
 
-            {/* Use Cases */}
-            <UseCaseComparison
+            <FeatureGroupList
+              featuresByGroup={featuresByGroup}
               tools={tools}
-              getDetailedComparison={getDetailedComparison}
+              getFeatureValue={getFeatureValue}
             />
-
-            {/* Security Features */}
-            <SecurityComparison
-              tools={tools}
-              getDetailedComparison={getDetailedComparison}
-            />
-
-            {/* Resources & Training */}
-            <ResourceComparison
-              tools={tools}
-              getDetailedComparison={getDetailedComparison}
-            />
-
-            {/* Pricing Analysis */}
-            <PricingComparison
-              tools={tools}
-              getDetailedComparison={getDetailedComparison}
-            />
-
-            {/* Feature Groups */}
-            {Object.entries(featuresByGroup).map(([groupKey, { category, group, features: featureSet }]) => (
-              <FeatureGroup
-                key={groupKey}
-                category={category}
-                group={group}
-                features={featureSet}
-                tools={tools}
-                getFeatureValue={getFeatureValue}
-              />
-            ))}
           </ScrollArea>
         </Card>
       </div>
@@ -255,3 +191,4 @@ const CompareFeatureGrid = ({ tools }: CompareFeatureGridProps) => {
 };
 
 export default CompareFeatureGrid;
+
