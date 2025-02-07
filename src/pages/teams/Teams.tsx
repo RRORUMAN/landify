@@ -24,6 +24,9 @@ const Teams = () => {
     queryKey: ['teams'],
     queryFn: async () => {
       console.log('Fetching teams...');
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('Not authenticated');
+
       const { data: teamsData, error: teamsError } = await supabase
         .from('teams')
         .select(`
@@ -55,7 +58,6 @@ const Teams = () => {
 
     setIsCreating(true);
     try {
-      console.log('Starting team creation...');
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
         throw new Error('Not authenticated');
