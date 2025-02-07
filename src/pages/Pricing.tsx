@@ -67,7 +67,7 @@ const Pricing = () => {
           <span className="bg-blue-50 text-blue-600 px-4 py-1 rounded-full text-sm font-medium">
             PRICING
           </span>
-          <h2 className="text-4xl font-bold mt-6 mb-4 text-black">
+          <h2 className="text-4xl font-bold mt-6 mb-4 text-gray-900">
             Choose the Perfect Plan for Your Needs
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto text-lg">
@@ -81,35 +81,35 @@ const Pricing = () => {
               key={plan.name}
               className={`rounded-2xl p-8 relative transition-all hover:scale-105 duration-300 ${
                 plan.popular
-                  ? "bg-black text-white border-2 border-blue-400"
-                  : "bg-white border-2 border-gray-100 hover:border-blue-100 hover:shadow-xl"
+                  ? "bg-white border-2 border-blue-100 shadow-xl"
+                  : "bg-white border border-gray-100 hover:border-blue-100 hover:shadow-lg"
               }`}
             >
               {plan.popular && (
                 <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                  <span className="bg-blue-500 text-white px-4 py-1 rounded-full text-sm font-medium flex items-center">
-                    <Star className="w-4 h-4 mr-1" /> Most Popular
+                  <span className="bg-blue-500 text-white px-6 py-2 rounded-full text-sm font-medium flex items-center gap-1">
+                    <Star className="w-4 h-4" /> Most Popular
                   </span>
                 </div>
               )}
               <div className="flex items-center gap-2 mb-4">
                 {plan.icon}
-                <h3 className={`text-2xl font-bold ${plan.popular ? "text-white" : "text-black"}`}>
+                <h3 className="text-2xl font-bold text-gray-900">
                   {plan.name}
                 </h3>
               </div>
-              <p className={`text-sm mb-4 ${plan.popular ? "text-gray-300" : "text-gray-600"}`}>
+              <p className="text-gray-600 text-sm mb-4">
                 {plan.description}
               </p>
-              <p className={`text-4xl font-bold mb-2 ${plan.popular ? "text-white" : "text-black"}`}>
+              <p className="text-4xl font-bold mb-2 text-gray-900">
                 {plan.price}
-                <span className={`text-sm font-normal ${plan.popular ? "text-gray-300" : "text-gray-500"}`}>/month</span>
+                <span className="text-sm font-normal text-gray-500">/month</span>
               </p>
               <ul className="space-y-4 mb-8 min-h-[320px]">
                 {plan.features.map((feature) => (
                   <li key={feature} className="flex items-center">
-                    <Check className={`h-5 w-5 mr-2 ${plan.popular ? "text-blue-400" : "text-blue-500"} flex-shrink-0`} />
-                    <span className={`${plan.popular ? "text-gray-300" : "text-gray-600"}`}>
+                    <Check className="h-5 w-5 mr-2 text-blue-500 flex-shrink-0" />
+                    <span className="text-gray-700">
                       {feature}
                     </span>
                   </li>
@@ -118,8 +118,8 @@ const Pricing = () => {
               <Button
                 className={`w-full py-6 text-lg transition-colors ${
                   plan.popular
-                    ? "bg-blue-500 hover:bg-blue-600 text-white"
-                    : "bg-white hover:bg-blue-500 hover:text-white text-black border-2 border-gray-200"
+                    ? "bg-blue-500 hover:bg-blue-600 text-white shadow-lg"
+                    : "bg-white hover:bg-blue-50 text-blue-500 border-2 border-blue-200"
                 }`}
                 onClick={() => navigate("/auth")}
               >
@@ -130,7 +130,7 @@ const Pricing = () => {
         </div>
 
         <div className="mt-20 text-center">
-          <h3 className="text-2xl font-bold mb-4 text-black">
+          <h3 className="text-2xl font-bold mb-4 text-gray-900">
             Trusted by Industry Leaders
           </h3>
           <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
@@ -162,14 +162,14 @@ const Pricing = () => {
 
         <div className="mt-20 text-center bg-gray-50 rounded-2xl p-8">
           <Shield className="w-8 h-8 text-blue-500 mx-auto mb-4" />
-          <h3 className="text-2xl font-bold mb-4 text-black">
+          <h3 className="text-2xl font-bold mb-4 text-gray-900">
             Enterprise Solutions
           </h3>
           <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
             Need a custom solution? We offer tailored plans for large enterprises with specific requirements.
           </p>
           <Button
-            className="bg-black hover:bg-gray-800 text-white px-8 py-6 text-lg"
+            className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-6 text-lg shadow-lg"
             onClick={() => navigate("/contact")}
           >
             Contact Sales
