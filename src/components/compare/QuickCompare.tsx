@@ -20,7 +20,7 @@ const QuickCompare = ({ tools }: QuickCompareProps) => {
     queryKey: ['performance_metrics', tools.map(t => t.id)],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('performance_metrics')
+        .from('tool_performance')
         .select('*')
         .in('tool_id', tools.map(t => t.id));
       
@@ -70,7 +70,9 @@ const QuickCompare = ({ tools }: QuickCompareProps) => {
                           <Zap className="h-4 w-4 text-blue-400" />
                           <span className="text-sm">Performance</span>
                         </div>
-                        <span className="font-medium">{metric?.metric_value || 'N/A'}</span>
+                        <span className="font-medium">
+                          {metric ? `${Math.round(metric.accuracy_score * 100)}%` : 'N/A'}
+                        </span>
                       </div>
                     </TooltipTrigger>
                     <TooltipContent>
@@ -85,7 +87,9 @@ const QuickCompare = ({ tools }: QuickCompareProps) => {
                           <TrendingUp className="h-4 w-4 text-green-400" />
                           <span className="text-sm">ROI Score</span>
                         </div>
-                        <span className="font-medium">{metric?.roi_score || 'N/A'}/10</span>
+                        <span className="font-medium">
+                          {metric ? `${Math.round(metric.cost_efficiency_score * 10)}/10` : 'N/A'}
+                        </span>
                       </div>
                     </TooltipTrigger>
                     <TooltipContent>
@@ -100,7 +104,9 @@ const QuickCompare = ({ tools }: QuickCompareProps) => {
                           <Award className="h-4 w-4 text-purple-400" />
                           <span className="text-sm">User Score</span>
                         </div>
-                        <span className="font-medium">{metric?.ease_of_use_score || 'N/A'}/10</span>
+                        <span className="font-medium">
+                          {metric ? `${Math.round(metric.ease_of_use_score * 10)}/10` : 'N/A'}
+                        </span>
                       </div>
                     </TooltipTrigger>
                     <TooltipContent>
