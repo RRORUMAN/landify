@@ -28,7 +28,6 @@ const AIRecommendations = () => {
 
     setIsLoading(true);
     try {
-      // Call the generate_tool_recommendations function which exists in Supabase
       const { data, error } = await supabase.rpc(
         'generate_tool_recommendations',
         { 

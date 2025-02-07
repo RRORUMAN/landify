@@ -2384,20 +2384,43 @@ export type Database = {
           priority_level: string
         }[]
       }
-      generate_tool_recommendations: {
-        Args: {
-          p_user_id: string
-        }
-        Returns: {
-          recommendation_id: string
-          tool_id: string
-          recommendation_type: string
-          score: number
-          reasoning: string
-          suggested_alternatives: Json
-          priority_level: string
-        }[]
-      }
+      generate_tool_recommendations:
+        | {
+            Args: {
+              p_user_id: string
+            }
+            Returns: {
+              recommendation_id: string
+              tool_id: string
+              recommendation_type: string
+              score: number
+              reasoning: string
+              suggested_alternatives: Json
+              priority_level: string
+            }[]
+          }
+        | {
+            Args: {
+              p_user_id: string
+              p_query: string
+              p_limit?: number
+            }
+            Returns: {
+              tool_id: string
+              name: string
+              description: string
+              logo: string
+              visit_url: string
+              tags: string[]
+              score: number
+              reviews: number
+              bookmarks: number
+              pricing: string
+              category: string
+              featured: boolean
+              trending_tools: Json[]
+            }[]
+          }
       is_team_admin: {
         Args: {
           team_id: string
