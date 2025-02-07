@@ -38,15 +38,28 @@ const TeamDashboard = () => {
 
       if (teamError) throw teamError;
       
-      return {
-        ...team,
+      if (!team) throw new Error('Team not found');
+
+      const teamWithMembers = {
+        id: team.id,
+        name: team.name,
+        description: team.description,
+        created_by: team.created_by,
+        created_at: team.created_at,
+        updated_at: team.updated_at,
         team_members: team.team_members.map((member: any) => ({
-          ...member,
+          id: member.id,
+          team_id: member.team_id,
+          user_id: member.user_id,
+          role: member.role,
+          joined_at: member.joined_at,
           user: {
             email: member.profiles?.email
           }
         }))
-      } as Team & { team_members: (TeamMember & { user: { email: string } })[] };
+      };
+
+      return teamWithMembers as Team & { team_members: (TeamMember & { user: { email: string } })[] };
     },
   });
 
@@ -89,10 +102,12 @@ const TeamDashboard = () => {
     },
   });
 
-  const isAdmin = teamData?.team_members.some(async member => {
+  const isAdmin = async () => {
     const { data: { user } } = await supabase.auth.getUser();
-    return member.user_id === user?.id && member.role === 'admin';
-  });
+    return teamData?.team_members.some(member => 
+      member.user_id === user?.id && member.role === 'admin'
+    ) || false;
+  };
 
   if (isLoadingTeam || isLoadingTools) {
     return (
