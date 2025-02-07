@@ -3,19 +3,58 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import ToolCard from "@/components/ToolCard";
-import { tools } from "@/data/tools";
+import { useUser } from "@supabase/auth-helpers-react";
+import { useToast } from "@/components/ui/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { Tool } from "@/data/types";
+import { Loader2 } from "lucide-react";
 
 const AIRecommendations = () => {
   const [userNeeds, setUserNeeds] = useState("");
-  const [recommendations, setRecommendations] = useState<typeof tools>([]);
+  const [recommendations, setRecommendations] = useState<Tool[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const { user } = useUser();
+  const { toast } = useToast();
 
-  const handleGetRecommendations = () => {
-    // TODO: Implement AI recommendation logic
-    // For now, just show some random tools as recommendations
-    const randomTools = tools
-      .sort(() => Math.random() - 0.5)
-      .slice(0, 3);
-    setRecommendations(randomTools);
+  const handleGetRecommendations = async () => {
+    if (!userNeeds.trim()) {
+      toast({
+        title: "Please describe your needs",
+        description: "Tell us what kind of AI tool you're looking for",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const { data, error } = await supabase.rpc(
+        'get_tool_recommendations',
+        { 
+          p_user_id: user?.id,
+          p_query: userNeeds,
+          p_limit: 5
+        }
+      );
+
+      if (error) throw error;
+
+      setRecommendations(data || []);
+
+      toast({
+        title: "Recommendations ready!",
+        description: `Found ${data.length} tools matching your needs`,
+      });
+    } catch (error) {
+      console.error('Error getting recommendations:', error);
+      toast({
+        title: "Error getting recommendations",
+        description: "Please try again later",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -41,8 +80,16 @@ const AIRecommendations = () => {
         <Button
           onClick={handleGetRecommendations}
           className="w-full bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+          disabled={isLoading}
         >
-          Get Recommendations
+          {isLoading ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Getting Recommendations...
+            </>
+          ) : (
+            'Get Recommendations'
+          )}
         </Button>
 
         {recommendations.length > 0 && (
