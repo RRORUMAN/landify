@@ -1,6 +1,32 @@
 
+export interface ToolCompatibility {
+  score: number;
+  factors: Record<string, number>;
+  recommendations: string[];
+  integration_factors: Record<string, any>;
+}
+
+export interface AIInsight {
+  id: string;
+  type: string;
+  score: number;
+  details: Record<string, any>;
+  insight_data: Record<string, any>;
+  recommendations: string[];
+  insight_type: string;
+  confidence_score: number;
+  last_updated: string;
+}
+
+export interface ROIMetrics {
+  cost_savings: number;
+  time_saved: number;
+  productivity_gain: number;
+  roi_score: number;
+}
+
 export interface ToolPerformance {
-  accuracy_score: number; 
+  accuracy_score: number;
   response_time: number;
   scalability_score: number;
   ease_of_use_score: number;
@@ -68,6 +94,14 @@ export interface ComparisonFeature {
   tool_id: string;
   is_premium: boolean;
   sort_order: number;
+  name: string;
+  description: string;
+  values: Array<{
+    toolId: string;
+    value: string | boolean | number;
+    confidenceScore: number;
+    notes?: string;
+  }>;
 }
 
 export interface FeatureCategory {

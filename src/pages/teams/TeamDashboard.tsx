@@ -8,6 +8,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import type { Team, TeamMember } from '@/data/types';
+import type { TeamActivityLog } from '@/types/aiTypes';
 import { Skeleton } from '@/components/ui/skeleton';
 import TeamOverview from './components/TeamOverview';
 import TeamMembersList from './components/TeamMembersList';
@@ -45,9 +46,9 @@ const TeamDashboard = () => {
             email: member.profiles?.email
           }
         }))
-      };
+      } as Team & { team_members: (TeamMember & { user: { email: string } })[] };
 
-      return transformedTeam as Team & { team_members: (TeamMember & { user: { email: string } })[] };
+      return transformedTeam;
     },
   });
 
@@ -82,7 +83,11 @@ const TeamDashboard = () => {
         .limit(5);
 
       if (error) throw error;
-      return logs;
+
+      return logs.map(log => ({
+        ...log,
+        activity_data: log.activity_data as Record<string, any>
+      })) as TeamActivityLog[];
     },
   });
 

@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { AlertTriangle, TrendingUp, DollarSign, Zap } from 'lucide-react';
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import type { AIWorkflowInsight } from '@/data/types';
+import type { AIWorkflowInsight } from '@/types/aiTypes';
 import { supabase } from "@/integrations/supabase/client";
 
 interface AIWorkflowInsightsProps {
@@ -19,7 +19,15 @@ const AIWorkflowInsights = ({ teamId }: AIWorkflowInsightsProps) => {
       });
 
       if (error) throw error;
-      return data as AIWorkflowInsight[];
+      
+      return (data || []).map(insight => ({
+        id: insight.insight_id,
+        insight_type: insight.insight_type,
+        insight_data: insight.insight_data as Record<string, any>,
+        priority_level: insight.priority_level,
+        created_at: new Date().toISOString(),
+        status: 'pending'
+      })) as AIWorkflowInsight[];
     }
   });
 
