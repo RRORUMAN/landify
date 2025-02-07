@@ -15,9 +15,11 @@ import TeamMembersList from './components/TeamMembersList';
 import TeamToolsGrid from './components/TeamToolsGrid';
 import TeamActivityLogComponent from './components/TeamActivityLog';
 import AIWorkflowInsights from './components/AIWorkflowInsights';
+import { useState, useEffect } from 'react';
 
 const TeamDashboard = () => {
   const { teamId } = useParams();
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const { data: teamData, isLoading: isLoadingTeam } = useQuery({
     queryKey: ['team', teamId],
@@ -76,8 +78,19 @@ const TeamDashboard = () => {
 
       if (error) throw error;
 
-      return tools.map(item => ({
-        ...item.tools,
+      return tools.map((item: any) => ({
+        id: item.tools.id,
+        name: item.tools.name,
+        logo: item.tools.logo,
+        rating: item.tools.rating,
+        reviews: item.tools.reviews,
+        pricing: item.tools.pricing,
+        description: item.tools.description,
+        tags: item.tools.tags,
+        category: item.tools.category,
+        featured: item.tools.featured,
+        visit_url: item.tools.visit_url,
+        bookmarks: item.tools.bookmarks,
         folder_id: item.folder_id
       }));
     },
@@ -102,12 +115,19 @@ const TeamDashboard = () => {
     },
   });
 
-  const isAdmin = async () => {
-    const { data: { user } } = await supabase.auth.getUser();
-    return teamData?.team_members.some(member => 
-      member.user_id === user?.id && member.role === 'admin'
-    ) || false;
-  };
+  useEffect(() => {
+    const checkIsAdmin = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      const adminStatus = teamData?.team_members.some(member => 
+        member.user_id === user?.id && member.role === 'admin'
+      ) || false;
+      setIsAdmin(adminStatus);
+    };
+
+    if (teamData) {
+      checkIsAdmin();
+    }
+  }, [teamData]);
 
   if (isLoadingTeam || isLoadingTools) {
     return (
@@ -190,3 +210,4 @@ const TeamDashboard = () => {
 };
 
 export default TeamDashboard;
+
