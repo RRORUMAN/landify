@@ -28,8 +28,9 @@ const AIRecommendations = () => {
 
     setIsLoading(true);
     try {
+      // Call the generate_tool_recommendations function which exists in Supabase
       const { data, error } = await supabase.rpc(
-        'get_tool_recommendations',
+        'generate_tool_recommendations',
         { 
           p_user_id: user?.id,
           p_query: userNeeds,
@@ -39,11 +40,25 @@ const AIRecommendations = () => {
 
       if (error) throw error;
 
-      setRecommendations(data || []);
+      // Convert the recommendations to Tool type array
+      const toolRecommendations = data?.map((rec: any) => ({
+        id: rec.tool_id,
+        name: rec.name,
+        description: rec.description,
+        logo: rec.logo,
+        visit_url: rec.visit_url,
+        tags: rec.tags || [],
+        rating: rec.score || 0,
+        reviews: rec.reviews || 0,
+        bookmarks: rec.bookmarks || 0,
+        trending_tools: rec.trending_tools || [],
+      })) || [];
+
+      setRecommendations(toolRecommendations);
 
       toast({
         title: "Recommendations ready!",
-        description: `Found ${data.length} tools matching your needs`,
+        description: `Found ${toolRecommendations.length} tools matching your needs`,
       });
     } catch (error) {
       console.error('Error getting recommendations:', error);
