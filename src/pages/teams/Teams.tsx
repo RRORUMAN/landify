@@ -1,10 +1,11 @@
+
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Plus, Users, FolderPlus, Copy, Check } from 'lucide-react';
+import { Plus, Users, FolderPlus, Copy, Check, Loader2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -22,9 +23,17 @@ const Teams = () => {
   const { data: teams, isLoading, refetch } = useQuery({
     queryKey: ['teams'],
     queryFn: async () => {
+      console.log('Fetching teams...');
       const { data: teamsData, error: teamsError } = await supabase
         .from('teams')
-        .select('*, team_members(*)');
+        .select(`
+          *,
+          team_members (
+            id,
+            role,
+            user_id
+          )
+        `);
 
       if (teamsError) {
         console.error('Error fetching teams:', teamsError);
@@ -80,23 +89,6 @@ const Teams = () => {
       if (memberError) {
         console.error('Error creating team member:', memberError);
         throw memberError;
-      }
-
-      console.log('Creating initial invite...');
-      const { data: invite, error: inviteError } = await supabase
-        .from('team_invites')
-        .insert({
-          team_id: team.id,
-          invited_by: user.id,
-          role: 'member',
-          uses_remaining: 5
-        })
-        .select()
-        .single();
-
-      if (inviteError) {
-        console.error('Error creating invite:', inviteError);
-        throw inviteError;
       }
 
       toast({
@@ -176,7 +168,11 @@ const Teams = () => {
   };
 
   if (isLoading) {
-    return <div className="p-8">Loading teams...</div>;
+    return (
+      <div className="flex items-center justify-center min-h-[200px]">
+        <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
+      </div>
+    );
   }
 
   return (
@@ -222,13 +218,22 @@ const Teams = () => {
                   placeholder="Describe your team's purpose"
                 />
               </div>
-              <Button 
-                onClick={handleCreateTeam} 
-                className="w-full"
-                disabled={isCreating}
-              >
-                {isCreating ? 'Creating...' : 'Create Team'}
-              </Button>
+              <DialogFooter>
+                <Button 
+                  onClick={handleCreateTeam} 
+                  className="w-full"
+                  disabled={isCreating}
+                >
+                  {isCreating ? (
+                    <>
+                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                      Creating...
+                    </>
+                  ) : (
+                    'Create Team'
+                  )}
+                </Button>
+              </DialogFooter>
             </div>
           </DialogContent>
         </Dialog>
