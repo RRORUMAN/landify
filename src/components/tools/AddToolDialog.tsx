@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/select";
 import { PRICING_OPTIONS, BILLING_CYCLES } from "./AddToolTypes";
 import { categories } from "@/data/tools";
+import { Loader2 } from "lucide-react";
 
 interface AddToolDialogProps {
   onAdd: (tool: UserTool) => void;
@@ -47,21 +48,35 @@ export const AddToolDialog = ({ onAdd, onClose }: AddToolDialogProps) => {
       return;
     }
 
-    const { data, error } = await supabase
-      .from("tools")
-      .select("*")
-      .ilike("name", `%${query}%`)
-      .limit(5);
+    try {
+      const { data, error } = await supabase
+        .from("tools")
+        .select("*")
+        .ilike("name", `%${query}%`)
+        .limit(5);
 
-    if (error) {
+      if (error) throw error;
+      setSearchResults(data || []);
+    } catch (error) {
       console.error("Error searching tools:", error);
-      return;
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to search tools. Please try again.",
+      });
     }
-
-    setSearchResults(data || []);
   };
 
   const handleCustomToolSubmit = async () => {
+    if (!formData.name || !formData.category || !formData.visitUrl) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Please fill in all required fields.",
+      });
+      return;
+    }
+
     try {
       setLoading(true);
       const { data: { user } } = await supabase.auth.getUser();
@@ -71,6 +86,7 @@ export const AddToolDialog = ({ onAdd, onClose }: AddToolDialogProps) => {
       const { data: toolData, error: toolError } = await supabase
         .from("tools")
         .insert({
+          id: crypto.randomUUID(),
           name: formData.name,
           description: formData.description,
           category: formData.category,
@@ -78,7 +94,7 @@ export const AddToolDialog = ({ onAdd, onClose }: AddToolDialogProps) => {
           pricing: formData.pricing,
           is_custom: true,
           owner_id: user.id,
-          logo: "https://placehold.co/60x60", // Default placeholder logo
+          logo: "https://placehold.co/60x60",
           rating: 0,
           reviews: 0,
           tags: [],
@@ -114,6 +130,7 @@ export const AddToolDialog = ({ onAdd, onClose }: AddToolDialogProps) => {
         title: "Success",
         description: "Custom tool added successfully",
       });
+      onClose();
     } catch (error) {
       console.error("Error adding custom tool:", error);
       toast({
@@ -141,6 +158,23 @@ export const AddToolDialog = ({ onAdd, onClose }: AddToolDialogProps) => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("No user found");
 
+      // Check if user already has this tool
+      const { data: existingTool } = await supabase
+        .from("user_tools")
+        .select()
+        .eq("user_id", user.id)
+        .eq("tool_id", selectedTool.id)
+        .maybeSingle();
+
+      if (existingTool) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "You already have this tool in your collection",
+        });
+        return;
+      }
+
       const { data: userToolData, error: userToolError } = await supabase
         .from("user_tools")
         .insert({
@@ -164,6 +198,7 @@ export const AddToolDialog = ({ onAdd, onClose }: AddToolDialogProps) => {
         title: "Success",
         description: "Tool added successfully",
       });
+      onClose();
     } catch (error) {
       console.error("Error adding existing tool:", error);
       toast({
@@ -252,6 +287,17 @@ export const AddToolDialog = ({ onAdd, onClose }: AddToolDialogProps) => {
                 </Select>
               </div>
 
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+                  Notes (Optional)
+                </label>
+                <Input
+                  value={formData.notes}
+                  onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                  placeholder="Add any notes about how you use this tool..."
+                />
+              </div>
+
               <div className="flex justify-end space-x-2">
                 <Button variant="outline" onClick={onClose}>
                   Cancel
@@ -261,7 +307,14 @@ export const AddToolDialog = ({ onAdd, onClose }: AddToolDialogProps) => {
                   disabled={loading}
                   className="bg-[#4361EE] hover:bg-[#3249d8] text-white"
                 >
-                  {loading ? "Adding..." : "Add Tool"}
+                  {loading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Adding...
+                    </>
+                  ) : (
+                    "Add Tool"
+                  )}
                 </Button>
               </div>
             </div>
@@ -280,7 +333,14 @@ export const AddToolDialog = ({ onAdd, onClose }: AddToolDialogProps) => {
             disabled={loading}
             className="bg-[#4361EE] hover:bg-[#3249d8] text-white"
           >
-            {loading ? "Adding..." : "Add Custom Tool"}
+            {loading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Adding...
+              </>
+            ) : (
+              "Add Custom Tool"
+            )}
           </Button>
         </div>
       </TabsContent>

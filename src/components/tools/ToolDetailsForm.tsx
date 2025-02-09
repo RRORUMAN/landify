@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { categories } from "@/data/tools";
 import { PRICING_OPTIONS, type PricingOption, type BillingCycle, BILLING_CYCLES } from "./AddToolTypes";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface ToolDetailsFormProps {
   formData: {
@@ -39,37 +40,42 @@ export const ToolDetailsForm = ({ formData, setFormData }: ToolDetailsFormProps)
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
           Category *
         </label>
-        <select
+        <Select
           value={formData.category}
-          onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-          className="w-full rounded-md border border-gray-200 dark:border-gray-600 dark:bg-gray-700 px-3 py-2 text-gray-900 dark:text-white"
-          required
+          onValueChange={(value) => setFormData({ ...formData, category: value })}
         >
-          <option value="">Select a category</option>
-          {categories.map((category) => (
-            <option key={category.name} value={category.name}>
-              {category.name}
-            </option>
-          ))}
-        </select>
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Select a category" />
+          </SelectTrigger>
+          <SelectContent>
+            {categories.map((category) => (
+              <SelectItem key={category.name} value={category.name}>
+                {category.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
       <div>
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
           Pricing Type *
         </label>
-        <select
+        <Select
           value={formData.pricing}
-          onChange={(e) => setFormData({ ...formData, pricing: e.target.value as PricingOption })}
-          className="w-full rounded-md border border-gray-200 dark:border-gray-600 dark:bg-gray-700 px-3 py-2 text-gray-900 dark:text-white"
-          required
+          onValueChange={(value) => setFormData({ ...formData, pricing: value as PricingOption })}
         >
-          {PRICING_OPTIONS.map((option) => (
-            <option key={option} value={option}>
-              {option}
-            </option>
-          ))}
-        </select>
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Select pricing type" />
+          </SelectTrigger>
+          <SelectContent>
+            {PRICING_OPTIONS.map((option) => (
+              <SelectItem key={option} value={option}>
+                {option}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
       {isPaidTool && (
@@ -96,18 +102,22 @@ export const ToolDetailsForm = ({ formData, setFormData }: ToolDetailsFormProps)
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
           Billing Cycle
         </label>
-        <select
+        <Select
           value={formData.billingCycle}
-          onChange={(e) => setFormData({ ...formData, billingCycle: e.target.value as BillingCycle })}
-          className="w-full rounded-md border border-gray-200 dark:border-gray-600 dark:bg-gray-700 px-3 py-2 text-gray-900 dark:text-white"
+          onValueChange={(value) => setFormData({ ...formData, billingCycle: value as BillingCycle })}
           disabled={!isPaidTool}
         >
-          {BILLING_CYCLES.map((cycle) => (
-            <option key={cycle} value={cycle}>
-              {cycle.charAt(0).toUpperCase() + cycle.slice(1)}
-            </option>
-          ))}
-        </select>
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Select billing cycle" />
+          </SelectTrigger>
+          <SelectContent>
+            {BILLING_CYCLES.map((cycle) => (
+              <SelectItem key={cycle} value={cycle}>
+                {cycle.charAt(0).toUpperCase() + cycle.slice(1)}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
       <div>
