@@ -2183,10 +2183,12 @@ export type Database = {
           id: string
           integration_count: number | null
           integrations_count: number | null
+          is_custom: boolean | null
           last_updated: string | null
           logo: string
           monthly_active_users: number | null
           name: string
+          owner_id: string | null
           pricing: string
           pricing_range: string | null
           rating: number
@@ -2213,10 +2215,12 @@ export type Database = {
           id: string
           integration_count?: number | null
           integrations_count?: number | null
+          is_custom?: boolean | null
           last_updated?: string | null
           logo: string
           monthly_active_users?: number | null
           name: string
+          owner_id?: string | null
           pricing?: string
           pricing_range?: string | null
           rating?: number
@@ -2243,10 +2247,12 @@ export type Database = {
           id?: string
           integration_count?: number | null
           integrations_count?: number | null
+          is_custom?: boolean | null
           last_updated?: string | null
           logo?: string
           monthly_active_users?: number | null
           name?: string
+          owner_id?: string | null
           pricing?: string
           pricing_range?: string | null
           rating?: number
