@@ -1045,6 +1045,114 @@ export type Database = {
           },
         ]
       }
+      tool_comparison_insights: {
+        Row: {
+          created_at: string | null
+          id: string
+          impact_score: number | null
+          insight_category: string
+          insight_description: string | null
+          insight_title: string
+          supporting_data: Json | null
+          tool_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          impact_score?: number | null
+          insight_category: string
+          insight_description?: string | null
+          insight_title: string
+          supporting_data?: Json | null
+          tool_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          impact_score?: number | null
+          insight_category?: string
+          insight_description?: string | null
+          insight_title?: string
+          supporting_data?: Json | null
+          tool_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tool_comparison_insights_tool_id_fkey"
+            columns: ["tool_id"]
+            isOneToOne: false
+            referencedRelation: "real_time_tool_metrics"
+            referencedColumns: ["tool_id"]
+          },
+          {
+            foreignKeyName: "tool_comparison_insights_tool_id_fkey"
+            columns: ["tool_id"]
+            isOneToOne: false
+            referencedRelation: "tools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tool_comparison_kpis: {
+        Row: {
+          api_reliability_score: number | null
+          created_at: string | null
+          documentation_quality_score: number | null
+          ease_of_implementation_score: number | null
+          feature_completeness_score: number | null
+          id: string
+          learning_curve_score: number | null
+          support_quality_score: number | null
+          tool_id: string
+          updated_at: string | null
+          user_satisfaction_score: number | null
+          value_for_money_score: number | null
+        }
+        Insert: {
+          api_reliability_score?: number | null
+          created_at?: string | null
+          documentation_quality_score?: number | null
+          ease_of_implementation_score?: number | null
+          feature_completeness_score?: number | null
+          id?: string
+          learning_curve_score?: number | null
+          support_quality_score?: number | null
+          tool_id: string
+          updated_at?: string | null
+          user_satisfaction_score?: number | null
+          value_for_money_score?: number | null
+        }
+        Update: {
+          api_reliability_score?: number | null
+          created_at?: string | null
+          documentation_quality_score?: number | null
+          ease_of_implementation_score?: number | null
+          feature_completeness_score?: number | null
+          id?: string
+          learning_curve_score?: number | null
+          support_quality_score?: number | null
+          tool_id?: string
+          updated_at?: string | null
+          user_satisfaction_score?: number | null
+          value_for_money_score?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tool_comparison_kpis_tool_id_fkey"
+            columns: ["tool_id"]
+            isOneToOne: false
+            referencedRelation: "real_time_tool_metrics"
+            referencedColumns: ["tool_id"]
+          },
+          {
+            foreignKeyName: "tool_comparison_kpis_tool_id_fkey"
+            columns: ["tool_id"]
+            isOneToOne: false
+            referencedRelation: "tools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tool_compatibility_scores: {
         Row: {
           ai_ranking: number | null
@@ -1164,6 +1272,60 @@ export type Database = {
           },
           {
             foreignKeyName: "tool_feature_evaluations_tool_id_fkey"
+            columns: ["tool_id"]
+            isOneToOne: false
+            referencedRelation: "tools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tool_feature_matrix: {
+        Row: {
+          created_at: string | null
+          feature_category: string
+          feature_description: string | null
+          feature_name: string
+          feature_strength: number | null
+          has_feature: boolean | null
+          id: string
+          implementation_details: Json | null
+          tool_id: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          feature_category: string
+          feature_description?: string | null
+          feature_name: string
+          feature_strength?: number | null
+          has_feature?: boolean | null
+          id?: string
+          implementation_details?: Json | null
+          tool_id: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          feature_category?: string
+          feature_description?: string | null
+          feature_name?: string
+          feature_strength?: number | null
+          has_feature?: boolean | null
+          id?: string
+          implementation_details?: Json | null
+          tool_id?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tool_feature_matrix_tool_id_fkey"
+            columns: ["tool_id"]
+            isOneToOne: false
+            referencedRelation: "real_time_tool_metrics"
+            referencedColumns: ["tool_id"]
+          },
+          {
+            foreignKeyName: "tool_feature_matrix_tool_id_fkey"
             columns: ["tool_id"]
             isOneToOne: false
             referencedRelation: "tools"
@@ -1913,6 +2075,63 @@ export type Database = {
           },
           {
             foreignKeyName: "tool_use_cases_tool_id_fkey"
+            columns: ["tool_id"]
+            isOneToOne: false
+            referencedRelation: "tools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tool_user_experience: {
+        Row: {
+          avg_response_time: number | null
+          common_use_cases: string[] | null
+          created_at: string | null
+          id: string
+          monthly_active_users: number | null
+          support_response_time: number | null
+          tool_id: string
+          updated_at: string | null
+          uptime_percentage: number | null
+          user_retention_rate: number | null
+          user_reviews_summary: Json | null
+        }
+        Insert: {
+          avg_response_time?: number | null
+          common_use_cases?: string[] | null
+          created_at?: string | null
+          id?: string
+          monthly_active_users?: number | null
+          support_response_time?: number | null
+          tool_id: string
+          updated_at?: string | null
+          uptime_percentage?: number | null
+          user_retention_rate?: number | null
+          user_reviews_summary?: Json | null
+        }
+        Update: {
+          avg_response_time?: number | null
+          common_use_cases?: string[] | null
+          created_at?: string | null
+          id?: string
+          monthly_active_users?: number | null
+          support_response_time?: number | null
+          tool_id?: string
+          updated_at?: string | null
+          uptime_percentage?: number | null
+          user_retention_rate?: number | null
+          user_reviews_summary?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tool_user_experience_tool_id_fkey"
+            columns: ["tool_id"]
+            isOneToOne: false
+            referencedRelation: "real_time_tool_metrics"
+            referencedColumns: ["tool_id"]
+          },
+          {
+            foreignKeyName: "tool_user_experience_tool_id_fkey"
             columns: ["tool_id"]
             isOneToOne: false
             referencedRelation: "tools"
