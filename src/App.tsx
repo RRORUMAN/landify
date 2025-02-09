@@ -16,8 +16,57 @@ import TeamDashboard from "./pages/teams/TeamDashboard";
 import TeamFolders from "./pages/teams/TeamFolders";
 import ReferralProgram from "./pages/teams/ReferralProgram";
 import Sidebar from "./components/dashboard/Sidebar";
+import { useEffect, useState } from "react";
+import { supabase } from "./integrations/supabase/client";
+import { useToast } from "./hooks/use-toast";
 
 const queryClient = new QueryClient();
+
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const { toast } = useToast();
+  const location = useLocation();
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        setIsAuthenticated(!!user);
+        
+        if (!user) {
+          toast({
+            title: "Authentication required",
+            description: "Please sign in to access this page",
+            variant: "destructive",
+          });
+        }
+      } catch (error) {
+        console.error('Auth error:', error);
+        setIsAuthenticated(false);
+      }
+    };
+
+    checkAuth();
+
+    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setIsAuthenticated(!!session?.user);
+    });
+
+    return () => {
+      authListener?.subscription.unsubscribe();
+    };
+  }, [toast]);
+
+  if (isAuthenticated === null) {
+    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
+  }
+
+  if (!isAuthenticated) {
+    return <Navigate to="/auth" state={{ from: location }} replace />;
+  }
+
+  return <>{children}</>;
+};
 
 const AppContent = () => {
   const location = useLocation();
@@ -43,19 +92,39 @@ const AppContent = () => {
             <Route path="/" element={<Landing />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/auth" element={<Auth />} />
-            <Route path="/my-tools" element={<MyTools />} />
+            
+            {/* Protected Routes */}
+            <Route path="/my-tools" element={
+              <ProtectedRoute><MyTools /></ProtectedRoute>
+            } />
             <Route path="/tools">
               <Route index element={<Navigate to="/tools/categories" replace />} />
-              <Route path="categories" element={<ToolCategories />} />
-              <Route path="add" element={<AddTool />} />
-              <Route path="compare" element={<CompareTools />} />
-              <Route path="recommendations" element={<AIRecommendations />} />
+              <Route path="categories" element={
+                <ProtectedRoute><ToolCategories /></ProtectedRoute>
+              } />
+              <Route path="add" element={
+                <ProtectedRoute><AddTool /></ProtectedRoute>
+              } />
+              <Route path="compare" element={
+                <ProtectedRoute><CompareTools /></ProtectedRoute>
+              } />
+              <Route path="recommendations" element={
+                <ProtectedRoute><AIRecommendations /></ProtectedRoute>
+              } />
             </Route>
             <Route path="/teams">
-              <Route index element={<Teams />} />
-              <Route path=":teamId" element={<TeamDashboard />} />
-              <Route path=":teamId/folders/*" element={<TeamFolders />} />
-              <Route path="referral" element={<ReferralProgram />} />
+              <Route index element={
+                <ProtectedRoute><Teams /></ProtectedRoute>
+              } />
+              <Route path=":teamId" element={
+                <ProtectedRoute><TeamDashboard /></ProtectedRoute>
+              } />
+              <Route path=":teamId/folders/*" element={
+                <ProtectedRoute><TeamFolders /></ProtectedRoute>
+              } />
+              <Route path="referral" element={
+                <ProtectedRoute><ReferralProgram /></ProtectedRoute>
+              } />
             </Route>
           </Routes>
         </main>
