@@ -39,7 +39,6 @@ const AIRecommendations = () => {
 
       if (error) throw error;
 
-      // Convert the recommendations to Tool type array with all required properties
       const toolRecommendations: Tool[] = data?.map((rec: any) => ({
         id: rec.tool_id,
         name: rec.name,
