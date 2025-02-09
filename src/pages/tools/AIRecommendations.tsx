@@ -13,7 +13,7 @@ const AIRecommendations = () => {
   const [userNeeds, setUserNeeds] = useState("");
   const [recommendations, setRecommendations] = useState<Tool[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const { user } = useUser();
+  const userAuth = useUser();
   const { toast } = useToast();
 
   const handleGetRecommendations = async () => {
@@ -31,7 +31,7 @@ const AIRecommendations = () => {
       const { data, error } = await supabase.rpc(
         'generate_tool_recommendations',
         { 
-          p_user_id: user?.id || '',
+          p_user_id: userAuth?.id || '',
           p_query: userNeeds,
           p_limit: 5
         }
