@@ -16,52 +16,26 @@ import TeamDashboard from "./pages/teams/TeamDashboard";
 import TeamFolders from "./pages/teams/TeamFolders";
 import ReferralProgram from "./pages/teams/ReferralProgram";
 import Sidebar from "./components/dashboard/Sidebar";
-import { useEffect, useState } from "react";
-import { supabase } from "./integrations/supabase/client";
+import { useAuth } from "./hooks/useAuth";
 import { useToast } from "./hooks/use-toast";
 
 const queryClient = new QueryClient();
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const { user, loading } = useAuth();
   const { toast } = useToast();
   const location = useLocation();
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const { data: { user } } = await supabase.auth.getUser();
-        setIsAuthenticated(!!user);
-        
-        if (!user) {
-          toast({
-            title: "Authentication required",
-            description: "Please sign in to access this page",
-            variant: "destructive",
-          });
-        }
-      } catch (error) {
-        console.error('Auth error:', error);
-        setIsAuthenticated(false);
-      }
-    };
-
-    checkAuth();
-
-    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
-      setIsAuthenticated(!!session?.user);
-    });
-
-    return () => {
-      authListener?.subscription.unsubscribe();
-    };
-  }, [toast]);
-
-  if (isAuthenticated === null) {
+  if (loading) {
     return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
   }
 
-  if (!isAuthenticated) {
+  if (!user) {
+    toast({
+      title: "Authentication required",
+      description: "Please sign in to access this page",
+      variant: "destructive",
+    });
     return <Navigate to="/auth" state={{ from: location }} replace />;
   }
 

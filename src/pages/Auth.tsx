@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
@@ -13,6 +13,7 @@ const Auth = () => {
   const [loading, setLoading] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const { toast } = useToast();
 
   // Check if user is already logged in
@@ -20,11 +21,12 @@ const Auth = () => {
     const checkUser = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
-        navigate("/tools/categories");
+        const returnUrl = location.state?.from?.pathname || "/tools/categories";
+        navigate(returnUrl);
       }
     };
     checkUser();
-  }, [navigate]);
+  }, [navigate, location]);
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,22 +34,36 @@ const Auth = () => {
 
     try {
       if (isSignUp) {
-        const { error } = await supabase.auth.signUp({
+        const { data, error: signUpError } = await supabase.auth.signUp({
           email,
           password,
+          options: {
+            emailRedirectTo: window.location.origin + '/auth'
+          }
         });
-        if (error) throw error;
-        toast({
-          title: "Success!",
-          description: "Please check your email to verify your account.",
-        });
+
+        if (signUpError) throw signUpError;
+
+        if (data.user) {
+          toast({
+            title: "Account created successfully!",
+            description: "You can now sign in with your credentials.",
+          });
+          // Switch to sign in mode after successful signup
+          setIsSignUp(false);
+        }
       } else {
-        const { error } = await supabase.auth.signInWithPassword({
+        const { data, error: signInError } = await supabase.auth.signInWithPassword({
           email,
           password,
         });
-        if (error) throw error;
-        navigate("/tools/categories");
+
+        if (signInError) throw signInError;
+
+        if (data.user) {
+          const returnUrl = location.state?.from?.pathname || "/tools/categories";
+          navigate(returnUrl);
+        }
       }
     } catch (error: any) {
       toast({
@@ -88,7 +104,7 @@ const Auth = () => {
                   placeholder="Enter your email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="pl-10 border-gray-200 text-gray-900" // Added text color here
+                  className="pl-10 border-gray-200 text-gray-900"
                   required
                 />
               </div>
@@ -103,7 +119,7 @@ const Auth = () => {
                   placeholder="Enter your password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="pl-10 border-gray-200 text-gray-900" // Added text color here
+                  className="pl-10 border-gray-200 text-gray-900"
                   required
                 />
               </div>
