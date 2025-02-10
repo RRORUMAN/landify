@@ -1,11 +1,10 @@
-
 import { Tool } from "@/data/types";
 import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { ComparisonFeature, DetailedComparison } from "@/types/aiTypes";
+import { ComparisonFeature } from "@/types/aiTypes";
 import AICompatibilitySection from "./AICompatibilitySection";
 import ComparisonHeader from "./ComparisonHeader";
 import DetailedComparisons from "./DetailedComparison";
@@ -19,18 +18,41 @@ const CompareFeatureGrid = ({ tools }: CompareFeatureGridProps) => {
   const { data: features = [], isLoading: isFeaturesLoading } = useQuery({
     queryKey: ['comparison_features', tools.map(t => t.id)],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data: featureData, error: featureError } = await supabase
         .from('comparison_features')
-        .select('*')
+        .select(`
+          *,
+          feature_comparison_matrix!inner(
+            feature_score,
+            confidence_score,
+            implementation_quality,
+            feature_details,
+            notes
+          )
+        `)
         .in('tool_id', tools.map(t => t.id))
         .order('sort_order', { ascending: true });
       
-      if (error) throw error;
-      return data.map(feature => ({
+      if (featureError) throw featureError;
+
+      // Get the feature comparison summary for better insights
+      const { data: summaryData, error: summaryError } = await supabase
+        .from('feature_comparison_summary')
+        .select('*')
+        .in('tool_id', tools.map(t => t.id));
+
+      if (summaryError) throw summaryError;
+
+      return featureData.map(feature => ({
         ...feature,
-        feature_details: feature.feature_details as Record<string, any>,
+        feature_details: {
+          ...feature.feature_details,
+          summary: summaryData?.find(s => s.tool_id === feature.tool_id)?.category_summary?.[feature.feature_category] || {},
+        },
         name: feature.feature_name,
-        description: (feature.feature_details as Record<string, any>)?.description || '',
+        description: feature.feature_details?.description || '',
+        confidence_score: feature.confidence_score || 0.8,
+        implementation_details: feature.feature_comparison_matrix?.[0] || {},
         values: []
       })) as ComparisonFeature[];
     }
@@ -105,7 +127,7 @@ const CompareFeatureGrid = ({ tools }: CompareFeatureGridProps) => {
     }
   });
 
-  const { data: metrics = [] } = useQuery({
+  const { data: metrics = [], isLoading: isMetricsLoading } = useQuery({
     queryKey: ['performance_metrics', tools.map(t => t.id)],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -124,12 +146,20 @@ const CompareFeatureGrid = ({ tools }: CompareFeatureGridProps) => {
       acc[groupKey] = {
         category: feature.feature_category,
         group: feature.feature_group,
-        features: new Set<string>()
+        features: new Set<string>(),
+        confidence: feature.confidence_score,
+        summary: feature.feature_details?.summary || {}
       };
     }
     acc[groupKey].features.add(feature.feature_name);
     return acc;
-  }, {} as Record<string, { category: string; group: string; features: Set<string> }>);
+  }, {} as Record<string, { 
+    category: string; 
+    group: string; 
+    features: Set<string>;
+    confidence: number;
+    summary: Record<string, any>;
+  }>);
 
   const getFeatureValue = (toolId: string, featureName: string): ComparisonFeature | undefined => {
     const feature = features.find(
@@ -142,7 +172,10 @@ const CompareFeatureGrid = ({ tools }: CompareFeatureGridProps) => {
       ...feature,
       name: feature.feature_name,
       description: feature.feature_details?.description || '',
-      values: []
+      confidence_score: feature.confidence_score || 0.8,
+      implementation_details: feature.feature_comparison_matrix?.[0] || {},
+      values: [],
+      feature_limitations: feature.feature_limitations || []
     };
   };
 
@@ -154,7 +187,7 @@ const CompareFeatureGrid = ({ tools }: CompareFeatureGridProps) => {
     return detailedComparisons[toolId];
   };
 
-  if (isFeaturesLoading || isDetailsLoading) {
+  if (isFeaturesLoading || isDetailsLoading || isMetricsLoading) {
     return <div className="text-center py-8">Loading comparison data...</div>;
   }
 
