@@ -1,3 +1,4 @@
+
 import { Tool } from "@/data/types";
 import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -35,19 +36,11 @@ const CompareFeatureGrid = ({ tools }: CompareFeatureGridProps) => {
       
       if (featureError) throw featureError;
 
-      // Get the feature comparison summary for better insights
-      const { data: summaryData, error: summaryError } = await supabase
-        .from('feature_comparison_summary')
-        .select('*')
-        .in('tool_id', tools.map(t => t.id));
-
-      if (summaryError) throw summaryError;
-
       return (featureData || []).map(feature => ({
         ...feature,
         feature_details: feature.feature_details || {},
         name: feature.feature_name,
-        description: feature.feature_details?.description || '',
+        description: typeof feature.feature_details === 'object' ? feature.feature_details.description || '' : '',
         confidence_score: feature.confidence_score || 0.8,
         implementation_details: {
           feature_score: feature.feature_comparison_matrix?.[0]?.feature_score || 0,
@@ -95,23 +88,38 @@ const CompareFeatureGrid = ({ tools }: CompareFeatureGridProps) => {
 
         toolComparisons[tool.id] = {
           performance: performance || undefined,
-          useCases: useCases?.map(uc => ({
-            ...uc,
-            details: uc.details || {}
+          useCases: (useCases || []).map(uc => ({
+            use_case: uc.use_case,
+            effectiveness_score: uc.effectiveness_score || 0,
+            implementation_complexity: uc.implementation_complexity || 0,
+            time_savings: uc.time_savings || 0,
+            cost_impact: uc.cost_impact || 0,
+            details: typeof uc.details === 'object' ? uc.details : {}
           })),
-          security: security?.map(s => ({
-            ...s,
-            details: s.details || {}
+          security: (security || []).map(s => ({
+            security_feature: s.security_feature,
+            security_score: s.security_score || 0,
+            compliance_standards: s.compliance_standards || [],
+            certification_status: s.certification_status || '',
+            last_audit_date: s.last_audit_date || '',
+            details: typeof s.details === 'object' ? s.details : {}
           })),
-          resources: resources?.map(r => ({
-            ...r,
-            details: r.details || {}
+          resources: (resources || []).map(r => ({
+            resource_type: r.resource_type,
+            quality_score: r.quality_score || 0,
+            accessibility_score: r.accessibility_score || 0,
+            comprehensiveness_score: r.comprehensiveness_score || 0,
+            update_frequency: r.update_frequency || '',
+            details: typeof r.details === 'object' ? r.details : {}
           })),
-          pricing: pricing?.map(p => ({
-            ...p,
-            usage_limits: p.usage_limits || {},
-            overage_costs: p.overage_costs || {},
-            details: p.details || {}
+          pricing: (pricing || []).map(p => ({
+            plan_name: p.plan_name,
+            monthly_cost: p.monthly_cost || 0,
+            features_included: p.features_included || [],
+            usage_limits: typeof p.usage_limits === 'object' ? p.usage_limits : {},
+            minimum_commitment: p.minimum_commitment || '',
+            overage_costs: typeof p.overage_costs === 'object' ? p.overage_costs : {},
+            details: typeof p.details === 'object' ? p.details : {}
           }))
         };
       }

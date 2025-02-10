@@ -81,24 +81,6 @@ export interface FeatureCategory {
   feature_summary?: Record<string, any>;
 }
 
-export interface TeamActivityLog {
-  id: string;
-  team_id: string;
-  user_id: string;
-  activity_type: string;
-  activity_data: Record<string, any>;
-  created_at: string;
-}
-
-export interface AIWorkflowInsight {
-  id: string;
-  insight_type: string;
-  insight_data: Record<string, any>;
-  priority_level: string;
-  created_at: string;
-  status: string;
-}
-
 export interface DetailedComparison {
   performance?: ToolPerformance;
   useCases?: Array<{
