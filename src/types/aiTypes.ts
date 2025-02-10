@@ -1,4 +1,3 @@
-
 export interface ToolCompatibility {
   score: number;
   factors: Record<string, number>;
@@ -126,4 +125,12 @@ export interface AIWorkflowInsight {
   priority_level: string;
   created_at: string;
   status: string;
+}
+
+export interface FeatureCategory {
+  name: string;
+  description: string;
+  features: ComparisonFeature[];
+  confidence_score?: number;
+  feature_summary?: Record<string, any>;
 }
