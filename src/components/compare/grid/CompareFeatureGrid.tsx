@@ -4,7 +4,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { ComparisonFeature } from "@/types/aiTypes";
+import { ComparisonFeature, DetailedComparison, ToolFeatureMatrix } from "@/types/aiTypes";
 import AICompatibilitySection from "./AICompatibilitySection";
 import ComparisonHeader from "./ComparisonHeader";
 import DetailedComparisons from "./DetailedComparison";
@@ -43,16 +43,19 @@ const CompareFeatureGrid = ({ tools }: CompareFeatureGridProps) => {
 
       if (summaryError) throw summaryError;
 
-      return featureData.map(feature => ({
+      return (featureData || []).map(feature => ({
         ...feature,
-        feature_details: {
-          ...feature.feature_details,
-          summary: summaryData?.find(s => s.tool_id === feature.tool_id)?.category_summary?.[feature.feature_category] || {},
-        },
+        feature_details: feature.feature_details || {},
         name: feature.feature_name,
         description: feature.feature_details?.description || '',
         confidence_score: feature.confidence_score || 0.8,
-        implementation_details: feature.feature_comparison_matrix?.[0] || {},
+        implementation_details: {
+          feature_score: feature.feature_comparison_matrix?.[0]?.feature_score || 0,
+          confidence_score: feature.feature_comparison_matrix?.[0]?.confidence_score || 0,
+          implementation_quality: feature.feature_comparison_matrix?.[0]?.implementation_quality || '',
+          feature_details: feature.feature_comparison_matrix?.[0]?.feature_details || {},
+          notes: feature.feature_comparison_matrix?.[0]?.notes || ''
+        } as ToolFeatureMatrix,
         values: []
       })) as ComparisonFeature[];
     }
@@ -91,34 +94,24 @@ const CompareFeatureGrid = ({ tools }: CompareFeatureGridProps) => {
           .eq('tool_id', tool.id);
 
         toolComparisons[tool.id] = {
-          performance: performance ? {
-            accuracy_score: performance.accuracy_score || 0,
-            response_time: performance.response_time || 0,
-            scalability_score: performance.scalability_score || 0,
-            ease_of_use_score: performance.ease_of_use_score || 0,
-            cost_efficiency_score: performance.cost_efficiency_score || 0,
-            support_quality_score: performance.support_quality_score || 0,
-            api_reliability_score: performance.api_reliability_score || 0,
-            customization_score: performance.customization_score || 0,
-            update_frequency: performance.update_frequency || 0,
-          } : {} as DetailedComparison['performance'],
-          useCases: (useCases || []).map(uc => ({
+          performance: performance || undefined,
+          useCases: useCases?.map(uc => ({
             ...uc,
-            details: uc.details as Record<string, any>
+            details: uc.details || {}
           })),
-          security: (security || []).map(s => ({
+          security: security?.map(s => ({
             ...s,
-            details: s.details as Record<string, any>
+            details: s.details || {}
           })),
-          resources: (resources || []).map(r => ({
+          resources: resources?.map(r => ({
             ...r,
-            details: r.details as Record<string, any>
+            details: r.details || {}
           })),
-          pricing: (pricing || []).map(p => ({
+          pricing: pricing?.map(p => ({
             ...p,
-            usage_limits: p.usage_limits as Record<string, any>,
-            overage_costs: p.overage_costs as Record<string, any>,
-            details: p.details as Record<string, any>
+            usage_limits: p.usage_limits || {},
+            overage_costs: p.overage_costs || {},
+            details: p.details || {}
           }))
         };
       }
@@ -173,9 +166,8 @@ const CompareFeatureGrid = ({ tools }: CompareFeatureGridProps) => {
       name: feature.feature_name,
       description: feature.feature_details?.description || '',
       confidence_score: feature.confidence_score || 0.8,
-      implementation_details: feature.feature_comparison_matrix?.[0] || {},
-      values: [],
-      feature_limitations: feature.feature_limitations || []
+      implementation_details: feature.implementation_details,
+      values: []
     };
   };
 
@@ -187,7 +179,7 @@ const CompareFeatureGrid = ({ tools }: CompareFeatureGridProps) => {
     return detailedComparisons[toolId];
   };
 
-  if (isFeaturesLoading || isDetailsLoading || isMetricsLoading) {
+  if (isFeaturesLoading || isDetailsLoading) {
     return <div className="text-center py-8">Loading comparison data...</div>;
   }
 

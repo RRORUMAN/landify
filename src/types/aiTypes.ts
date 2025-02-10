@@ -1,3 +1,4 @@
+
 export interface ToolCompatibility {
   score: number;
   factors: Record<string, number>;
@@ -46,6 +47,7 @@ export interface ToolFeatureMatrix {
 
 export interface ComparisonFeature {
   id: string;
+  tool_id: string;
   feature_name: string;
   feature_category: string;
   feature_value: string | null;
@@ -53,7 +55,6 @@ export interface ComparisonFeature {
   importance: 'high' | 'medium' | 'low';
   feature_group: string | null;
   help_text: string | null;
-  tool_id: string;
   is_premium: boolean;
   sort_order: number;
   name: string;
@@ -63,7 +64,7 @@ export interface ComparisonFeature {
   feature_limitations?: string[];
   verification_source_url?: string;
   comparison_note?: string;
-  implementation_details?: ToolFeatureMatrix;
+  implementation_details: ToolFeatureMatrix;
   values: Array<{
     toolId: string;
     value: string | boolean | number;
@@ -96,4 +97,41 @@ export interface AIWorkflowInsight {
   priority_level: string;
   created_at: string;
   status: string;
+}
+
+export interface DetailedComparison {
+  performance?: ToolPerformance;
+  useCases?: Array<{
+    use_case: string;
+    effectiveness_score: number;
+    implementation_complexity: number;
+    time_savings: number;
+    cost_impact: number;
+    details: Record<string, any>;
+  }>;
+  security?: Array<{
+    security_feature: string;
+    security_score: number;
+    compliance_standards: string[];
+    certification_status: string;
+    last_audit_date: string;
+    details: Record<string, any>;
+  }>;
+  resources?: Array<{
+    resource_type: string;
+    quality_score: number;
+    accessibility_score: number;
+    comprehensiveness_score: number;
+    update_frequency: string;
+    details: Record<string, any>;
+  }>;
+  pricing?: Array<{
+    plan_name: string;
+    monthly_cost: number;
+    features_included: string[];
+    usage_limits: Record<string, any>;
+    minimum_commitment: string;
+    overage_costs: Record<string, any>;
+    details: Record<string, any>;
+  }>;
 }
