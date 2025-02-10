@@ -7,7 +7,8 @@ import { useUser } from "@supabase/auth-helpers-react";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Tool } from "@/data/types";
-import { Loader2 } from "lucide-react";
+import { Loader2, Brain } from "lucide-react";
+import { Card } from "@/components/ui/card";
 
 const AIRecommendations = () => {
   const [userNeeds, setUserNeeds] = useState("");
@@ -28,7 +29,7 @@ const AIRecommendations = () => {
 
     setIsLoading(true);
     try {
-      const { data, error } = await supabase.rpc(
+      const { data: aiData, error: aiError } = await supabase.rpc(
         'generate_tool_recommendations',
         { 
           p_user_id: userAuth?.id || '',
@@ -37,9 +38,24 @@ const AIRecommendations = () => {
         }
       );
 
-      if (error) throw error;
+      if (aiError) throw aiError;
 
-      const toolRecommendations: Tool[] = data?.map((rec: any) => ({
+      // Store the recommendation results for analytics
+      await supabase.from('ai_recommendation_results').insert({
+        user_id: userAuth?.id,
+        query: userNeeds,
+        results: aiData,
+        match_scores: aiData.reduce((acc: Record<string, number>, tool: any) => {
+          acc[tool.tool_id] = tool.score || 0;
+          return acc;
+        }, {}),
+        use_case_fit: {
+          description: userNeeds,
+          timestamp: new Date().toISOString(),
+        }
+      });
+
+      const toolRecommendations: Tool[] = aiData?.map((rec: any) => ({
         id: rec.tool_id,
         name: rec.name,
         description: rec.description,
@@ -74,49 +90,60 @@ const AIRecommendations = () => {
   };
 
   return (
-    <div className="p-6 max-w-3xl mx-auto">
+    <div className="p-6 max-w-4xl mx-auto">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">AI Tool Recommendations</h1>
-        <p className="text-gray-600">Get personalized AI tool suggestions based on your needs</p>
+        <div className="flex items-center gap-3 mb-4">
+          <Brain className="w-8 h-8 text-blue-600" />
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">AI Tool Recommendations</h1>
+        </div>
+        <p className="text-gray-600 dark:text-gray-300">
+          Get personalized AI tool suggestions based on your specific needs and use cases.
+        </p>
       </div>
 
-      <div className="space-y-6">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Describe your needs
-          </label>
-          <Textarea
-            value={userNeeds}
-            onChange={(e) => setUserNeeds(e.target.value)}
-            placeholder="What kind of AI tool are you looking for? Describe your use case..."
-            className="h-32"
-          />
+      <Card className="p-6 mb-8">
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+              Describe your needs
+            </label>
+            <Textarea
+              value={userNeeds}
+              onChange={(e) => setUserNeeds(e.target.value)}
+              placeholder="What kind of AI tool are you looking for? Describe your use case, requirements, and any specific features you need..."
+              className="h-32"
+            />
+          </div>
+
+          <Button
+            onClick={handleGetRecommendations}
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white transition-colors"
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Analyzing your needs...
+              </>
+            ) : (
+              'Get AI Recommendations'
+            )}
+          </Button>
         </div>
+      </Card>
 
-        <Button
-          onClick={handleGetRecommendations}
-          className="w-full bg-blue-600 text-white hover:bg-blue-700 transition-colors"
-          disabled={isLoading}
-        >
-          {isLoading ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Getting Recommendations...
-            </>
-          ) : (
-            'Get Recommendations'
-          )}
-        </Button>
-
-        {recommendations.length > 0 && (
-          <div className="mt-8 space-y-6">
-            <h2 className="text-xl font-semibold text-gray-900">Recommended Tools</h2>
+      {recommendations.length > 0 && (
+        <div className="space-y-6">
+          <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">
+            Recommended Tools for You
+          </h2>
+          <div className="grid grid-cols-1 gap-6">
             {recommendations.map((tool) => (
               <ToolCard key={tool.id} tool={tool} />
             ))}
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

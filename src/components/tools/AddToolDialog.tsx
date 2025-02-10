@@ -5,18 +5,9 @@ import { ToolDetailsForm } from "@/components/tools/ToolDetailsForm";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import type { UserTool } from "@/data/types";
+import type { Tool, UserTool } from "@/data/types";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
-import { 
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { PRICING_OPTIONS, BILLING_CYCLES } from "./AddToolTypes";
-import { categories } from "@/data/tools";
 import { Loader2 } from "lucide-react";
 
 interface AddToolDialogProps {
@@ -26,9 +17,9 @@ interface AddToolDialogProps {
 
 export const AddToolDialog = ({ onAdd, onClose }: AddToolDialogProps) => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedTool, setSelectedTool] = useState<any>(null);
+  const [selectedTool, setSelectedTool] = useState<Tool | null>(null);
   const [loading, setLoading] = useState(false);
-  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [searchResults, setSearchResults] = useState<Tool[]>([]);
   const { toast } = useToast();
   const [formData, setFormData] = useState({
     name: "",
@@ -37,8 +28,8 @@ export const AddToolDialog = ({ onAdd, onClose }: AddToolDialogProps) => {
     visitUrl: "",
     notes: "",
     price: "",
-    billingCycle: "monthly",
-    pricing: "Paid",
+    billingCycle: "monthly" as const,
+    pricing: "Paid" as const,
   });
 
   const handleExistingToolSearch = async (query: string) => {
@@ -115,7 +106,15 @@ export const AddToolDialog = ({ onAdd, onClose }: AddToolDialogProps) => {
           monthly_cost: parseFloat(formData.price) || 0,
           billing_cycle: formData.billingCycle,
           notes: formData.notes,
-          subscription_status: "active"
+          subscription_status: "active",
+          subscription_details: {
+            category: formData.category,
+            description: formData.description,
+            url: formData.visitUrl,
+            price: parseFloat(formData.price) || 0,
+            billing_cycle: formData.billingCycle,
+            pricing_type: formData.pricing,
+          } as Record<string, any>,
         })
         .select(`
           *,
@@ -125,7 +124,7 @@ export const AddToolDialog = ({ onAdd, onClose }: AddToolDialogProps) => {
 
       if (userToolError) throw userToolError;
 
-      onAdd(userToolData);
+      onAdd(userToolData as UserTool);
       toast({
         title: "Success",
         description: "Custom tool added successfully",
@@ -183,7 +182,13 @@ export const AddToolDialog = ({ onAdd, onClose }: AddToolDialogProps) => {
           monthly_cost: parseFloat(formData.price) || 0,
           billing_cycle: formData.billingCycle,
           notes: formData.notes,
-          subscription_status: "active"
+          subscription_status: "active",
+          subscription_details: {
+            category: selectedTool.category,
+            price: parseFloat(formData.price) || 0,
+            billing_cycle: formData.billingCycle,
+            pricing_type: formData.pricing,
+          } as Record<string, any>,
         })
         .select(`
           *,
@@ -193,7 +198,7 @@ export const AddToolDialog = ({ onAdd, onClose }: AddToolDialogProps) => {
 
       if (userToolError) throw userToolError;
 
-      onAdd(userToolData);
+      onAdd(userToolData as UserTool);
       toast({
         title: "Success",
         description: "Tool added successfully",
@@ -249,55 +254,7 @@ export const AddToolDialog = ({ onAdd, onClose }: AddToolDialogProps) => {
 
           {selectedTool && (
             <div className="space-y-4 mt-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
-                  Monthly Cost
-                </label>
-                <div className="relative">
-                  <span className="absolute left-3 top-2.5 text-gray-500">$</span>
-                  <Input
-                    type="number"
-                    step="0.01"
-                    value={formData.price}
-                    onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                    placeholder="0.00"
-                    className="pl-8"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
-                  Billing Cycle
-                </label>
-                <Select
-                  value={formData.billingCycle}
-                  onValueChange={(value) => setFormData({ ...formData, billingCycle: value })}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select billing cycle" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {BILLING_CYCLES.map((cycle) => (
-                      <SelectItem key={cycle} value={cycle}>
-                        {cycle.charAt(0).toUpperCase() + cycle.slice(1)}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
-                  Notes (Optional)
-                </label>
-                <Input
-                  value={formData.notes}
-                  onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                  placeholder="Add any notes about how you use this tool..."
-                />
-              </div>
-
+              <ToolDetailsForm formData={formData} setFormData={setFormData} />
               <div className="flex justify-end space-x-2">
                 <Button variant="outline" onClick={onClose}>
                   Cancel
@@ -305,7 +262,7 @@ export const AddToolDialog = ({ onAdd, onClose }: AddToolDialogProps) => {
                 <Button 
                   onClick={handleExistingToolSubmit}
                   disabled={loading}
-                  className="bg-[#4361EE] hover:bg-[#3249d8] text-white"
+                  className="bg-blue-600 hover:bg-blue-700 text-white"
                 >
                   {loading ? (
                     <>
@@ -331,7 +288,7 @@ export const AddToolDialog = ({ onAdd, onClose }: AddToolDialogProps) => {
           <Button 
             onClick={handleCustomToolSubmit}
             disabled={loading}
-            className="bg-[#4361EE] hover:bg-[#3249d8] text-white"
+            className="bg-blue-600 hover:bg-blue-700 text-white"
           >
             {loading ? (
               <>
