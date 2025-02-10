@@ -52,6 +52,7 @@ const AIRecommendations = () => {
         use_case_fit: {
           description: userNeeds,
           timestamp: new Date().toISOString(),
+          query_context: userNeeds
         }
       });
 

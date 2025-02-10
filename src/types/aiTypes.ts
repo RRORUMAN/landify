@@ -73,14 +73,6 @@ export interface ComparisonFeature {
   }>;
 }
 
-export interface FeatureCategory {
-  name: string;
-  description: string;
-  features: ComparisonFeature[];
-  confidence_score?: number;
-  feature_summary?: Record<string, any>;
-}
-
 export interface DetailedComparison {
   performance?: ToolPerformance;
   useCases?: Array<{
@@ -116,4 +108,22 @@ export interface DetailedComparison {
     overage_costs: Record<string, any>;
     details: Record<string, any>;
   }>;
+}
+
+export interface TeamActivityLog {
+  id: string;
+  team_id: string;
+  user_id: string;
+  activity_type: string;
+  activity_data: Record<string, any>;
+  created_at: string;
+}
+
+export interface AIWorkflowInsight {
+  id: string;
+  insight_type: string;
+  insight_data: Record<string, any>;
+  priority_level: string;
+  created_at: string;
+  status: string;
 }
