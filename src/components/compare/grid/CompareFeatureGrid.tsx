@@ -1,4 +1,3 @@
-
 import { Tool } from "@/data/types";
 import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -36,21 +35,26 @@ const CompareFeatureGrid = ({ tools }: CompareFeatureGridProps) => {
       
       if (featureError) throw featureError;
 
-      return featureData.map(feature => ({
-        ...feature,
-        feature_details: feature.feature_details || {},
-        name: feature.feature_name,
-        description: typeof feature.feature_details === 'object' && feature.feature_details ? feature.feature_details.description || '' : '',
-        confidence_score: feature.confidence_score || 0.8,
-        implementation_details: {
-          feature_score: feature.feature_comparison_matrix?.[0]?.feature_score || 0,
-          confidence_score: feature.feature_comparison_matrix?.[0]?.confidence_score || 0,
-          implementation_quality: feature.feature_comparison_matrix?.[0]?.implementation_quality || '',
-          feature_details: feature.feature_comparison_matrix?.[0]?.feature_details || {},
-          notes: feature.feature_comparison_matrix?.[0]?.notes || ''
-        } as ToolFeatureMatrix,
-        values: []
-      })) as ComparisonFeature[];
+      return (featureData || []).map(feature => {
+        const matrix = feature.feature_comparison_matrix?.[0] || {};
+        const details = typeof feature.feature_details === 'object' ? feature.feature_details || {} : {};
+        
+        return {
+          ...feature,
+          feature_details: details,
+          name: feature.feature_name,
+          description: details.description || '',
+          confidence_score: feature.confidence_score || 0.8,
+          implementation_details: {
+            feature_score: Number(matrix.feature_score) || 0,
+            confidence_score: Number(matrix.confidence_score) || 0,
+            implementation_quality: String(matrix.implementation_quality || ''),
+            feature_details: typeof matrix.feature_details === 'object' ? matrix.feature_details || {} : {},
+            notes: String(matrix.notes || '')
+          } as ToolFeatureMatrix,
+          values: []
+        } as ComparisonFeature;
+      });
     }
   });
 

@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { ArrowRight, Sparkles } from "lucide-react";
@@ -95,35 +96,32 @@ const HeroSection = () => {
             >
               <Button
                 size="lg"
-                className="relative overflow-hidden bg-primary hover:bg-primary/90 text-white font-semibold px-8 py-6 text-lg rounded-xl w-full sm:w-auto transition-all duration-500 ease-out transform hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)]"
+                className="relative overflow-hidden bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold px-10 py-7 text-lg rounded-xl w-full sm:w-auto transition-all duration-500 ease-out transform hover:shadow-[0_8px_30px_rgb(59,130,246,0.3)] dark:hover:shadow-[0_8px_30px_rgb(59,130,246,0.2)]"
                 onClick={() => navigate("/auth")}
               >
-                <span className="relative z-10 flex items-center text-white">
-                  Start Discovering AI Tools
-                  <ArrowRight className="ml-2 transition-transform duration-300 group-hover:translate-x-1" />
+                <span className="relative z-10 flex items-center gap-2 text-white">
+                  Start Building Your AI Stack
+                  <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
                 </span>
                 <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-primary/40 to-primary/60"
+                  className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent"
                   initial={{ x: "100%" }}
                   animate={{ x: "-100%" }}
                   transition={{
                     repeat: Infinity,
-                    duration: 2,
+                    duration: 1.5,
                     ease: "linear",
-                  }}
-                  style={{
-                    opacity: 0.2,
                   }}
                 />
               </Button>
-              <div className="absolute -inset-0.5 bg-gradient-to-r from-primary to-primary/80 rounded-xl blur opacity-30 group-hover:opacity-50 transition duration-500" />
+              <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-blue-400 rounded-xl blur opacity-30 group-hover:opacity-50 transition duration-500" />
             </motion.div>
-            <motion.span 
+            <motion.p 
               variants={itemVariants}
               className="text-sm text-gray-500 dark:text-gray-400 mt-4"
             >
               Free forever • No credit card required
-            </motion.span>
+            </motion.p>
           </motion.div>
         </motion.div>
       </div>
