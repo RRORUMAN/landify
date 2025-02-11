@@ -21,7 +21,7 @@ const Auth = () => {
     const checkUser = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
-        const returnUrl = location.state?.from?.pathname || "/tools/categories";
+        const returnUrl = location.state?.from?.pathname || "/my-tools";
         navigate(returnUrl);
       }
     };
@@ -34,25 +34,58 @@ const Auth = () => {
 
     try {
       if (isSignUp) {
+        // For signup, first check if user exists
+        const { data: { users }, error: getUserError } = await supabase.auth.admin.listUsers({
+          filter: {
+            email: email
+          }
+        });
+
+        if (getUserError) {
+          throw getUserError;
+        }
+
+        if (users && users.length > 0) {
+          toast({
+            title: "Email already exists",
+            description: "Please sign in instead or use a different email.",
+            variant: "destructive",
+          });
+          return;
+        }
+
+        // Proceed with signup
         const { data, error: signUpError } = await supabase.auth.signUp({
           email,
           password,
           options: {
-            emailRedirectTo: window.location.origin + '/auth'
+            data: {
+              full_name: email.split('@')[0], // Default name from email
+            },
           }
         });
 
         if (signUpError) throw signUpError;
 
         if (data.user) {
-          toast({
-            title: "Account created successfully!",
-            description: "You can now sign in with your credentials.",
+          // Auto sign in after signup
+          const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+            email,
+            password,
           });
-          // Switch to sign in mode after successful signup
-          setIsSignUp(false);
+
+          if (signInError) throw signInError;
+
+          if (signInData.user) {
+            toast({
+              title: "Welcome!",
+              description: "Your account has been created and you're now signed in.",
+            });
+            navigate("/my-tools");
+          }
         }
       } else {
+        // Regular sign in
         const { data, error: signInError } = await supabase.auth.signInWithPassword({
           email,
           password,
@@ -61,13 +94,17 @@ const Auth = () => {
         if (signInError) throw signInError;
 
         if (data.user) {
-          const returnUrl = location.state?.from?.pathname || "/tools/categories";
-          navigate(returnUrl);
+          toast({
+            title: "Welcome back!",
+            description: "You've been successfully signed in.",
+          });
+          navigate("/my-tools");
         }
       }
     } catch (error: any) {
+      console.error('Auth error:', error);
       toast({
-        title: "Error",
+        title: "Authentication error",
         description: error.message,
         variant: "destructive",
       });
