@@ -33,42 +33,44 @@ const AIRecommendations = () => {
     setIsLoading(true);
     try {
       const { data: suggestionsData, error: suggestionsError } = await supabase
-        .rpc('generate_ai_suggestions', {
-          p_query: userNeeds,
+        .rpc('generate_tool_recommendations', {
           p_user_id: userAuth?.id,
-          p_category: category
+          p_query: userNeeds,
+          p_limit: 5
         });
 
       if (suggestionsError) throw suggestionsError;
 
-      const toolRecommendations = (suggestionsData || []).map((rec: any) => ({
-        id: rec.tool_id,
-        name: rec.name,
-        description: rec.description,
-        logo: rec.logo || 'https://via.placeholder.com/60',
-        visit_url: rec.visit_url || '#',
-        tags: rec.matching_features || [],
-        rating: rec.relevance_score || 0,
-        reviews: 0,
-        bookmarks: 0,
-        pricing: 'Free',
-        category: rec.category,
-        featured: false,
-      }));
+      if (Array.isArray(suggestionsData)) {
+        const toolRecommendations = suggestionsData.map((rec) => ({
+          id: rec.tool_id,
+          name: rec.name,
+          description: rec.description,
+          logo: rec.logo || 'https://via.placeholder.com/60',
+          visit_url: rec.visit_url || '#',
+          tags: rec.tags || [],
+          rating: rec.score || 0,
+          reviews: 0,
+          bookmarks: 0,
+          pricing: 'Free',
+          category: rec.category,
+          featured: false,
+        }));
 
-      setRecommendations(toolRecommendations);
+        setRecommendations(toolRecommendations);
 
-      if (toolRecommendations.length === 0) {
-        toast({
-          title: "No matches found",
-          description: "Try broadening your search or using different keywords",
-          variant: "default",
-        });
-      } else {
-        toast({
-          title: "Recommendations ready!",
-          description: `Found ${toolRecommendations.length} tools matching your needs`,
-        });
+        if (toolRecommendations.length === 0) {
+          toast({
+            title: "No matches found",
+            description: "Try broadening your search or using different keywords",
+            variant: "default",
+          });
+        } else {
+          toast({
+            title: "Recommendations ready!",
+            description: `Found ${toolRecommendations.length} tools matching your needs`,
+          });
+        }
       }
     } catch (error) {
       console.error('Error getting recommendations:', error);

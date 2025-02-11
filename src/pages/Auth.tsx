@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -34,27 +33,7 @@ const Auth = () => {
 
     try {
       if (isSignUp) {
-        // For signup, first check if user exists
-        const { data: { users }, error: getUserError } = await supabase.auth.admin.listUsers({
-          filter: {
-            email: email
-          }
-        });
-
-        if (getUserError) {
-          throw getUserError;
-        }
-
-        if (users && users.length > 0) {
-          toast({
-            title: "Email already exists",
-            description: "Please sign in instead or use a different email.",
-            variant: "destructive",
-          });
-          return;
-        }
-
-        // Proceed with signup
+        // Proceed directly with signup
         const { data, error: signUpError } = await supabase.auth.signUp({
           email,
           password,

@@ -36,25 +36,38 @@ const CompareFeatureGrid = ({ tools }: CompareFeatureGridProps) => {
       if (featureError) throw featureError;
 
       return (featureData || []).map(feature => {
-        const matrix = (feature.feature_comparison_matrix?.[0] || {}) as ToolFeatureMatrix;
-        const details = typeof feature.feature_details === 'object' ? feature.feature_details || {} : {};
+        const matrix = feature.feature_comparison_matrix?.[0] || {};
+        const details = feature.feature_details || {};
         
-        const implementationDetails: ToolFeatureMatrix = {
+        const implementationDetails = {
           feature_score: Number(matrix?.feature_score) || 0,
           confidence_score: Number(matrix?.confidence_score) || 0,
           implementation_quality: matrix?.implementation_quality || '',
-          feature_details: typeof matrix?.feature_details === 'object' ? matrix.feature_details || {} : {},
+          feature_details: matrix?.feature_details || {},
           notes: matrix?.notes || ''
         };
 
         return {
-          ...feature,
+          id: feature.id,
+          tool_id: feature.tool_id,
+          feature_name: feature.feature_name,
+          feature_category: feature.feature_category,
+          feature_value: feature.feature_value,
           feature_details: details,
+          importance: feature.importance || 'medium',
+          feature_group: feature.feature_group,
+          help_text: feature.help_text,
+          is_premium: feature.is_premium,
+          sort_order: feature.sort_order,
           name: feature.feature_name,
-          description: (details as Record<string, any>).description || '',
+          description: feature.feature_details?.description || '',
           confidence_score: feature.confidence_score || 0.8,
           implementation_details: implementationDetails,
-          values: []
+          values: [],
+          implementation_quality: feature.implementation_quality,
+          feature_limitations: feature.feature_limitations,
+          verification_source_url: feature.verification_source_url,
+          comparison_note: feature.comparison_note
         } as ComparisonFeature;
       });
     }
