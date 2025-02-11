@@ -1,3 +1,4 @@
+
 import { Tool } from "@/data/types";
 import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -43,14 +44,14 @@ const CompareFeatureGrid = ({ tools }: CompareFeatureGridProps) => {
           ...feature,
           feature_details: details,
           name: feature.feature_name,
-          description: details.description || '',
+          description: (details as Record<string, any>).description || '',
           confidence_score: feature.confidence_score || 0.8,
           implementation_details: {
-            feature_score: Number(matrix.feature_score) || 0,
-            confidence_score: Number(matrix.confidence_score) || 0,
-            implementation_quality: String(matrix.implementation_quality || ''),
-            feature_details: typeof matrix.feature_details === 'object' ? matrix.feature_details || {} : {},
-            notes: String(matrix.notes || '')
+            feature_score: Number(matrix?.feature_score) || 0,
+            confidence_score: Number(matrix?.confidence_score) || 0,
+            implementation_quality: String(matrix?.implementation_quality || ''),
+            feature_details: typeof matrix?.feature_details === 'object' ? matrix.feature_details || {} : {},
+            notes: String(matrix?.notes || '')
           } as ToolFeatureMatrix,
           values: []
         } as ComparisonFeature;
