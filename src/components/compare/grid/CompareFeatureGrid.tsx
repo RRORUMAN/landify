@@ -15,6 +15,14 @@ interface CompareFeatureGridProps {
   tools: Tool[];
 }
 
+interface FeatureMatrixResponse {
+  feature_score?: number;
+  confidence_score?: number;
+  implementation_quality?: string;
+  feature_details?: Record<string, any>;
+  notes?: string;
+}
+
 const CompareFeatureGrid = ({ tools }: CompareFeatureGridProps) => {
   const { data: features = [], isLoading: isFeaturesLoading } = useQuery({
     queryKey: ['comparison_features', tools.map(t => t.id)],
@@ -37,22 +45,24 @@ const CompareFeatureGrid = ({ tools }: CompareFeatureGridProps) => {
       if (featureError) throw featureError;
 
       return (featureData || []).map(feature => {
-        const matrix = feature.feature_comparison_matrix?.[0] || {};
+        const matrix = (feature.feature_comparison_matrix?.[0] || {}) as FeatureMatrixResponse;
         const details = typeof feature.feature_details === 'object' ? feature.feature_details || {} : {};
         
+        const implementationDetails: ToolFeatureMatrix = {
+          feature_score: Number(matrix?.feature_score) || 0,
+          confidence_score: Number(matrix?.confidence_score) || 0,
+          implementation_quality: matrix?.implementation_quality || '',
+          feature_details: typeof matrix?.feature_details === 'object' ? matrix.feature_details || {} : {},
+          notes: matrix?.notes || ''
+        };
+
         return {
           ...feature,
           feature_details: details,
           name: feature.feature_name,
           description: (details as Record<string, any>).description || '',
           confidence_score: feature.confidence_score || 0.8,
-          implementation_details: {
-            feature_score: Number(matrix?.feature_score) || 0,
-            confidence_score: Number(matrix?.confidence_score) || 0,
-            implementation_quality: String(matrix?.implementation_quality || ''),
-            feature_details: typeof matrix?.feature_details === 'object' ? matrix.feature_details || {} : {},
-            notes: String(matrix?.notes || '')
-          } as ToolFeatureMatrix,
+          implementation_details: implementationDetails,
           values: []
         } as ComparisonFeature;
       });
