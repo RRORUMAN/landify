@@ -1,4 +1,3 @@
-
 import { Tool } from "@/data/types";
 import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -13,14 +12,6 @@ import FeatureGroupList from "./FeatureGroupList";
 
 interface CompareFeatureGridProps {
   tools: Tool[];
-}
-
-interface FeatureMatrixResponse {
-  feature_score?: number;
-  confidence_score?: number;
-  implementation_quality?: string;
-  feature_details?: Record<string, any>;
-  notes?: string;
 }
 
 const CompareFeatureGrid = ({ tools }: CompareFeatureGridProps) => {
@@ -45,7 +36,7 @@ const CompareFeatureGrid = ({ tools }: CompareFeatureGridProps) => {
       if (featureError) throw featureError;
 
       return (featureData || []).map(feature => {
-        const matrix = (feature.feature_comparison_matrix?.[0] || {}) as FeatureMatrixResponse;
+        const matrix = (feature.feature_comparison_matrix?.[0] || {}) as ToolFeatureMatrix;
         const details = typeof feature.feature_details === 'object' ? feature.feature_details || {} : {};
         
         const implementationDetails: ToolFeatureMatrix = {
