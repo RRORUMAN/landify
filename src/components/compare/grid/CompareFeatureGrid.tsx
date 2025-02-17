@@ -1,3 +1,4 @@
+
 import { Tool } from "@/data/types";
 import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -22,7 +23,7 @@ const CompareFeatureGrid = ({ tools }: CompareFeatureGridProps) => {
         .from('comparison_features')
         .select(`
           *,
-          feature_comparison_matrix!inner(
+          feature_comparison_matrix:tool_feature_matrix!inner(
             feature_score,
             confidence_score,
             implementation_quality,
@@ -36,18 +37,25 @@ const CompareFeatureGrid = ({ tools }: CompareFeatureGridProps) => {
       if (featureError) throw featureError;
 
       return (featureData || []).map(feature => {
-        const matrix = feature.feature_comparison_matrix?.[0] || {};
-        const details = feature.feature_details || {};
-        
-        const implementationDetails = {
-          feature_score: Number(matrix?.feature_score) || 0,
-          confidence_score: Number(matrix?.confidence_score) || 0,
-          implementation_quality: matrix?.implementation_quality || '',
-          feature_details: matrix?.feature_details || {},
-          notes: matrix?.notes || ''
+        const matrix = feature.feature_comparison_matrix?.[0] as ToolFeatureMatrix || {
+          feature_score: 0,
+          confidence_score: 0,
+          implementation_quality: '',
+          feature_details: {},
+          notes: ''
         };
 
-        return {
+        const details = typeof feature.feature_details === 'object' ? feature.feature_details : {};
+        
+        const implementationDetails: ToolFeatureMatrix = {
+          feature_score: Number(matrix.feature_score) || 0,
+          confidence_score: Number(matrix.confidence_score) || 0,
+          implementation_quality: matrix.implementation_quality || '',
+          feature_details: matrix.feature_details || {},
+          notes: matrix.notes || ''
+        };
+
+        const comparisonFeature: ComparisonFeature = {
           id: feature.id,
           tool_id: feature.tool_id,
           feature_name: feature.feature_name,
@@ -60,7 +68,7 @@ const CompareFeatureGrid = ({ tools }: CompareFeatureGridProps) => {
           is_premium: feature.is_premium,
           sort_order: feature.sort_order,
           name: feature.feature_name,
-          description: feature.feature_details?.description || '',
+          description: typeof details === 'object' && details?.description ? String(details.description) : '',
           confidence_score: feature.confidence_score || 0.8,
           implementation_details: implementationDetails,
           values: [],
@@ -68,7 +76,9 @@ const CompareFeatureGrid = ({ tools }: CompareFeatureGridProps) => {
           feature_limitations: feature.feature_limitations,
           verification_source_url: feature.verification_source_url,
           comparison_note: feature.comparison_note
-        } as ComparisonFeature;
+        };
+
+        return comparisonFeature;
       });
     }
   });
