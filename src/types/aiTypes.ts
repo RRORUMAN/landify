@@ -1,3 +1,4 @@
+
 export interface ToolCompatibility {
   score: number;
   factors: Record<string, number>;
@@ -65,10 +66,13 @@ export interface ComparisonFeature {
   feature_limitations?: string[];
   verification_source_url?: string;
   comparison_note?: string;
+  data_quality_score?: number;
+  weight?: number;
+  created_at?: string;
 }
 
 export interface DetailedComparison {
-  performance?: any;
+  performance?: ToolPerformance;
   useCases?: any[];
   security?: any[];
   resources?: any[];
@@ -81,6 +85,7 @@ export interface TeamActivityLog {
   user_id: string;
   activity_type: string;
   activity_data: Record<string, any>;
+  created_at: string;
   timestamp: string;
   metadata?: Record<string, any>;
 }
