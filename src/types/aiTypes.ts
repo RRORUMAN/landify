@@ -59,54 +59,20 @@ export interface ComparisonFeature {
   name: string;
   description: string;
   confidence_score: number;
+  implementation_details: ToolFeatureMatrix;
+  values: any[];
   implementation_quality?: string;
   feature_limitations?: string[];
   verification_source_url?: string;
   comparison_note?: string;
-  implementation_details: ToolFeatureMatrix;
-  values: Array<{
-    toolId: string;
-    value: string | boolean | number;
-    confidenceScore: number;
-    notes?: string;
-  }>;
 }
 
 export interface DetailedComparison {
-  performance?: ToolPerformance;
-  useCases?: Array<{
-    use_case: string;
-    effectiveness_score: number;
-    implementation_complexity: number;
-    time_savings: number;
-    cost_impact: number;
-    details: Record<string, any>;
-  }>;
-  security?: Array<{
-    security_feature: string;
-    security_score: number;
-    compliance_standards: string[];
-    certification_status: string;
-    last_audit_date: string;
-    details: Record<string, any>;
-  }>;
-  resources?: Array<{
-    resource_type: string;
-    quality_score: number;
-    accessibility_score: number;
-    comprehensiveness_score: number;
-    update_frequency: string;
-    details: Record<string, any>;
-  }>;
-  pricing?: Array<{
-    plan_name: string;
-    monthly_cost: number;
-    features_included: string[];
-    usage_limits: Record<string, any>;
-    minimum_commitment: string;
-    overage_costs: Record<string, any>;
-    details: Record<string, any>;
-  }>;
+  performance?: any;
+  useCases?: any[];
+  security?: any[];
+  resources?: any[];
+  pricing?: any[];
 }
 
 export interface TeamActivityLog {
@@ -115,7 +81,8 @@ export interface TeamActivityLog {
   user_id: string;
   activity_type: string;
   activity_data: Record<string, any>;
-  created_at: string;
+  timestamp: string;
+  metadata?: Record<string, any>;
 }
 
 export interface AIWorkflowInsight {

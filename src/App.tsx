@@ -1,5 +1,5 @@
 
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { cn } from "@/lib/utils";
 import Navbar from "./components/Navbar";
@@ -23,7 +23,7 @@ const AppContent = () => {
     return pathname.startsWith('/tools') || pathname === '/my-tools' || pathname.startsWith('/teams');
   };
 
-  // For demo purposes, we'll consider all routes as dashboard routes except landing and pricing
+  // Show navbar only on landing and pricing pages
   const showNavbar = ['/', '/pricing'].includes(window.location.pathname);
 
   return (
@@ -38,7 +38,7 @@ const AppContent = () => {
             : "bg-white dark:bg-gray-900"
         )}>
           <Routes>
-            <Route path="/" element={<Landing />} />
+            <Route path="/" element={<Navigate to="/my-tools" replace />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/my-tools" element={<MyTools />} />
             <Route path="/tools">

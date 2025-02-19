@@ -37,7 +37,8 @@ const CompareFeatureGrid = ({ tools }: CompareFeatureGridProps) => {
       if (featureError) throw featureError;
 
       return (featureData || []).map(feature => {
-        const matrix = feature.feature_comparison_matrix?.[0] as ToolFeatureMatrix || {
+        const matrix = (feature.feature_comparison_matrix?.[0] || {}) as unknown as ToolFeatureMatrix;
+        const defaultMatrix: ToolFeatureMatrix = {
           feature_score: 0,
           confidence_score: 0,
           implementation_quality: '',
@@ -48,11 +49,11 @@ const CompareFeatureGrid = ({ tools }: CompareFeatureGridProps) => {
         const details = typeof feature.feature_details === 'object' ? feature.feature_details : {};
         
         const implementationDetails: ToolFeatureMatrix = {
-          feature_score: Number(matrix.feature_score) || 0,
-          confidence_score: Number(matrix.confidence_score) || 0,
-          implementation_quality: matrix.implementation_quality || '',
-          feature_details: matrix.feature_details || {},
-          notes: matrix.notes || ''
+          feature_score: Number(matrix?.feature_score) || defaultMatrix.feature_score,
+          confidence_score: Number(matrix?.confidence_score) || defaultMatrix.confidence_score,
+          implementation_quality: matrix?.implementation_quality || defaultMatrix.implementation_quality,
+          feature_details: matrix?.feature_details || defaultMatrix.feature_details,
+          notes: matrix?.notes || defaultMatrix.notes
         };
 
         const comparisonFeature: ComparisonFeature = {
@@ -62,13 +63,13 @@ const CompareFeatureGrid = ({ tools }: CompareFeatureGridProps) => {
           feature_category: feature.feature_category,
           feature_value: feature.feature_value,
           feature_details: details,
-          importance: feature.importance || 'medium',
+          importance: (feature.importance || 'medium') as 'high' | 'medium' | 'low',
           feature_group: feature.feature_group,
           help_text: feature.help_text,
           is_premium: feature.is_premium,
           sort_order: feature.sort_order,
           name: feature.feature_name,
-          description: typeof details === 'object' && details?.description ? String(details.description) : '',
+          description: typeof details === 'object' && 'description' in details ? String(details.description) : '',
           confidence_score: feature.confidence_score || 0.8,
           implementation_details: implementationDetails,
           values: [],
